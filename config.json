@@ -1,0 +1,13 @@
+{
+  "project": {
+    "name": "OokVPN"
+  },
+  "subscriptions": {
+    "free": true,
+    "premium": true
+  },
+  "servers": {
+    "freePath": "servers/free",
+    "premiumPath": "servers/premium"
+  }
+}
