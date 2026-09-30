@@ -6,51 +6,84 @@ const root = process.cwd();
 const serversPath = path.join(root, "servers");
 const outputPath = path.join(root, "output");
 
-function loadServers(tier) {
-  const directory = path.join(serversPath, tier);
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
 
+function getJsonFiles(directory) {
   if (!fs.existsSync(directory)) {
     return [];
   }
 
-  const files = fs
+  return fs
     .readdirSync(directory)
-    .filter(file => file.endsWith(".json") && !file.endsWith(".meta.json"));
+    .filter(file =>
+      file.endsWith(".json") &&
+      !file.endsWith(".meta.json")
+    );
+}
+
+function loadServers(tier) {
+  const directory = path.join(serversPath, tier);
+  const files = getJsonFiles(directory);
 
   const servers = [];
 
   for (const file of files) {
     const id = file.replace(".json", "");
+
     const configPath = path.join(directory, file);
-    const metaPath = path.join(directory, `${id}.meta.json`);
+
+    const freeMetaPath = path.join(
+      serversPath,
+      "free",
+      `${id}.meta.json`
+    );
+
+    const premiumMetaPath = path.join(
+      serversPath,
+      "premium",
+      `${id}.meta.json`
+    );
+
+    let metaPath;
+
+    if (tier === "free") {
+      metaPath = freeMetaPath;
+    } else {
+      if (fs.existsSync(freeMetaPath)) {
+        metaPath = freeMetaPath;
+      } else {
+        metaPath = premiumMetaPath;
+      }
+    }
 
     if (!fs.existsSync(metaPath)) {
-      console.warn(`Missing metadata: ${id}.meta.json`);
+      console.warn(
+        `Missing metadata for: ${tier}/${file}`
+      );
       continue;
     }
 
     try {
-      const config = JSON.parse(
-        fs.readFileSync(configPath, "utf8")
-      );
-
-      const meta = JSON.parse(
-        fs.readFileSync(metaPath, "utf8")
-      );
+      const config = readJson(configPath);
+      const meta = readJson(metaPath);
 
       if (meta.enabled === false) {
         continue;
       }
 
       servers.push({
-        id: meta.id,
+        id: meta.id ?? id,
         name: meta.name,
         country: meta.country,
-        tier: meta.tier,
+        tier: meta.tier ?? tier,
         config
       });
     } catch (error) {
-      console.error(`Failed to load ${file}:`, error.message);
+      console.error(
+        `Failed to load ${tier}/${file}: ${error.message}`
+      );
     }
   }
 
