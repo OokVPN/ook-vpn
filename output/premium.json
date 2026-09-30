@@ -1,0 +1,58 @@
+[
+  {
+    "id": "finland-01",
+    "name": "🇫🇮 Финляндия #1",
+    "country": "FI",
+    "tier": "free",
+    "config": {
+      "remarks": "🇫🇮 Финляндия #1",
+      "outbounds": [
+        {
+          "protocol": "vless",
+          "settings": {
+            "vnext": [
+              {
+                "address": "example.com",
+                "port": 443,
+                "users": [
+                  {
+                    "id": "YOUR-UUID",
+                    "encryption": "none"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "germany-01",
+    "name": "🇩🇪 Germany #1",
+    "country": "DE",
+    "tier": "premium",
+    "config": {
+      "remarks": "🇩🇪 Германия #1",
+      "outbounds": [
+        {
+          "protocol": "vless",
+          "settings": {
+            "vnext": [
+              {
+                "address": "example.com",
+                "port": 443,
+                "users": [
+                  {
+                    "id": "YOUR-UUID",
+                    "encryption": "none"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+]
