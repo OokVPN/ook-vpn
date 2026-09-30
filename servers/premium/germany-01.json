@@ -1,0 +1,22 @@
+{
+  "remarks": "🇩🇪 Германия #1",
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "example.com",
+            "port": 443,
+            "users": [
+              {
+                "id": "YOUR-UUID",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
