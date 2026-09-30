@@ -51,17 +51,13 @@ function loadServers(tier) {
     if (tier === "free") {
       metaPath = freeMetaPath;
     } else {
-      if (fs.existsSync(freeMetaPath)) {
-        metaPath = freeMetaPath;
-      } else {
-        metaPath = premiumMetaPath;
-      }
+      metaPath = fs.existsSync(freeMetaPath)
+        ? freeMetaPath
+        : premiumMetaPath;
     }
 
     if (!fs.existsSync(metaPath)) {
-      console.warn(
-        `Missing metadata for: ${tier}/${file}`
-      );
+      console.warn(`Missing metadata for: ${tier}/${file}`);
       continue;
     }
 
@@ -73,13 +69,9 @@ function loadServers(tier) {
         continue;
       }
 
-      servers.push({
-        id: meta.id ?? id,
-        name: meta.name,
-        country: meta.country,
-        tier: meta.tier ?? tier,
-        config
-      });
+      config.remarks = meta.name;
+
+      servers.push(config);
     } catch (error) {
       console.error(
         `Failed to load ${tier}/${file}: ${error.message}`
