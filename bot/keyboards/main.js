@@ -9,6 +9,12 @@ export function getMainKeyboard() {
       ],
       [
         {
+          text: "📱 Устройства",
+          callback_data: "devices"
+        }
+      ],
+      [
+        {
           text: "💎 Premium",
           callback_data: "premium"
         },
