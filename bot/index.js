@@ -5,7 +5,6 @@ import { handleStart } from "./handlers/start.js";
 function getConfig() {
   const configPath = path.join(
     process.cwd(),
-    "config",
     "config.json"
   );
 
@@ -21,15 +20,10 @@ export async function handleUpdate(update) {
 
   const config = getConfig();
 
-  if (config.maintenance) {
-    if (update.message.text === "/start") {
-      await handleStart(update.message);
-    }
-
-    return;
-  }
-
   if (update.message.text === "/start") {
-    await handleStart(update.message);
+    await handleStart(
+      update.message,
+      config.maintenance
+    );
   }
 }
