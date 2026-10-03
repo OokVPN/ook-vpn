@@ -4,6 +4,10 @@ import path from "node:path";
 import { handleStart } from "./handlers/start.js";
 
 import {
+  handleSubscription
+} from "./handlers/subscription.js";
+
+import {
   handleDevices,
   handleDeleteDevice,
   handleRestoreMenu,
@@ -23,10 +27,18 @@ function getConfig() {
 
 async function answerCallback(
   callbackQueryId,
-  text
+  text = null
 ) {
   const token =
     process.env.TELEGRAM_BOT_TOKEN;
+
+  const body = {
+    callback_query_id: callbackQueryId
+  };
+
+  if (text) {
+    body.text = text;
+  }
 
   await fetch(
     `https://api.telegram.org/bot${token}/answerCallbackQuery`,
@@ -35,10 +47,7 @@ async function answerCallback(
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        callback_query_id: callbackQueryId,
-        text
-      })
+      body: JSON.stringify(body)
     }
   );
 }
@@ -57,84 +66,94 @@ export async function handleUpdate(update) {
     return;
   }
 
-  if (update?.callback_query) {
-    const callbackQuery =
-      update.callback_query;
+  if (!update?.callback_query) {
+    return;
+  }
 
-    if (config.maintenance) {
+  const callbackQuery =
+    update.callback_query;
+
+  if (config.maintenance) {
+    await answerCallback(
+      callbackQuery.id,
+      "🛠 Бот временно находится на технических работах"
+    );
+
+    return;
+  }
+
+  const data =
+    callbackQuery.data || "";
+
+  if (data === "subscription") {
+    await handleSubscription(
+      callbackQuery
+    );
+
+    return;
+  }
+
+  if (data === "devices") {
+    await handleDevices(
+      callbackQuery
+    );
+
+    return;
+  }
+
+  if (data === "restore_menu") {
+    await handleRestoreMenu(
+      callbackQuery
+    );
+
+    return;
+  }
+
+  if (data.startsWith("delete_device:")) {
+    const deviceId = Number(
+      data.split(":")[1]
+    );
+
+    if (!Number.isInteger(deviceId)) {
       await answerCallback(
         callbackQuery.id,
-        "🛠 Бот временно находится на технических работах"
+        "Некорректное устройство"
       );
 
       return;
     }
 
-    const data =
-      callbackQuery.data || "";
-
-    if (data === "devices") {
-      await handleDevices(
-        callbackQuery
-      );
-
-      return;
-    }
-
-    if (data === "restore_menu") {
-      await handleRestoreMenu(
-        callbackQuery
-      );
-
-      return;
-    }
-
-    if (data.startsWith("delete_device:")) {
-      const deviceId = Number(
-        data.split(":")[1]
-      );
-
-      if (!Number.isInteger(deviceId)) {
-        await answerCallback(
-          callbackQuery.id,
-          "Некорректное устройство"
-        );
-
-        return;
-      }
-
-      await handleDeleteDevice(
-        callbackQuery,
-        deviceId
-      );
-
-      return;
-    }
-
-    if (data.startsWith("restore_device:")) {
-      const deviceId = Number(
-        data.split(":")[1]
-      );
-
-      if (!Number.isInteger(deviceId)) {
-        await answerCallback(
-          callbackQuery.id,
-          "Некорректное устройство"
-        );
-
-        return;
-      }
-
-      await handleRestoreDevice(
-        callbackQuery,
-        deviceId
-      );
-
-      return;
-    }
-
-    await answerCallback(
-      callbackQuery.id
+    await handleDeleteDevice(
+      callbackQuery,
+      deviceId
     );
+
+    return;
   }
+
+  if (data.startsWith("restore_device:")) {
+    const deviceId = Number(
+      data.split(":")[1]
+    );
+
+    if (!Number.isInteger(deviceId)) {
+      await answerCallback(
+        callbackQuery.id,
+        "Некорректное устройство"
+      );
+
+      return;
+    }
+
+    await handleRestoreDevice(
+      callbackQuery,
+      deviceId
+    );
+
+    return;
+  }
+
+  await answerCallback(
+    callbackQuery.id
+  );
 }
