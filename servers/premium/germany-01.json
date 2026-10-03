@@ -1,22 +1,54 @@
 {
-  "remarks": "🇩🇪 Германия #1",
+ "remarks": "🇩🇪 Германия #1",
+  "dns": {
+    "servers": [
+      "1.1.1.1",
+      "8.8.8.8"
+    ]
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "udp": true
+      }
+    }
+  ],
   "outbounds": [
     {
+      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "example.com",
-            "port": 443,
+            "address": "kookas.fi",
+            "port": 8443,
             "users": [
               {
-                "id": "YOUR-UUID",
-                "encryption": "none"
+                "id": "7b9e3f12-4a61-4c85-b2d7-91e638f5042a",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "fingerprint": "chrome",
+          "serverName": "kookas.fi",
+          "publicKey": "Yb4kQ2mN8vR7xT1pL5cW3zA9dF6hJ0sG2eU4iO7nM1k",
+          "shortId": "6ba85179"
+        }
       }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom"
     }
   ]
 }
