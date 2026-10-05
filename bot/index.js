@@ -14,6 +14,8 @@ import {
   handleRestoreDevice
 } from "./handlers/devices.js";
 
+import { getMainKeyboard } from "./keyboards/main.js";
+
 function getConfig() {
   const configPath = path.join(
     process.cwd(),
@@ -61,6 +63,79 @@ async function answerCallback(
   );
 }
 
+async function editMessage(
+  chatId,
+  messageId,
+  text,
+  replyMarkup
+) {
+  const token =
+    process.env.TELEGRAM_BOT_TOKEN;
+
+  await fetch(
+    `https://api.telegram.org/bot${token}/editMessageText`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        message_id: messageId,
+        text,
+        reply_markup: replyMarkup
+      })
+    }
+  );
+}
+
+function getBackKeyboard() {
+  return {
+    inline_keyboard: [
+      [
+        {
+          text: "◀️ Назад",
+          callback_data: "back"
+        }
+      ]
+    ]
+  };
+}
+
+async function showPremium(callbackQuery) {
+  await editMessage(
+    callbackQuery.message.chat.id,
+    callbackQuery.message.message_id,
+    "💎 Premium\n\n" +
+      "⭐ Больше возможностей\n" +
+      "📡 Premium-серверы\n" +
+      "📱 Расширенный лимит устройств\n\n" +
+      "Покупка Premium скоро будет доступна.",
+    getBackKeyboard()
+  );
+}
+
+async function showStats(callbackQuery) {
+  await editMessage(
+    callbackQuery.message.chat.id,
+    callbackQuery.message.message_id,
+    "📊 Статистика\n\n" +
+      "Статистика пользователя скоро будет доступна.",
+    getBackKeyboard()
+  );
+}
+
+async function showHelp(callbackQuery) {
+  await editMessage(
+    callbackQuery.message.chat.id,
+    callbackQuery.message.message_id,
+    "❓ Помощь\n\n" +
+      "Если у тебя возникли проблемы с OokVPN, " +
+      "обратись в поддержку.",
+    getBackKeyboard()
+  );
+}
+
 export async function handleUpdate(update) {
   const config = getConfig();
 
@@ -98,6 +173,22 @@ export async function handleUpdate(update) {
   const data =
     callbackQuery.data || "";
 
+  if (data === "back") {
+    await answerCallback(
+      callbackQuery.id
+    );
+
+    await editMessage(
+      callbackQuery.message.chat.id,
+      callbackQuery.message.message_id,
+      "👋 Главное меню\n\n" +
+        "Выбери нужный раздел:",
+      getMainKeyboard()
+    );
+
+    return;
+  }
+
   if (data === "subscription") {
     await handleSubscription(
       callbackQuery
@@ -108,6 +199,42 @@ export async function handleUpdate(update) {
 
   if (data === "devices") {
     await handleDevices(
+      callbackQuery
+    );
+
+    return;
+  }
+
+  if (data === "premium") {
+    await answerCallback(
+      callbackQuery.id
+    );
+
+    await showPremium(
+      callbackQuery
+    );
+
+    return;
+  }
+
+  if (data === "stats") {
+    await answerCallback(
+      callbackQuery.id
+    );
+
+    await showStats(
+      callbackQuery
+    );
+
+    return;
+  }
+
+  if (data === "help") {
+    await answerCallback(
+      callbackQuery.id
+    );
+
+    await showHelp(
       callbackQuery
     );
 
