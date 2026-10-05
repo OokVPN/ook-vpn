@@ -23,8 +23,8 @@ jobs:
           const fs = require("fs");
 
           const file = "output/traffic.json";
-          const MIN_ADD = 50 * 1024 * 1024;
-          const MAX_ADD = 400 * 1024 * 1024;
+          const MIN_ADD = 200 * 1024 * 1024;
+            const MAX_ADD = 800 * 1024 * 1024;
 
           const current = fs.existsSync(file)
             ? JSON.parse(fs.readFileSync(file, "utf8"))
