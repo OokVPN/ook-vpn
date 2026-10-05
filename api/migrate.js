@@ -21,22 +21,21 @@ export default async function handler(req, res) {
 
   try {
     const result = await db.execute({
-      sql: "PRAGMA table_info(users)",
+      sql: "PRAGMA table_info(tokens)",
       args: []
     });
 
     const exists =
       result.rows.some(
         column =>
-          column.name ===
-          "subscription_token"
+          column.name === "token"
       );
 
     if (!exists) {
       await db.execute({
         sql: `
-          ALTER TABLE users
-          ADD COLUMN subscription_token TEXT
+          ALTER TABLE tokens
+          ADD COLUMN token TEXT
         `,
         args: []
       });
@@ -44,7 +43,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       ok: true,
-      column: "subscription_token",
+      column: "token",
       created: !exists
     });
   } catch (error) {
