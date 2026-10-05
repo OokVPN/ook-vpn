@@ -1,11 +1,14 @@
 import { createUser } from "./users.js";
-import { createSubscription } from "./subscriptions.js";
+import {
+  createSubscription
+} from "./subscriptions.js";
 import { createToken } from "./tokens.js";
 
 export async function createAccess({
   telegramId,
   plan,
-  expiresAt = null
+  expiresAt = null,
+  source = "legacy"
 }) {
   if (!telegramId) {
     throw new Error("Telegram ID is required");
@@ -15,12 +18,15 @@ export async function createAccess({
     throw new Error("Invalid subscription plan");
   }
 
-  const user = await createUser(telegramId);
+  const user = await createUser(
+    telegramId
+  );
 
   await createSubscription(
     user.id,
     plan,
-    expiresAt
+    expiresAt,
+    source
   );
 
   const token = await createToken(
@@ -32,6 +38,7 @@ export async function createAccess({
     user,
     token,
     plan,
-    expiresAt
+    expiresAt,
+    source
   };
 }
