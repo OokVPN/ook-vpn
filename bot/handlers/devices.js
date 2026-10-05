@@ -81,6 +81,13 @@ function getDevicesKeyboard(devices) {
 
   rows.push([
     {
+      text: "♻️ Восстановить устройство",
+      callback_data: "restore_menu"
+    }
+  ]);
+
+  rows.push([
+    {
       text: "◀️ Назад",
       callback_data: "back"
     }
@@ -159,8 +166,6 @@ async function showDevices(
 export async function handleDevices(
   callbackQuery
 ) {
-  await answerCallback(callbackQuery.id);
-
   const telegramId =
     callbackQuery.from.id;
 
@@ -177,6 +182,10 @@ export async function handleDevices(
 
     return;
   }
+
+  await answerCallback(
+    callbackQuery.id
+  );
 
   const devices =
     await getUserDevices(user.id);
@@ -248,10 +257,6 @@ export async function handleDeleteDevice(
 export async function handleRestoreMenu(
   callbackQuery
 ) {
-  await answerCallback(
-    callbackQuery.id
-  );
-
   const telegramId =
     callbackQuery.from.id;
 
@@ -278,11 +283,16 @@ export async function handleRestoreMenu(
         device.status === "removed"
     );
 
+  await answerCallback(
+    callbackQuery.id
+  );
+
   if (removedDevices.length === 0) {
     await editMessage(
       callbackQuery.message.chat.id,
       callbackQuery.message.message_id,
-      "♻️ Восстановление устройства\n\nУдалённых устройств нет.",
+      "♻️ Восстановление устройства\n\n" +
+        "Удалённых устройств нет.",
       {
         inline_keyboard: [
           [
@@ -301,7 +311,8 @@ export async function handleRestoreMenu(
   await editMessage(
     callbackQuery.message.chat.id,
     callbackQuery.message.message_id,
-    "♻️ Восстановление устройства\n\nВыберите устройство:",
+    "♻️ Восстановление устройства\n\n" +
+      "Выберите устройство:",
     getRestoreKeyboard(removedDevices)
   );
 }
@@ -358,4 +369,4 @@ export async function handleRestoreDevice(
     devices,
     count
   );
-    }
+}
