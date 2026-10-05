@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+
 import {
   getUserByTelegramId
 } from "../../api/lib/users.js";
@@ -9,6 +12,24 @@ import {
 import {
   createToken
 } from "../../api/lib/tokens.js";
+
+import {
+  getDeviceCount
+} from "../../api/lib/devices.js";
+
+function getPlans() {
+  const planPath = path.join(
+    process.cwd(),
+    "plan.json"
+  );
+
+  return JSON.parse(
+    fs.readFileSync(
+      planPath,
+      "utf8"
+    )
+  );
+}
 
 async function answerCallback(
   callbackQueryId,
@@ -115,7 +136,7 @@ function getSubscriptionKeyboard(
     inline_keyboard: [
       [
         {
-          text: "📋 Скопировать ссылку",
+          text: "📋 Скопировать",
           copy_text: {
             text: url
           }
@@ -181,6 +202,23 @@ export async function handleSubscription(
     return;
   }
 
+  const plans = getPlans();
+
+  const planKey =
+    subscription.source === "trial"
+      ? "trial"
+      : subscription.plan;
+
+  const plan =
+    plans[planKey] ||
+    plans[subscription.plan];
+
+  const deviceLimit =
+    plan?.devices ?? 0;
+
+  const deviceCount =
+    await getDeviceCount(user.id);
+
   const token =
     await createToken(
       user.id,
@@ -193,15 +231,25 @@ export async function handleSubscription(
       token
     );
 
-  const plan =
-    subscription.plan === "premium"
-      ? "⭐ Premium"
-      : "🆓 Free";
+  const planName =
+    plan?.name ||
+    subscription.plan;
 
-  const expires =
-    formatDate(
-      subscription.expires_at
-    );
+  const description =
+    plan?.description ||
+    "Подписка OokVPN";
+
+  const devicesText =
+    deviceLimit === -1
+      ? `${deviceCount}/∞`
+      : `${deviceCount}/${deviceLimit}`;
+
+  const text =
+    "📡 Моя подписка\n\n" +
+    `⭐ План: ${planName}\n` +
+    `📝 ${description}\n\n` +
+    `📱 Устройства: ${devicesText}\n` +
+    `⏳ Действует до: ${formatDate(subscription.expires_at)}`;
 
   await answerCallback(
     callbackQuery.id
@@ -210,12 +258,7 @@ export async function handleSubscription(
   await editMessage(
     callbackQuery.message.chat.id,
     callbackQuery.message.message_id,
-    "📡 Моя подписка\n\n" +
-      `Тариф: ${plan}\n` +
-      `Действует до: ${expires}\n\n` +
-      "🔗 Ссылка на подписку:\n" +
-      `${url}\n\n` +
-      "Нажми кнопку ниже, чтобы скопировать ссылку.",
+    text,
     getSubscriptionKeyboard(url)
   );
 }
