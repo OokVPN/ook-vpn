@@ -1,34 +1,62 @@
 [
   {
-    "remarks": "🇫🇮 Финляндия #1",
     "dns": {
       "servers": [
         "1.1.1.1",
-        "8.8.8.8"
-      ]
+        "1.0.0.1"
+      ],
+      "queryStrategy": "UseIP"
     },
     "inbounds": [
       {
-        "listen": "127.0.0.1",
+        "tag": "socks",
         "port": 10808,
+        "listen": "127.0.0.1",
         "protocol": "socks",
         "settings": {
-          "udp": true
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ]
         }
       }
     ],
     "outbounds": [
       {
         "protocol": "vless",
-        "tag": "proxy",
         "settings": {
           "vnext": [
             {
-              "address": "78.17.209.212",
+              "address": "31.58.178.110",
               "port": 443,
               "users": [
                 {
-                  "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
+                  "id": "87fd990d-ca93-440a-bbd4-e8281c4a0910",
                   "encryption": "none",
                   "flow": "xtls-rprx-vision"
                 }
@@ -40,12 +68,14 @@
           "network": "tcp",
           "security": "reality",
           "realitySettings": {
-            "serverName": "woocommerce.com",
-            "publicKey": "_O79-WaT8T8VdFn1fBfCfJ8dPAnraPEKmyjOauVpQSo",
-            "shortId": "c27e45d7c9f866b4",
-            "fingerprint": "firefox"
+            "serverName": "de3.swcdn.xyz",
+            "fingerprint": "chrome",
+            "publicKey": "N6RFNy2oUKtxhdpKyIbZnjWSMghyiu37veqd6MLjbgk",
+            "shortId": "d641efc97408a7e4",
+            "spiderX": ""
           }
-        }
+        },
+        "tag": "proxy"
       },
       {
         "protocol": "freedom",
@@ -55,6 +85,17 @@
         "protocol": "blackhole",
         "tag": "block"
       }
-    ]
+    ],
+    "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "rules": [
+        {
+          "type": "field",
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        }
+      ]
+    },
+    "remarks": "🇩🇪 Германия #1"
   }
 ]
