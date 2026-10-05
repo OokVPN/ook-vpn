@@ -44,6 +44,7 @@ export async function getUserToken(userId) {
   const result = await db.execute({
     sql: `
       SELECT
+        id,
         token,
         token_hash,
         expires_at,
@@ -61,15 +62,39 @@ export async function getUserToken(userId) {
     return null;
   }
 
-  return result.rows[0];
+  const row = result.rows[0];
+
+  if (row.token) {
+    return row.token;
+  }
+
+  const token = generateToken();
+  const tokenHash = hashToken(token);
+
+  await db.execute({
+    sql: `
+      UPDATE tokens
+      SET
+        token = ?,
+        token_hash = ?
+      WHERE id = ?
+    `,
+    args: [
+      token,
+      tokenHash,
+      row.id
+    ]
+  });
+
+  return token;
 }
 
 export async function getOrCreateUserToken(userId) {
-  const existing =
+  const existingToken =
     await getUserToken(userId);
 
-  if (existing?.token) {
-    return existing.token;
+  if (existingToken) {
+    return existingToken;
   }
 
   return createToken(userId);
