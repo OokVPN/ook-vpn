@@ -34,8 +34,12 @@ async function sendMessage(chatId, text, replyMarkup = null) {
   );
 }
 
-export async function handleStart(message, maintenance) {
-  if (maintenance) {
+export async function handleStart(
+  message,
+  maintenance,
+  admin = false
+) {
+  if (maintenance && !admin) {
     await sendMessage(
       message.chat.id,
       maintenanceMessage
