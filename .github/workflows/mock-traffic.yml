@@ -1,0 +1,74 @@
+name: Update mock traffic
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  traffic:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update traffic
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require("fs");
+
+          const file = "output/traffic.json";
+          const MIN_ADD = 50 * 1024 * 1024;
+          const MAX_ADD = 400 * 1024 * 1024;
+
+          const current = fs.existsSync(file)
+            ? JSON.parse(fs.readFileSync(file, "utf8"))
+            : {
+                mode: "mock",
+                usedBytes: "0",
+                totalBytes: "0",
+                updatedAt: null
+              };
+
+          const add = Math.floor(
+            MIN_ADD + Math.random() * (MAX_ADD - MIN_ADD + 1)
+          );
+
+          const used =
+            Number(current.usedBytes || 0) + add;
+
+          fs.writeFileSync(
+            file,
+            JSON.stringify(
+              {
+                mode: "mock",
+                usedBytes: String(used),
+                totalBytes: "0",
+                updatedAt: new Date().toISOString()
+              },
+              null,
+              2
+            ) + "\n"
+          );
+
+          console.log(
+            `Added ${add} bytes`
+          );
+
+          console.log(
+            `Used: ${used} bytes`
+          );
+          NODE
+
+      - name: Commit traffic
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/traffic.json
+          git diff --cached --quiet || git commit -m "chore: update mock traffic"
+          git push
