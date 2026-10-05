@@ -3,10 +3,23 @@ import db from "../db.js";
 export async function createSubscription(
   userId,
   plan,
-  expiresAt = null
+  expiresAt = null,
+  source = "legacy"
 ) {
   if (plan !== "free" && plan !== "premium") {
     throw new Error("Invalid subscription plan");
+  }
+
+  const allowedSources = [
+    "free",
+    "trial",
+    "paid",
+    "admin",
+    "legacy"
+  ];
+
+  if (!allowedSources.includes(source)) {
+    throw new Error("Invalid subscription source");
   }
 
   await db.execute({
@@ -15,14 +28,16 @@ export async function createSubscription(
         user_id,
         plan,
         expires_at,
-        status
+        status,
+        source
       )
-      VALUES (?, ?, ?, 'active')
+      VALUES (?, ?, ?, 'active', ?)
     `,
     args: [
       userId,
       plan,
-      expiresAt
+      expiresAt,
+      source
     ]
   });
 }
@@ -34,24 +49,15 @@ export async function getActiveSubscription(userId) {
       FROM subscriptions
       WHERE user_id = ?
         AND status = 'active'
+        AND (
+          expires_at IS NULL
+          OR expires_at > CURRENT_TIMESTAMP
+        )
       ORDER BY id DESC
       LIMIT 1
     `,
     args: [userId]
   });
 
-  const subscription = result.rows[0] ?? null;
-
-  if (!subscription) {
-    return null;
-  }
-
-  if (
-    subscription.expires_at &&
-    new Date(subscription.expires_at) <= new Date()
-  ) {
-    return null;
-  }
-
-  return subscription;
+  return result.rows[0] ?? null;
 }
