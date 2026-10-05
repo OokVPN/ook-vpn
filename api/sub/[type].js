@@ -2,15 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { getTokenInfo } from "../lib/tokens.js";
 
-const TEST_UPLOAD_BYTES =
-  Number(process.env.TEST_UPLOAD_BYTES || 0);
-
-const TEST_DOWNLOAD_BYTES =
-  Number(process.env.TEST_DOWNLOAD_BYTES || 0);
-
-const TEST_TOTAL_BYTES =
-  Number(process.env.TEST_TOTAL_BYTES || 0);
-
 const TEST_EXPIRE =
   Number(
     process.env.TEST_EXPIRE ||
@@ -37,6 +28,37 @@ function getAnnounce() {
     "",
     "v2.0"
   ].join("\n");
+}
+
+function getTraffic() {
+  const filePath = path.join(
+    process.cwd(),
+    "output",
+    "traffic.json"
+  );
+
+  if (!fs.existsSync(filePath)) {
+    return {
+      usedBytes: 0,
+      totalBytes: 0
+    };
+  }
+
+  try {
+    const data = JSON.parse(
+      fs.readFileSync(filePath, "utf8")
+    );
+
+    return {
+      usedBytes: Number(data.usedBytes || 0),
+      totalBytes: Number(data.totalBytes || 0)
+    };
+  } catch {
+    return {
+      usedBytes: 0,
+      totalBytes: 0
+    };
+  }
 }
 
 export default async function handler(req, res) {
@@ -90,6 +112,8 @@ export default async function handler(req, res) {
         "utf8"
       );
 
+    const traffic = getTraffic();
+
     const expire =
       tokenInfo.subscription_expires_at
         ? Math.floor(
@@ -101,9 +125,9 @@ export default async function handler(req, res) {
 
     const subscriptionUserinfo =
       [
-        `upload=${TEST_UPLOAD_BYTES}`,
-        `download=${TEST_DOWNLOAD_BYTES}`,
-        `total=${TEST_TOTAL_BYTES}`,
+        "upload=0",
+        `download=${traffic.usedBytes}`,
+        `total=${traffic.totalBytes}`,
         `expire=${expire}`
       ].join("; ");
 
