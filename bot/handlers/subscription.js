@@ -6,6 +6,10 @@ import {
   getActiveSubscription
 } from "../../api/lib/subscriptions.js";
 
+import {
+  createToken
+} from "../../api/lib/tokens.js";
+
 async function answerCallback(
   callbackQueryId,
   text = null
@@ -42,7 +46,7 @@ async function editMessage(
   const token =
     process.env.TELEGRAM_BOT_TOKEN;
 
-  await fetch(
+  const response = await fetch(
     `https://api.telegram.org/bot${token}/editMessageText`,
     {
       method: "POST",
@@ -57,6 +61,12 @@ async function editMessage(
       })
     }
   );
+
+  if (!response.ok) {
+    throw new Error(
+      `Telegram API error: ${response.status}`
+    );
+  }
 }
 
 function formatDate(date) {
@@ -78,9 +88,39 @@ function formatDate(date) {
   );
 }
 
-function getSubscriptionKeyboard() {
+function getSubscriptionUrl(
+  plan,
+  token
+) {
+  const baseUrl =
+    process.env.PUBLIC_URL;
+
+  if (!baseUrl) {
+    throw new Error(
+      "PUBLIC_URL is not configured"
+    );
+  }
+
+  return (
+    `${baseUrl.replace(/\/+$/, "")}` +
+    `/api/sub/${plan}` +
+    `?token=${encodeURIComponent(token)}`
+  );
+}
+
+function getSubscriptionKeyboard(
+  url
+) {
   return {
     inline_keyboard: [
+      [
+        {
+          text: "📋 Скопировать ссылку",
+          copy_text: {
+            text: url
+          }
+        }
+      ],
       [
         {
           text: "◀️ Назад",
@@ -126,15 +166,32 @@ export async function handleSubscription(
       callbackQuery.message.message_id,
       "📡 Моя подписка\n\n" +
         "Активной подписки нет.",
-      getSubscriptionKeyboard()
+      {
+        inline_keyboard: [
+          [
+            {
+              text: "◀️ Назад",
+              callback_data: "back"
+            }
+          ]
+        ]
+      }
     );
 
     return;
   }
 
-  await answerCallback(
-    callbackQuery.id
-  );
+  const token =
+    await createToken(
+      user.id,
+      subscription.expires_at
+    );
+
+  const url =
+    getSubscriptionUrl(
+      subscription.plan,
+      token
+    );
 
   const plan =
     subscription.plan === "premium"
@@ -146,12 +203,19 @@ export async function handleSubscription(
       subscription.expires_at
     );
 
+  await answerCallback(
+    callbackQuery.id
+  );
+
   await editMessage(
     callbackQuery.message.chat.id,
     callbackQuery.message.message_id,
     "📡 Моя подписка\n\n" +
       `Тариф: ${plan}\n` +
-      `Действует до: ${expires}`,
-    getSubscriptionKeyboard()
+      `Действует до: ${expires}\n\n` +
+      "🔗 Ссылка на подписку:\n" +
+      `${url}\n\n` +
+      "Нажми кнопку ниже, чтобы скопировать ссылку.",
+    getSubscriptionKeyboard(url)
   );
 }
