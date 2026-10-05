@@ -10,7 +10,7 @@ import {
 } from "../../api/lib/subscriptions.js";
 
 import {
-  createToken
+  getOrCreateUserToken
 } from "../../api/lib/tokens.js";
 
 import {
@@ -204,25 +204,33 @@ export async function handleSubscription(
 
   const plans = getPlans();
 
-  const planKey =
-    subscription.source === "trial"
-      ? "trial"
-      : subscription.plan;
+  const basePlan =
+    plans[subscription.plan] || {};
 
-  const plan =
-    plans[planKey] ||
-    plans[subscription.plan];
+  const sourcePlan =
+    plans[subscription.source] || {};
+
+  const planName =
+    sourcePlan.name ||
+    basePlan.name ||
+    subscription.plan;
+
+  const description =
+    sourcePlan.description ||
+    basePlan.description ||
+    "Подписка OokVPN";
 
   const deviceLimit =
-    plan?.devices ?? 0;
+    sourcePlan.devices ??
+    basePlan.devices ??
+    0;
 
   const deviceCount =
     await getDeviceCount(user.id);
 
   const token =
-    await createToken(
-      user.id,
-      subscription.expires_at
+    await getOrCreateUserToken(
+      user.id
     );
 
   const url =
@@ -230,14 +238,6 @@ export async function handleSubscription(
       subscription.plan,
       token
     );
-
-  const planName =
-    plan?.name ||
-    subscription.plan;
-
-  const description =
-    plan?.description ||
-    "Подписка OokVPN";
 
   const devicesText =
     deviceLimit === -1
