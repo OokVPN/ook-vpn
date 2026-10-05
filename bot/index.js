@@ -25,6 +25,15 @@ function getConfig() {
   );
 }
 
+function isAdmin(telegramId) {
+  const adminIds = (process.env.ADMIN_IDS || "")
+    .split(",")
+    .map(id => id.trim())
+    .filter(Boolean);
+
+  return adminIds.includes(String(telegramId));
+}
+
 async function answerCallback(
   callbackQueryId,
   text = null
@@ -59,7 +68,8 @@ export async function handleUpdate(update) {
     if (update.message.text === "/start") {
       await handleStart(
         update.message,
-        config.maintenance
+        config.maintenance,
+        isAdmin(update.message.from?.id)
       );
     }
 
@@ -73,7 +83,10 @@ export async function handleUpdate(update) {
   const callbackQuery =
     update.callback_query;
 
-  if (config.maintenance) {
+  if (
+    config.maintenance &&
+    !isAdmin(callbackQuery.from?.id)
+  ) {
     await answerCallback(
       callbackQuery.id,
       "🛠 Бот временно находится на технических работах"
