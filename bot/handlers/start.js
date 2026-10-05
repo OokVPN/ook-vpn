@@ -6,18 +6,19 @@ import {
 } from "../../api/lib/users.js";
 
 import {
-  getActiveSubscription
+  getActiveSubscription,
+  createSubscription
 } from "../../api/lib/subscriptions.js";
-
-import {
-  createToken
-} from "../../api/lib/tokens.js";
 
 const maintenanceMessage =
   "🛠 OokVPN временно закрыт\n\n" +
   "Мы делаем масштабную переработку VPN.\n\n" +
   "Текущая подписка продолжает работать до выхода новой версии.\n\n" +
   "Следите за новостями в канале: @OokVPNch.";
+
+const welcomeMessage =
+  "👋 Добро пожаловать в OokVPN!\n\n" +
+  "Выбери нужный раздел:";
 
 async function sendMessage(
   chatId,
@@ -54,45 +55,6 @@ async function sendMessage(
   }
 }
 
-function getSubscriptionUrl(
-  plan,
-  token
-) {
-  const baseUrl =
-    process.env.PUBLIC_URL;
-
-  if (!baseUrl) {
-    throw new Error(
-      "PUBLIC_URL is not configured"
-    );
-  }
-
-  return (
-    `${baseUrl.replace(/\/+$/, "")}` +
-    `/api/sub/${plan}` +
-    `?token=${encodeURIComponent(token)}`
-  );
-}
-
-function formatDate(date) {
-  if (!date) {
-    return "Бессрочно";
-  }
-
-  const value = new Date(date);
-
-  if (Number.isNaN(value.getTime())) {
-    return "Неизвестно";
-  }
-
-  return value.toLocaleString(
-    "ru-RU",
-    {
-      timeZone: "Europe/Moscow"
-    }
-  );
-}
-
 export async function handleStart(
   message,
   maintenance,
@@ -127,64 +89,23 @@ export async function handleStart(
     );
   }
 
-  let subscription =
+  const subscription =
     await getActiveSubscription(
       user.id
     );
 
   if (!subscription) {
-    const { createSubscription } =
-      await import(
-        "../../api/lib/subscriptions.js"
-      );
-
     await createSubscription(
       user.id,
       "free",
       null,
       "free"
     );
-
-    subscription =
-      await getActiveSubscription(
-        user.id
-      );
   }
-
-  if (!subscription) {
-    throw new Error(
-      "Failed to create Free subscription"
-    );
-  }
-
-  const token =
-    await createToken(
-      user.id,
-      subscription.expires_at
-    );
-
-  const url =
-    getSubscriptionUrl(
-      subscription.plan,
-      token
-    );
-
-  const plan =
-    subscription.plan === "premium"
-      ? "⭐ Premium"
-      : "🆓 Free";
-
-  const text =
-    "👋 Добро пожаловать в OokVPN!\n\n" +
-    `Тариф: ${plan}\n` +
-    `Действует до: ${formatDate(subscription.expires_at)}\n\n` +
-    "🔗 Твоя ссылка на подписку:\n" +
-    `${url}\n\n` +
-    "Добавь эту ссылку в Happ.";
 
   await sendMessage(
     message.chat.id,
-    text,
+    welcomeMessage,
     getMainKeyboard()
   );
 }
