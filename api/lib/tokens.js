@@ -23,13 +23,15 @@ export async function createToken(
     sql: `
       INSERT INTO tokens (
         user_id,
+        token,
         token_hash,
         expires_at
       )
-      VALUES (?, ?, ?)
+      VALUES (?, ?, ?, ?)
     `,
     args: [
       userId,
+      token,
       tokenHash,
       expiresAt
     ]
@@ -42,16 +44,13 @@ export async function getUserToken(userId) {
   const result = await db.execute({
     sql: `
       SELECT
+        token,
         token_hash,
         expires_at,
         revoked
       FROM tokens
       WHERE user_id = ?
         AND revoked = 0
-        AND (
-          expires_at IS NULL
-          OR expires_at > CURRENT_TIMESTAMP
-        )
       ORDER BY id ASC
       LIMIT 1
     `,
@@ -66,11 +65,11 @@ export async function getUserToken(userId) {
 }
 
 export async function getOrCreateUserToken(userId) {
-  const existingToken =
+  const existing =
     await getUserToken(userId);
 
-  if (existingToken) {
-    return null;
+  if (existing?.token) {
+    return existing.token;
   }
 
   return createToken(userId);
