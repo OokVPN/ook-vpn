@@ -1,0 +1,21 @@
+{
+  "free": {
+    "name": "Free",
+    "description": "Бесплатный доступ к OokVPN",
+    "devices": 3
+  },
+  "premium": {
+    "name": "Premium",
+    "description": "Расширенный доступ к OokVPN",
+    "devices": 5
+  },
+  "trial": {
+    "name": "Premium Trial",
+    "description": "Пробный Premium на 3 дня",
+    "devices": 5,
+    "days": 3
+  },
+  "admin": {
+    "devices": -1
+  }
+}
