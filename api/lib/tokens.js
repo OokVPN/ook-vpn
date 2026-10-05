@@ -38,6 +38,44 @@ export async function createToken(
   return token;
 }
 
+export async function getUserToken(userId) {
+  const result = await db.execute({
+    sql: `
+      SELECT
+        token_hash,
+        expires_at,
+        revoked
+      FROM tokens
+      WHERE user_id = ?
+        AND revoked = 0
+        AND (
+          expires_at IS NULL
+          OR expires_at > CURRENT_TIMESTAMP
+        )
+      ORDER BY id ASC
+      LIMIT 1
+    `,
+    args: [userId]
+  });
+
+  if (result.rows.length === 0) {
+    return null;
+  }
+
+  return result.rows[0];
+}
+
+export async function getOrCreateUserToken(userId) {
+  const existingToken =
+    await getUserToken(userId);
+
+  if (existingToken) {
+    return null;
+  }
+
+  return createToken(userId);
+}
+
 export async function getTokenInfo(token) {
   if (!token || typeof token !== "string") {
     return null;
