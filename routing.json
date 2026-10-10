@@ -1,0 +1,43 @@
+{
+  "Name": "OokRouting",
+  "GlobalProxy": "true",
+  "RouteOrder": "block-proxy-direct",
+  "RemoteDNSType": "DoH",
+  "RemoteDNSDomain": "https://cloudflare-dns.com/dns-query",
+  "RemoteDNSIP": "1.1.1.1",
+  "DomesticDNSType": "DoH",
+  "DomesticDNSDomain": "https://cloudflare-dns.com/dns-query",
+  "DomesticDNSIP": "1.1.1.1",
+  "Geoipurl": "https://cdn.jsdelivr.net/gh/hydraponique/roscomvpn-geoip@202605290701/release/geoip.dat",
+  "Geositeurl": "https://cdn.jsdelivr.net/gh/hydraponique/roscomvpn-geosite@202604152235/release/geosite.dat",
+  "LastUpdated": "1791741600",
+  "DnsHosts": {
+    "cloudflare-dns.com": "1.1.1.1"
+  },
+  "DirectSites": [
+    "geosite:private",
+    "geosite:tld-ru",
+    "geosite:category-ru",
+    "geosite:category-gov-ru",
+    "geosite:category-bank-ru",
+    "geosite:category-ecommerce-ru",
+    "geosite:ru-available-only-inside"
+  ],
+  "DirectIp": [
+    "geoip:private",
+    "geoip:ru",
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16",
+    "169.254.0.0/16",
+    "224.0.0.0/4",
+    "255.255.255.255"
+  ],
+  "ProxySites": [],
+  "ProxyIp": [],
+  "BlockSites": [],
+  "BlockIp": [],
+  "DomainStrategy": "IPIfNonMatch",
+  "FakeDNS": "false",
+  "UseChunkFiles": "true"
+}
