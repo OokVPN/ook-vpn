@@ -1,0 +1,305 @@
+{
+  "dns": {
+    "tag": "dns_out",
+    "servers": [
+      {
+        "address": "77.88.8.8",
+        "domains": [
+          "geosite:category-ru",
+          "domain:ru",
+          "domain:su",
+          "domain:xn--p1ai"
+        ],
+        "skipFallback": true
+      },
+      "1.1.1.1",
+      "8.8.8.8"
+    ],
+    "queryStrategy": "UseIPv4"
+  },
+  "log": {
+    "loglevel": "warning"
+  },
+  "stats": {},
+  "policy": {
+    "system": {
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "routing": {
+    "domainMatcher": "hybrid",
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "protocol": [
+          "bittorrent"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:telegram.org",
+          "domain:t.me",
+          "domain:telegram.me",
+          "domain:tdesktop.com",
+          "domain:telesco.pe",
+          "domain:telegram.dog",
+          "domain:cdn-telegram.org",
+          "domain:telegram-cdn.org",
+          "domain:telegra.ph",
+          "domain:graph.org",
+          "domain:fragment.com",
+          "domain:comments.app",
+          "domain:telegram.space",
+          "domain:tg.dev",
+          "domain:contest.com",
+          "domain:quiz.directory"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "91.105.192.0/23",
+          "91.108.4.0/22",
+          "91.108.8.0/22",
+          "91.108.12.0/22",
+          "91.108.16.0/22",
+          "91.108.20.0/22",
+          "91.108.56.0/22",
+          "95.161.64.0/20",
+          "149.154.160.0/20",
+          "185.76.151.0/24"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "::/0"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "port": "443",
+        "network": "udp",
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "geoip:private",
+          "10.0.0.0/8",
+          "100.64.0.0/10",
+          "127.0.0.0/8",
+          "169.254.0.0/16",
+          "172.16.0.0/12",
+          "192.168.0.0/16",
+          "::1/128",
+          "fc00::/7",
+          "fe80::/10"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:doubleclick.net",
+          "domain:googlesyndication.com",
+          "domain:googleadservices.com",
+          "domain:google-analytics.com",
+          "domain:googletagmanager.com",
+          "domain:googletagservices.com",
+          "domain:adservice.google.com",
+          "domain:2mdn.net",
+          "domain:app-measurement.com",
+          "domain:adnxs.com",
+          "domain:adsrvr.org",
+          "domain:criteo.com",
+          "domain:criteo.net",
+          "domain:rubiconproject.com",
+          "domain:pubmatic.com",
+          "domain:scorecardresearch.com",
+          "domain:moatads.com",
+          "domain:amazon-adsystem.com",
+          "domain:taboola.com",
+          "domain:outbrain.com",
+          "domain:mc.yandex.ru",
+          "domain:an.yandex.ru",
+          "domain:adfox.ru",
+          "domain:yandexadexchange.net",
+          "domain:ad.mail.ru",
+          "domain:top-fwz1.mail.ru",
+          "domain:rs.mail.ru",
+          "domain:appmetrica.yandex.net"
+        ],
+        "outboundTag": "block"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "domain:4pda.ru",
+          "domain:happ.su",
+          "domain:happ-proxy.com"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:private",
+          "geosite:apple",
+          "geosite:apple-pki",
+          "geosite:huawei",
+          "geosite:xiaomi",
+          "geosite:category-android-app-download",
+          "geosite:f-droid",
+          "geosite:twitch"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:category-ru",
+          "geosite:torrent",
+          "domain:ru",
+          "domain:su",
+          "domain:xn--p1ai",
+          "regexp:[.]ru$",
+          "regexp:[.]su$",
+          "regexp:[.]xn--p1ai$",
+          "domain:vk.com",
+          "domain:vk.ru",
+          "domain:vkontakte.ru",
+          "domain:vkvideo.ru",
+          "domain:mail.ru",
+          "domain:max.ru",
+          "domain:ok.ru",
+          "domain:ya.ru",
+          "domain:yandex.ru",
+          "domain:yandex.net",
+          "domain:yastatic.net",
+          "domain:2gis.ru",
+          "domain:avito.ru",
+          "domain:dns-shop.ru",
+          "domain:ozon.ru",
+          "domain:wildberries.ru",
+          "domain:gosuslugi.ru",
+          "domain:government.ru",
+          "domain:gov.ru",
+          "domain:cbr.ru",
+          "domain:mos.ru",
+          "domain:kinopoisk.ru",
+          "domain:rutube.ru",
+          "domain:dzen.ru",
+          "domain:habr.com",
+          "domain:ipify.org",
+          "domain:checkip.amazonaws.com",
+          "domain:ifconfig.me",
+          "domain:ipapi.is",
+          "domain:iplocate.io",
+          "domain:ip.sb",
+          "domain:2ip.ru"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "network": "tcp,udp",
+        "outboundTag": "proxy"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "tag": "socks",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "udp": true,
+        "auth": "noauth",
+        "userLevel": 8
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls",
+          "fakedns"
+        ]
+      }
+    },
+    {
+      "tag": "http",
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "userLevel": 8
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "proxy",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "alb1337.zaebalsanoproxyklinus.lol",
+            "port": 9378,
+            "users": [
+              {
+                "id": "f1b14eaa-8b80-453d-8c45-38a71ebb5a51",
+                "encryption": "none",
+                "flow": ""
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "xhttpSettings": {
+          "mode": "packet-up",
+          "host": "alb1337.zaebalsanoproxyklinus.lol",
+          "path": "/api/9378/download/",
+          "extra": {
+            "path": "/api/9378/download/",
+            "xPaddingKey": "_dc",
+            "uplinkDataKey": "128",
+            "xPaddingHeader": "X-Cache",
+            "xPaddingMethod": "tokenish",
+            "uplinkHTTPMethod": "GET",
+            "xPadding0bfsMode": true,
+            "xPaddingPlacement": "queryInHeader",
+            "uplinkDataPlacement": "header"
+          }
+        },
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "alb1337.zaebalsanoproxyklinus.lol",
+          "enableSessionResumption": false,
+          "fingerprint": "edge",
+          "alpn": [
+            "h2",
+            "http/1.1"
+          ]
+        }
+      }
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom"
+    },
+    {
+      "tag": "block",
+      "protocol": "blackhole"
+    }
+  ],
+  "remarks": "🇦🇱 Албания №1 [YouTube]"
+}
