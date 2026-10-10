@@ -3,6 +3,11 @@ import path from "node:path";
 
 const root = process.cwd();
 
+const configPath = path.join(root, "config.json");
+const config = JSON.parse(
+  fs.readFileSync(configPath, "utf8")
+);
+
 const serversPath = path.join(root, "servers");
 const outputPath = path.join(root, "output");
 
@@ -17,22 +22,23 @@ function getJsonFiles(directory) {
 
   return fs
     .readdirSync(directory)
-    .filter(file =>
-      file.endsWith(".json") &&
-      !file.endsWith(".meta.json")
+    .filter(
+      file =>
+        file.endsWith(".json") &&
+        !file.endsWith(".meta.json")
     );
 }
 
 function loadServers(tier) {
-  const directory = path.join(serversPath, tier);
-  const files = getJsonFiles(directory);
+  const relativePath = config.servers[`${tier}Path`];
 
+  const directory = path.join(root, relativePath);
+  const files = getJsonFiles(directory);
   const servers = [];
 
   for (const file of files) {
-    const id = file.replace(".json", "");
-
-    const configPath = path.join(directory, file);
+    const id = file.replace(/\.json$/, "");
+    const configFile = path.join(directory, file);
 
     const freeMetaPath = path.join(
       serversPath,
@@ -62,16 +68,19 @@ function loadServers(tier) {
     }
 
     try {
-      const config = readJson(configPath);
+      const serverConfig = readJson(configFile);
       const meta = readJson(metaPath);
 
       if (meta.enabled === false) {
         continue;
       }
 
-      config.remarks = meta.name;
+      serverConfig.remarks = meta.name;
 
-      servers.push(config);
+      servers.push({
+        id,
+        config: serverConfig
+      });
     } catch (error) {
       console.error(
         `Failed to load ${tier}/${file}: ${error.message}`
@@ -82,24 +91,67 @@ function loadServers(tier) {
   return servers;
 }
 
+function sortServers(servers, order = []) {
+  const priorities = new Map(
+    order.map((id, index) => [id, index])
+  );
+
+  return servers.sort((a, b) => {
+    const priorityA = priorities.has(a.id)
+      ? priorities.get(a.id)
+      : Infinity;
+
+    const priorityB = priorities.has(b.id)
+      ? priorities.get(b.id)
+      : Infinity;
+
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
+
+    return a.id.localeCompare(b.id);
+  });
+}
+
 function saveOutput(filename, servers) {
   const outputFile = path.join(outputPath, filename);
 
   fs.writeFileSync(
     outputFile,
-    JSON.stringify(servers, null, 2),
+    JSON.stringify(
+      servers.map(server => server.config),
+      null,
+      2
+    ),
     "utf8"
   );
 }
 
 fs.mkdirSync(outputPath, { recursive: true });
 
-const freeServers = loadServers("free");
-const premiumServers = loadServers("premium");
+const freeServers = sortServers(
+  loadServers("free"),
+  config.servers.freeOrder || []
+);
+
+const premiumServers = sortServers(
+  loadServers("premium"),
+  config.servers.premiumOrder || []
+);
 
 saveOutput("free.json", freeServers);
 saveOutput("premium.json", premiumServers);
 
-console.log(`Free servers: ${freeServers.length}`);
-console.log(`Premium servers: ${premiumServers.length}`);
+console.log(
+  `Free order: ${freeServers
+    .map(server => server.id)
+    .join(", ")}`
+);
+
+console.log(
+  `Premium order: ${premiumServers
+    .map(server => server.id)
+    .join(", ")}`
+);
+
 console.log("Generation completed.");
