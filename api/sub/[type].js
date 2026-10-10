@@ -61,6 +61,27 @@ function getTraffic() {
   }
 }
 
+function getRoutingHeader() {
+  const filePath = path.join(
+    process.cwd(),
+    "routing.json"
+  );
+
+  if (!fs.existsSync(filePath)) {
+    throw new Error("routing.json not found");
+  }
+
+  const profile = JSON.parse(
+    fs.readFileSync(filePath, "utf8")
+  );
+
+  const encodedProfile = toBase64(
+    JSON.stringify(profile)
+  );
+
+  return `happ://routing/onadd/${encodedProfile}`;
+}
+
 export default async function handler(req, res) {
   const { type } = req.query;
   const token = req.query.token;
@@ -78,8 +99,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const tokenInfo =
-      await getTokenInfo(token);
+    const tokenInfo = await getTokenInfo(token);
 
     if (!tokenInfo) {
       return res.status(401).json({
@@ -106,40 +126,35 @@ export default async function handler(req, res) {
       });
     }
 
-    const content =
-      fs.readFileSync(
-        filePath,
-        "utf8"
-      );
+    const content = fs.readFileSync(
+      filePath,
+      "utf8"
+    );
 
     const traffic = getTraffic();
 
-    const expire =
-      tokenInfo.subscription_expires_at
-        ? Math.floor(
-            new Date(
-              tokenInfo.subscription_expires_at
-            ).getTime() / 1000
-          )
-        : TEST_EXPIRE;
+    const expire = tokenInfo.subscription_expires_at
+      ? Math.floor(
+          new Date(
+            tokenInfo.subscription_expires_at
+          ).getTime() / 1000
+        )
+      : TEST_EXPIRE;
 
-    const subscriptionUserinfo =
-      [
-        "upload=0",
-        `download=${traffic.usedBytes}`,
-        `total=${traffic.totalBytes}`,
-        `expire=${expire}`
-      ].join("; ");
+    const subscriptionUserinfo = [
+      "upload=0",
+      `download=${traffic.usedBytes}`,
+      `total=${traffic.totalBytes}`,
+      `expire=${expire}`
+    ].join("; ");
 
     const profileTitle =
-      `base64:${toBase64(
-        getProfileTitle(type)
-      )}`;
+      `base64:${toBase64(getProfileTitle(type))}`;
 
     const announce =
-      `base64:${toBase64(
-        getAnnounce()
-      )}`;
+      `base64:${toBase64(getAnnounce())}`;
+
+    const routing = getRoutingHeader();
 
     res.setHeader(
       "Content-Type",
@@ -169,6 +184,11 @@ export default async function handler(req, res) {
     res.setHeader(
       "Announce",
       announce
+    );
+
+    res.setHeader(
+      "routing",
+      routing
     );
 
     if (req.method === "HEAD") {
