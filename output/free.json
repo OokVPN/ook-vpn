@@ -6095,5 +6095,353 @@
       }
     ],
     "remarks": "🇦🇱 Албания №1 [YouTube]"
+  },
+  {
+    "remarks": "🇩🇪 LTE №1 | Все операторы",
+    "log": {
+      "loglevel": "warning"
+    },
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8",
+          "domains": [
+            "geosite:category-ru",
+            "domain:ru",
+            "domain:su",
+            "domain:xn--p1ai",
+            "domain:xn--p1acf",
+            "domain:xn--p1ag"
+          ],
+          "skipFallback": true
+        },
+        "1.1.1.1",
+        "1.0.0.1"
+      ],
+      "queryStrategy": "UseIPv4"
+    },
+    "routing": {
+      "domainStrategy": "IPIfNonMatch",
+      "domainMatcher": "hybrid",
+      "rules": [
+        {
+          "type": "field",
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "ip": [
+            "77.88.8.8/32",
+            "10.0.0.0/8",
+            "100.64.0.0/10",
+            "172.16.0.0/12",
+            "192.168.0.0/16",
+            "127.0.0.0/8",
+            "169.254.0.0/16",
+            "::1/128",
+            "fc00::/7",
+            "fe80::/10"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "domain:telegram.org",
+            "domain:t.me",
+            "domain:telegram.me",
+            "domain:tdesktop.com",
+            "domain:telesco.pe",
+            "domain:telegram.dog",
+            "domain:cdn-telegram.org",
+            "domain:telegram-cdn.org",
+            "domain:telegra.ph",
+            "domain:graph.org",
+            "domain:fragment.com",
+            "domain:comments.app",
+            "domain:telegram.space",
+            "domain:tg.dev",
+            "domain:contest.com",
+            "domain:quiz.directory"
+          ],
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "ip": [
+            "149.154.160.0/20",
+            "91.108.4.0/22",
+            "91.108.8.0/22",
+            "91.108.12.0/22",
+            "91.108.16.0/22",
+            "91.108.20.0/22",
+            "91.108.56.0/22",
+            "95.161.64.0/20",
+            "185.76.151.0/24",
+            "17.0.0.0/8",
+            "2620:149:a44::/48",
+            "2403:300:a42::/48",
+            "2403:300:a51::/48",
+            "2a01:b740:a42::/48"
+          ],
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "network": "udp",
+          "port": "443",
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "domain:doubleclick.net",
+            "domain:googlesyndication.com",
+            "domain:googleadservices.com",
+            "domain:google-analytics.com",
+            "domain:googletagmanager.com",
+            "domain:googletagservices.com",
+            "domain:adservice.google.com",
+            "domain:2mdn.net",
+            "domain:app-measurement.com",
+            "domain:adnxs.com",
+            "domain:adsrvr.org",
+            "domain:criteo.com",
+            "domain:criteo.net",
+            "domain:rubiconproject.com",
+            "domain:pubmatic.com",
+            "domain:scorecardresearch.com",
+            "domain:moatads.com",
+            "domain:amazon-adsystem.com",
+            "domain:taboola.com",
+            "domain:outbrain.com",
+            "domain:mc.yandex.ru",
+            "domain:an.yandex.ru",
+            "domain:adfox.ru",
+            "domain:yandexadexchange.net",
+            "domain:ad.mail.ru",
+            "domain:top-fwz1.mail.ru",
+            "domain:rs.mail.ru",
+            "domain:appmetrica.yandex.net"
+          ],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "domain:sber.ru",
+            "domain:sberbank.ru",
+            "domain:sberbank.com",
+            "domain:lava.ru",
+            "domain:pay.lava.ru",
+            "domain:api.lava.ru",
+            "domain:business.lava.ru",
+            "domain:yoomoney.ru",
+            "domain:yookassa.ru",
+            "domain:inetdostup.com",
+            "domain:media.inetdostup.com",
+            "domain:n1.95-163-232-163.sslip.io",
+            "domain:mediawaflya.inetdostup.com",
+            "domain:tbank.ru",
+            "domain:tinkoff.ru",
+            "domain:smartcaptcha.yandexcloud.net",
+            "domain:yastatic.net",
+            "domain:yandex.com",
+            "domain:s3.yandex.net",
+            "domain:cdn.yandex.net",
+            "domain:cloud.yandex.ru",
+            "domain:static.yoomoney.ru",
+            "domain:captcha-api.yandex.ru",
+            "domain:cdn.antilopay.com",
+            "domain:astatic.antilopay.com",
+            "domain:sess.antilopay.com",
+            "domain:gate.antilopay.com",
+            "domain:lk.antilopay.com",
+            "domain:antilopay.com",
+            "domain:sbrf.ru",
+            "domain:sberbank-online.ru",
+            "domain:tbank-online.com",
+            "domain:tinkoffbank.ru",
+            "domain:alfabank.ru",
+            "domain:alfabank.com",
+            "domain:gazprombank.ru",
+            "domain:raiffeisen.ru",
+            "domain:pochtabank.ru",
+            "domain:rshb.ru",
+            "domain:sovcombank.ru",
+            "domain:open.ru",
+            "domain:psbank.ru",
+            "domain:mkb.ru",
+            "domain:rosbank.ru",
+            "domain:uralsib.ru",
+            "domain:homecredit.ru",
+            "domain:otpbank.ru",
+            "domain:bspb.ru",
+            "domain:akbars.ru",
+            "domain:mtsbank.ru",
+            "domain:domrf.ru",
+            "domain:nspk.ru",
+            "domain:mironline.ru",
+            "domain:push.apple.com",
+            "domain:mtalk.google.com"
+          ],
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "domain:ozon.ru",
+            "domain:ozone.ru",
+            "domain:o3.ru",
+            "domain:max.ru",
+            "domain:wildberries.ru",
+            "domain:wb.ru",
+            "domain:wbbasket.ru",
+            "domain:gosuslugi.ru",
+            "domain:gu-st.ru",
+            "domain:nalog.ru",
+            "domain:mos.ru",
+            "domain:vk.com",
+            "domain:vk.ru",
+            "domain:userapi.com",
+            "domain:mycdn.me",
+            "domain:ok.ru",
+            "domain:yandex.ru",
+            "domain:ya.ru",
+            "domain:vtb.ru",
+            "domain:mvideo.ru",
+            "domain:dns-shop.ru",
+            "domain:citilink.ru",
+            "domain:avito.ru",
+            "domain:aliexpress.ru",
+            "domain:mts.ru",
+            "domain:beeline.ru",
+            "domain:megafon.ru",
+            "domain:tele2.ru",
+            "domain:t2.ru",
+            "domain:2gis.ru",
+            "domain:zvuk.com",
+            "domain:zvq.me",
+            "domain:sberzvuk.com",
+            "domain:servicepipe.tech",
+            "domain:ozonusercontent.com",
+            "domain:wbstatic.net",
+            "domain:vkuseraudio.net",
+            "domain:vkuservideo.net",
+            "domain:vk-cdn.net",
+            "domain:vtb.com"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "regexp:[.]ru$",
+            "regexp:[.]su$",
+            "regexp:[.]xn--p1ai$",
+            "regexp:[.]xn--p1acf$",
+            "regexp:[.]xn--p1ag$",
+            "geosite:category-ru",
+            "domain:ru",
+            "domain:su",
+            "domain:xn--p1ai",
+            "domain:xn--p1acf",
+            "domain:xn--p1ag"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "routeOnly": true
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ],
+          "routeOnly": true
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "nashzapas.pro",
+              "port": 443,
+              "users": [
+                {
+                  "id": "1b66c786-4ad6-4782-b5f8-48e4ad5b999a",
+                  "encryption": "none"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "xhttpSettings": {
+            "mode": "auto",
+            "host": "nashzapas.pro",
+            "path": "/nzws"
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "nashzapas.pro",
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "direct",
+        "protocol": "freedom"
+      },
+      {
+        "tag": "block",
+        "protocol": "blackhole"
+      }
+    ]
   }
 ]
