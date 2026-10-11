@@ -839,6 +839,79 @@
       "settings": {
         "vnext": [
           {
+            "address": "se-2.pythonsetupbib.online",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": ""
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "xhttpSettings": {
+          "mode": "packet-up",
+          "host": "se-2.pythonsetupbib.online",
+          "path": "/",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "se-2.pythonsetupbib.online",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "spiderX": "/",
+          "fingerprint": "firefox"
+        }
+      }
+    },
+    {
+      "tag": "tcp",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "se-2.pythonsetupbib.online",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "tcpSettings": {},
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "se-2.pythonsetupbib.online",
+          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
+          "shortId": "a1037b25dcef6aa7",
+          "fingerprint": "firefox"
+        }
+      }
+    },
+    {
+      "tag": "fb",
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
             "address": "sw.golangwikito.cfd",
             "port": 61374,
             "users": [
@@ -877,80 +950,6 @@
       }
     },
     {
-      "tag": "tcp",
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "sw.golangwikito.cfd",
-            "port": 443,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "sw.golangwikito.cfd",
-          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-          "shortId": "a1037b25dcef6aa7",
-          "fingerprint": "chrome"
-        }
-      }
-    },
-    {
-      "tag": "fb",
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "ge-s-1.pythonmakemigreat.wiki",
-            "port": 61374,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none",
-                "flow": ""
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "xhttpSettings": {
-          "mode": "packet-up",
-          "host": "ge-s-1.pythonmakemigreat.wiki",
-          "path": "/",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "ge-s-1.pythonmakemigreat.wiki",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
-          "spiderX": "/",
-          "fingerprint": "firefox"
-        }
-      }
-    },
-    {
       "tag": "direct",
       "protocol": "freedom"
     },
@@ -973,4 +972,4 @@
     ]
   },
   "remarks": "🇸🇪 Швеция №1"
-          }
+}
