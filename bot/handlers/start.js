@@ -10,6 +10,9 @@ import {
   createSubscription
 } from "../../api/lib/subscriptions.js";
 
+const MENU_PHOTO =
+  "https://hotimg.com/f/kK9RT4nw.png";
+
 const maintenanceMessage =
   "🛠 OokVPN временно закрыт\n\n" +
   "Мы делаем масштабную переработку VPN.\n\n" +
@@ -22,20 +25,9 @@ const welcomeMessage =
 
 async function sendMessage(
   chatId,
-  text,
-  replyMarkup = null
+  text
 ) {
-  const token =
-    process.env.TELEGRAM_BOT_TOKEN;
-
-  const body = {
-    chat_id: chatId,
-    text
-  };
-
-  if (replyMarkup) {
-    body.reply_markup = replyMarkup;
-  }
+  const token = process.env.TELEGRAM_BOT_TOKEN;
 
   const response = await fetch(
     `https://api.telegram.org/bot${token}/sendMessage`,
@@ -44,13 +36,46 @@ async function sendMessage(
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({
+        chat_id: chatId,
+        text
+      })
     }
   );
 
-  if (!response.ok) {
+  const result = await response.json();
+
+  if (!response.ok || !result.ok) {
     throw new Error(
-      `Telegram API error: ${response.status}`
+      `Telegram sendMessage error: ${JSON.stringify(result)}`
+    );
+  }
+}
+
+async function sendWelcomePhoto(chatId) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+
+  const response = await fetch(
+    `https://api.telegram.org/bot${token}/sendPhoto`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        photo: MENU_PHOTO,
+        caption: welcomeMessage,
+        reply_markup: getMainKeyboard()
+      })
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.ok) {
+    throw new Error(
+      `Telegram sendPhoto error: ${JSON.stringify(result)}`
     );
   }
 }
@@ -69,30 +94,19 @@ export async function handleStart(
     return;
   }
 
-  const telegramId =
-    message.from?.id;
+  const telegramId = message.from?.id;
 
   if (!telegramId) {
-    throw new Error(
-      "Telegram ID is missing"
-    );
+    throw new Error("Telegram ID is missing");
   }
 
-  let user =
-    await getUserByTelegramId(
-      telegramId
-    );
+  let user = await getUserByTelegramId(telegramId);
 
   if (!user) {
-    user = await createUser(
-      telegramId
-    );
+    user = await createUser(telegramId);
   }
 
-  const subscription =
-    await getActiveSubscription(
-      user.id
-    );
+  const subscription = await getActiveSubscription(user.id);
 
   if (!subscription) {
     await createSubscription(
@@ -103,9 +117,5 @@ export async function handleStart(
     );
   }
 
-  await sendMessage(
-    message.chat.id,
-    welcomeMessage,
-    getMainKeyboard()
-  );
+  await sendWelcomePhoto(message.chat.id);
 }
