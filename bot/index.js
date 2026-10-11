@@ -1,10 +1,16 @@
-
 import fs from "node:fs";
 import path from "node:path";
 
 import { handleStart } from "./handlers/start.js";
 import { handleSubscription } from "./handlers/subscription.js";
 import { getMainKeyboard } from "./keyboards/main.js";
+
+const MENU_PHOTO =
+  "https://hotimg.com/f/kK9RT4nw.png";
+
+const welcomeMessage =
+  "👋 Добро пожаловать в OokVPN!\n\n" +
+  "Выбери нужный раздел:";
 
 function getConfig() {
   const configPath = path.join(
@@ -40,7 +46,7 @@ async function answerCallback(
     body.text = text;
   }
 
-  await fetch(
+  const response = await fetch(
     `https://api.telegram.org/bot${token}/answerCallbackQuery`,
     {
       method: "POST",
@@ -50,6 +56,14 @@ async function answerCallback(
       body: JSON.stringify(body)
     }
   );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.ok) {
+    throw new Error(
+      `Telegram answerCallbackQuery error: ${JSON.stringify(result)}`
+    );
+  }
 }
 
 async function editMessage(
@@ -60,7 +74,7 @@ async function editMessage(
 ) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
 
-  await fetch(
+  const response = await fetch(
     `https://api.telegram.org/bot${token}/editMessageText`,
     {
       method: "POST",
@@ -75,6 +89,51 @@ async function editMessage(
       })
     }
   );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.ok) {
+    throw new Error(
+      `Telegram editMessageText error: ${JSON.stringify(result)}`
+    );
+  }
+}
+
+async function editPhotoMessage(
+  chatId,
+  messageId,
+  caption,
+  replyMarkup
+) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+
+  const response = await fetch(
+    `https://api.telegram.org/bot${token}/editMessageMedia`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        message_id: messageId,
+        media: {
+          type: "photo",
+          media: MENU_PHOTO,
+          caption
+        },
+        reply_markup: replyMarkup
+      })
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok || !result.ok) {
+    throw new Error(
+      `Telegram editMessageMedia error: ${JSON.stringify(result)}`
+    );
+  }
 }
 
 function getBackKeyboard() {
@@ -174,11 +233,10 @@ export async function handleUpdate(update) {
   if (data === "back") {
     await answerCallback(callbackQuery.id);
 
-    await editMessage(
+    await editPhotoMessage(
       callbackQuery.message.chat.id,
       callbackQuery.message.message_id,
-      "👋 Главное меню\n\n" +
-        "Выбери нужный раздел:",
+      welcomeMessage,
       getMainKeyboard()
     );
 
