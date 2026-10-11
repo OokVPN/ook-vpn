@@ -4,7 +4,8 @@ export function getMainKeyboard() {
       [
         {
           text: "Моя подписка",
-          callback_data: "subscription"
+          callback_data: "subscription",
+          icon_custom_emoji_id: "5877465816030515018"
         }
       ],
       [
