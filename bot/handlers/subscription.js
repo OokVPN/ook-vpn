@@ -144,8 +144,9 @@ function getSubscriptionKeyboard(
       ],
       [
         {
-          text: "◀️ Назад",
-          callback_data: "back"
+          text: "Назад",
+          callback_data: "back",
+           icon_custom_emoji_id: "5877629862306385808"
         }
       ]
     ]
