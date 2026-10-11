@@ -1,4 +1,3 @@
-
 import fs from "node:fs";
 import path from "node:path";
 
@@ -214,8 +213,8 @@ async function showHelp(callbackQuery) {
   await showTextSection(
     callbackQuery,
     "❓ Помощь\n\n" +
-      "Если у тебя возникли проблемы с OokVPN, " +
-      "обратись в поддержку.",
+      "Если у тебя возникли проблемы с VPN, " +
+      "обратись в поддержку: @OokVPNHelp.",
     getBackKeyboard()
   );
 }
