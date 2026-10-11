@@ -178,6 +178,7 @@ function getSubscriptionKeyboard(url) {
       [
         {
           text: "Скопировать",
+          style: "success",
           copy_text: {
             text: url
           }
