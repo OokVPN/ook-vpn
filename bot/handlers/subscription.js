@@ -136,7 +136,7 @@ function getSubscriptionKeyboard(
     inline_keyboard: [
       [
         {
-          text: "📋 Скопировать",
+          text: "Скопировать",
           copy_text: {
             text: url
           }
