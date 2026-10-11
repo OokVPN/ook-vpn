@@ -1,19 +1,9 @@
+
 import fs from "node:fs";
 import path from "node:path";
 
 import { handleStart } from "./handlers/start.js";
-
-import {
-  handleSubscription
-} from "./handlers/subscription.js";
-
-import {
-  handleDevices,
-  handleDeleteDevice,
-  handleRestoreMenu,
-  handleRestoreDevice
-} from "./handlers/devices.js";
-
+import { handleSubscription } from "./handlers/subscription.js";
 import { getMainKeyboard } from "./keyboards/main.js";
 
 function getConfig() {
@@ -40,8 +30,7 @@ async function answerCallback(
   callbackQueryId,
   text = null
 ) {
-  const token =
-    process.env.TELEGRAM_BOT_TOKEN;
+  const token = process.env.TELEGRAM_BOT_TOKEN;
 
   const body = {
     callback_query_id: callbackQueryId
@@ -69,8 +58,7 @@ async function editMessage(
   text,
   replyMarkup
 ) {
-  const token =
-    process.env.TELEGRAM_BOT_TOKEN;
+  const token = process.env.TELEGRAM_BOT_TOKEN;
 
   await fetch(
     `https://api.telegram.org/bot${token}/editMessageText`,
@@ -94,12 +82,24 @@ function getBackKeyboard() {
     inline_keyboard: [
       [
         {
-          text: "◀️ Назад",
-          callback_data: "back"
+          text: "Назад",
+          callback_data: "back",
+          icon_custom_emoji_id: "5877629862306385808"
         }
       ]
     ]
   };
+}
+
+async function showDevices(callbackQuery) {
+  await editMessage(
+    callbackQuery.message.chat.id,
+    callbackQuery.message.message_id,
+    "📱 Менеджер устройств\n\n" +
+      "Менеджер устройств скоро появится!\n\n" +
+      "Мы готовим обновление OokVPN.",
+    getBackKeyboard()
+  );
 }
 
 async function showPremium(callbackQuery) {
@@ -155,8 +155,7 @@ export async function handleUpdate(update) {
     return;
   }
 
-  const callbackQuery =
-    update.callback_query;
+  const callbackQuery = update.callback_query;
 
   if (
     config.maintenance &&
@@ -170,13 +169,10 @@ export async function handleUpdate(update) {
     return;
   }
 
-  const data =
-    callbackQuery.data || "";
+  const data = callbackQuery.data || "";
 
   if (data === "back") {
-    await answerCallback(
-      callbackQuery.id
-    );
+    await answerCallback(callbackQuery.id);
 
     await editMessage(
       callbackQuery.message.chat.id,
@@ -190,110 +186,38 @@ export async function handleUpdate(update) {
   }
 
   if (data === "subscription") {
-    await handleSubscription(
-      callbackQuery
-    );
-
+    await handleSubscription(callbackQuery);
     return;
   }
 
-  if (data === "devices") {
-    await handleDevices(
-      callbackQuery
-    );
-
+  if (
+    data === "devices" ||
+    data === "restore_menu" ||
+    data.startsWith("delete_device:") ||
+    data.startsWith("restore_device:")
+  ) {
+    await answerCallback(callbackQuery.id);
+    await showDevices(callbackQuery);
     return;
   }
 
   if (data === "premium") {
-    await answerCallback(
-      callbackQuery.id
-    );
-
-    await showPremium(
-      callbackQuery
-    );
-
+    await answerCallback(callbackQuery.id);
+    await showPremium(callbackQuery);
     return;
   }
 
   if (data === "stats") {
-    await answerCallback(
-      callbackQuery.id
-    );
-
-    await showStats(
-      callbackQuery
-    );
-
+    await answerCallback(callbackQuery.id);
+    await showStats(callbackQuery);
     return;
   }
 
   if (data === "help") {
-    await answerCallback(
-      callbackQuery.id
-    );
-
-    await showHelp(
-      callbackQuery
-    );
-
+    await answerCallback(callbackQuery.id);
+    await showHelp(callbackQuery);
     return;
   }
 
-  if (data === "restore_menu") {
-    await handleRestoreMenu(
-      callbackQuery
-    );
-
-    return;
-  }
-
-  if (data.startsWith("delete_device:")) {
-    const deviceId = Number(
-      data.split(":")[1]
-    );
-
-    if (!Number.isInteger(deviceId)) {
-      await answerCallback(
-        callbackQuery.id,
-        "Некорректное устройство"
-      );
-
-      return;
-    }
-
-    await handleDeleteDevice(
-      callbackQuery,
-      deviceId
-    );
-
-    return;
-  }
-
-  if (data.startsWith("restore_device:")) {
-    const deviceId = Number(
-      data.split(":")[1]
-    );
-
-    if (!Number.isInteger(deviceId)) {
-      await answerCallback(
-        callbackQuery.id,
-        "Некорректное устройство"
-      );
-
-      return;
-    }
-
-    await handleRestoreDevice(
-      callbackQuery,
-      deviceId
-    );
-
-    return;
-  }
-
-  await answerCallback(
-    callbackQuery.id
-  );
+  await answerCallback(callbackQuery.id);
 }
