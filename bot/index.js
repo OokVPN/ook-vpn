@@ -32,22 +32,11 @@ function isAdmin(telegramId) {
   return adminIds.includes(String(telegramId));
 }
 
-async function answerCallback(
-  callbackQueryId,
-  text = null
-) {
+async function telegramRequest(method, body) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
 
-  const body = {
-    callback_query_id: callbackQueryId
-  };
-
-  if (text) {
-    body.text = text;
-  }
-
   const response = await fetch(
-    `https://api.telegram.org/bot${token}/answerCallbackQuery`,
+    `https://api.telegram.org/bot${token}/${method}`,
     {
       method: "POST",
       headers: {
@@ -61,79 +50,115 @@ async function answerCallback(
 
   if (!response.ok || !result.ok) {
     throw new Error(
-      `Telegram answerCallbackQuery error: ${JSON.stringify(result)}`
+      `Telegram ${method} error: ${
+        result.description || JSON.stringify(result)
+      }`
     );
   }
+
+  return result;
 }
 
-async function editMessage(
+async function answerCallback(
+  callbackQueryId,
+  text = null
+) {
+  const body = {
+    callback_query_id: callbackQueryId
+  };
+
+  if (text) {
+    body.text = text;
+  }
+
+  await telegramRequest(
+    "answerCallbackQuery",
+    body
+  );
+}
+
+async function sendTextMessage(
+  chatId,
+  text,
+  replyMarkup
+) {
+  await telegramRequest("sendMessage", {
+    chat_id: chatId,
+    text,
+    reply_markup: replyMarkup
+  });
+}
+
+async function editTextMessage(
   chatId,
   messageId,
   text,
   replyMarkup
 ) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-
-  const response = await fetch(
-    `https://api.telegram.org/bot${token}/editMessageText`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        message_id: messageId,
-        text,
-        reply_markup: replyMarkup
-      })
-    }
-  );
-
-  const result = await response.json();
-
-  if (!response.ok || !result.ok) {
-    throw new Error(
-      `Telegram editMessageText error: ${JSON.stringify(result)}`
-    );
-  }
+  await telegramRequest("editMessageText", {
+    chat_id: chatId,
+    message_id: messageId,
+    text,
+    reply_markup: replyMarkup
+  });
 }
 
-async function editPhotoMessage(
+async function deleteMessage(
   chatId,
-  messageId,
-  caption,
+  messageId
+) {
+  await telegramRequest("deleteMessage", {
+    chat_id: chatId,
+    message_id: messageId
+  });
+}
+
+async function showTextSection(
+  callbackQuery,
+  text,
   replyMarkup
 ) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const message = callbackQuery.message;
+  const chatId = message.chat.id;
 
-  const response = await fetch(
-    `https://api.telegram.org/bot${token}/editMessageMedia`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        message_id: messageId,
-        media: {
-          type: "photo",
-          media: MENU_PHOTO,
-          caption
-        },
-        reply_markup: replyMarkup
-      })
-    }
+  if (message.photo?.length) {
+    await deleteMessage(
+      chatId,
+      message.message_id
+    );
+
+    await sendTextMessage(
+      chatId,
+      text,
+      replyMarkup
+    );
+
+    return;
+  }
+
+  await editTextMessage(
+    chatId,
+    message.message_id,
+    text,
+    replyMarkup
+  );
+}
+
+async function showMainMenu(callbackQuery) {
+  const message = callbackQuery.message;
+  const chatId = message.chat.id;
+
+  await deleteMessage(
+    chatId,
+    message.message_id
   );
 
-  const result = await response.json();
-
-  if (!response.ok || !result.ok) {
-    throw new Error(
-      `Telegram editMessageMedia error: ${JSON.stringify(result)}`
-    );
-  }
+  await telegramRequest("sendPhoto", {
+    chat_id: chatId,
+    photo: MENU_PHOTO,
+    caption: welcomeMessage,
+    reply_markup: getMainKeyboard()
+  });
 }
 
 function getBackKeyboard() {
@@ -151,9 +176,8 @@ function getBackKeyboard() {
 }
 
 async function showDevices(callbackQuery) {
-  await editMessage(
-    callbackQuery.message.chat.id,
-    callbackQuery.message.message_id,
+  await showTextSection(
+    callbackQuery,
     "📱 Менеджер устройств\n\n" +
       "Менеджер устройств скоро появится!\n\n" +
       "Мы готовим обновление OokVPN.",
@@ -162,9 +186,8 @@ async function showDevices(callbackQuery) {
 }
 
 async function showPremium(callbackQuery) {
-  await editMessage(
-    callbackQuery.message.chat.id,
-    callbackQuery.message.message_id,
+  await showTextSection(
+    callbackQuery,
     "💎 Premium\n\n" +
       "⭐ Больше возможностей\n" +
       "📡 Premium-серверы\n" +
@@ -175,9 +198,8 @@ async function showPremium(callbackQuery) {
 }
 
 async function showStats(callbackQuery) {
-  await editMessage(
-    callbackQuery.message.chat.id,
-    callbackQuery.message.message_id,
+  await showTextSection(
+    callbackQuery,
     "📊 Статистика\n\n" +
       "Статистика пользователя скоро будет доступна.",
     getBackKeyboard()
@@ -185,9 +207,8 @@ async function showStats(callbackQuery) {
 }
 
 async function showHelp(callbackQuery) {
-  await editMessage(
-    callbackQuery.message.chat.id,
-    callbackQuery.message.message_id,
+  await showTextSection(
+    callbackQuery,
     "❓ Помощь\n\n" +
       "Если у тебя возникли проблемы с OokVPN, " +
       "обратись в поддержку.",
@@ -232,14 +253,7 @@ export async function handleUpdate(update) {
 
   if (data === "back") {
     await answerCallback(callbackQuery.id);
-
-    await editPhotoMessage(
-      callbackQuery.message.chat.id,
-      callbackQuery.message.message_id,
-      welcomeMessage,
-      getMainKeyboard()
-    );
-
+    await showMainMenu(callbackQuery);
     return;
   }
 
