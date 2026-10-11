@@ -1,3 +1,4 @@
+
 import fs from "node:fs";
 import path from "node:path";
 
@@ -10,6 +11,9 @@ const MENU_PHOTO =
 
 const welcomeMessage =
   "👋 Добро пожаловать в OokVPN!\n\n" +
+  "Выбери нужный раздел:";
+
+const mainMenuMessage =
   "Выбери нужный раздел:";
 
 function getConfig() {
@@ -156,7 +160,7 @@ async function showMainMenu(callbackQuery) {
   await telegramRequest("sendPhoto", {
     chat_id: chatId,
     photo: MENU_PHOTO,
-    caption: welcomeMessage,
+    caption: mainMenuMessage,
     reply_markup: getMainKeyboard()
   });
 }
