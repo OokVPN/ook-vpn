@@ -1,4 +1,8 @@
 {
+  "remarks": "🇦🇱 Албания №1 [YouTube]",
+  "log": {
+    "loglevel": "warning"
+  },
   "dns": {
     "tag": "dns_out",
     "servers": [
@@ -16,9 +20,6 @@
       "8.8.8.8"
     ],
     "queryStrategy": "UseIPv4"
-  },
-  "log": {
-    "loglevel": "warning"
   },
   "stats": {},
   "policy": {
@@ -153,7 +154,6 @@
         "domain": [
           "geosite:private",
           "geosite:apple",
-          "geosite:apple-pki",
           "geosite:huawei",
           "geosite:xiaomi",
           "geosite:category-android-app-download",
@@ -211,7 +211,19 @@
       {
         "type": "field",
         "network": "tcp,udp",
-        "outboundTag": "proxy"
+        "balancerTag": "PROXY"
+      }
+    ],
+    "balancers": [
+      {
+        "tag": "PROXY",
+        "selector": [
+          "proxy"
+        ],
+        "strategy": {
+          "type": "leastPing"
+        },
+        "fallbackTag": "proxy"
       }
     ]
   },
@@ -301,5 +313,15 @@
       "protocol": "blackhole"
     }
   ],
-  "remarks": "🇦🇱 Албания №1 [YouTube]"
+  "burstObservatory": {
+    "pingConfig": {
+      "timeout": "2s",
+      "interval": "10s",
+      "sampling": 2,
+      "destination": "http://www.gstatic.com/generate_204"
+    },
+    "subjectSelector": [
+      "proxy"
+    ]
+  }
 }
