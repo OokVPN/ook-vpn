@@ -11,14 +11,7 @@
     "freePath": "servers/free",
     "premiumPath": "servers/premium",
     "freeOrder": [
-      "auto",
-      "germany-01",
-      "netherlands-01",
-      "finland-01",
-      "poland-01",
-      "sweden-01",
-      "albania-01",
-      "germany-02.bypass"
+      "tech"
     ],
     "premiumOrder": [
       "germany-01"
