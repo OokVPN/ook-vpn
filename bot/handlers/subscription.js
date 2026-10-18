@@ -67,10 +67,25 @@ async function answerCallback(
     body.text = text;
   }
 
-  await telegramRequest(
-    "answerCallbackQuery",
-    body
-  );
+  try {
+    await telegramRequest(
+      "answerCallbackQuery",
+      body
+    );
+  } catch (error) {
+    const message = String(error?.message || error);
+
+    if (
+      message.includes("query is too old") ||
+      message.includes("query ID is invalid") ||
+      message.includes("response timeout expired")
+    ) {
+      console.warn("Ignoring expired Telegram callback query:", message);
+      return;
+    }
+
+    throw error;
+  }
 }
 
 async function sendTextMessage(
@@ -212,6 +227,9 @@ function getBackKeyboard() {
 export async function handleSubscription(
   callbackQuery
 ) {
+  // Acknowledge immediately, before database calls can make the callback expire.
+  await answerCallback(callbackQuery.id);
+
   const telegramId = callbackQuery.from.id;
 
   const user = await getUserByTelegramId(
@@ -219,11 +237,6 @@ export async function handleSubscription(
   );
 
   if (!user) {
-    await answerCallback(
-      callbackQuery.id,
-      "Пользователь не найден"
-    );
-
     return;
   }
 
@@ -232,8 +245,6 @@ export async function handleSubscription(
   );
 
   if (!subscription) {
-    await answerCallback(callbackQuery.id);
-
     await showTextSection(
       callbackQuery,
       "📡 Моя подписка\n\n" +
@@ -292,11 +303,9 @@ export async function handleSubscription(
     `📱 Устройства: ${devicesText}\n` +
     `⏳ Действует до: ${formatDate(subscription.expires_at)}`;
 
-  await answerCallback(callbackQuery.id);
-
   await showTextSection(
     callbackQuery,
     text,
     getSubscriptionKeyboard(url)
   );
-}
+                       }
