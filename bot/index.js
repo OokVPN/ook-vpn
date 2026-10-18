@@ -74,10 +74,25 @@ async function answerCallback(
     body.text = text;
   }
 
-  await telegramRequest(
-    "answerCallbackQuery",
-    body
-  );
+  try {
+    await telegramRequest(
+      "answerCallbackQuery",
+      body
+    );
+  } catch (error) {
+    const message = String(error?.message || error);
+
+    if (
+      message.includes("query is too old") ||
+      message.includes("query ID is invalid") ||
+      message.includes("response timeout expired")
+    ) {
+      console.warn("Ignoring expired Telegram callback query:", message);
+      return;
+    }
+
+    throw error;
+  }
 }
 
 async function sendTextMessage(
