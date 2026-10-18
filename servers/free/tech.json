@@ -1,42 +1,50 @@
 {
-  "remarks": "🇫🇲 Ведутся технические работы",
   "log": {
     "loglevel": "warning"
   },
   "inbounds": [
     {
-      "tag": "vless-in",
-      "listen": "0.0.0.0",
-      "port": 0000,
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      },
+      "tag": "socks"
+    }
+  ],
+  "outbounds": [
+    {
       "protocol": "vless",
       "settings": {
-        "clients": [
+        "vnext": [
           {
-            "id": "00000000-0000-0000-0000-000000000000",
-            "email": "0000"
+            "address": "0000",
+            "port": 0,
+            "users": [
+              {
+                "id": "00000000-0000-0000-0000-000000000000",
+                "encryption": "none"
+              }
+            ]
           }
-        ],
-        "decryption": "none"
+        ]
       },
       "streamSettings": {
         "network": "tcp",
         "security": "none"
       },
-      "sniffing": {
-        "enabled": false
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "tag": "direct",
-      "protocol": "freedom",
-      "settings": {}
+      "tag": "proxy"
     },
     {
-      "tag": "block",
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
       "protocol": "blackhole",
-      "settings": {}
+      "tag": "block"
     }
-  ]
+  ],
+  "remarks": "🇫🇲 Ведутся технические работы"
 }
