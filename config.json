@@ -2,7 +2,7 @@
   "project": {
     "name": "OokVPN"
   },
-  "maintenance": false,
+  "maintenance": true,
   "subscriptions": {
     "free": true,
     "premium": true
