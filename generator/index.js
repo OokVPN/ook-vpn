@@ -130,7 +130,18 @@ async function fetchSource() {
   if (!url) throw new Error("Не задан FREE_UPSTREAM_URL. Добавь ссылку в GitHub Secrets → Actions.");
   const ua = process.env.FREE_UPSTREAM_UA || "OokVPN-Subscription-Generator/1.1";
   const started = Date.now();
-  const response = await fetch(url, { headers: { "user-agent": ua }, signal: AbortSignal.timeout(30000) });
+  let response;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      response = await fetch(url, { headers: { "user-agent": ua }, signal: AbortSignal.timeout(60000) });
+      if (response.status < 500) break;
+      console.warn(`Попытка ${attempt}: HTTP ${response.status}`);
+    } catch (error) {
+      console.warn(`Попытка ${attempt}: ${error.name === "TimeoutError" ? "таймаут 60 с" : error.message}`);
+      if (attempt === 3) throw error;
+    }
+    await new Promise((r) => setTimeout(r, 5000 * attempt));
+  }
   const body = await response.text();
   const h = (name) => response.headers.get(name) || "-";
   console.log(`Источник: HTTP ${response.status}, ${Date.now() - started} мс, content-type=${h("content-type")}, redirected=${response.redirected}, subscription-userinfo=${response.headers.has("subscription-userinfo")}, profile-title=${response.headers.has("profile-title")}`);
@@ -140,6 +151,16 @@ async function fetchSource() {
   return decodeSubscription(body);
 }
 function safeDecode(value) { try { return decodeURIComponent(value || ""); } catch { return value || ""; } }
+function isProxyOutbound(o) {
+  if (!o || typeof o !== "object" || typeof o.protocol !== "string") return false;
+  const st = o.settings;
+  if (!st || typeof st !== "object") return false;
+  return Array.isArray(st.vnext) || Array.isArray(st.servers) || Array.isArray(st.peers) || (typeof st.address === "string" && st.port != null);
+}
+function nodeFingerprint(outbound) {
+  const { tag, ...rest } = outbound || {};
+  return crypto.createHash("sha256").update(JSON.stringify(rest)).digest("hex");
+}
 function isService(outbound) {
   const tag = String(outbound?.tag || "").toLowerCase(); const p = String(outbound?.protocol || "").toLowerCase();
   return ["direct","block","dns","freedom","blackhole"].includes(tag) || ["freedom","blackhole","dns"].includes(p);
@@ -151,12 +172,12 @@ function extractOutboundNodes(config, parentName = "") {
   for (const balancer of balancers) {
     const selectors = Array.isArray(balancer.selector) ? balancer.selector.filter((x) => typeof x === "string" && x) : [];
     for (const outbound of outbounds) if (!isService(outbound) && typeof outbound?.tag === "string" && selectors.some((prefix) => outbound.tag.startsWith(prefix))) selected.add(outbound.tag);
-    if (balancer.fallbackTag && outbounds.some((o) => o?.tag === balancer.fallbackTag && !isService(o))) selected.add(balancer.fallbackTag);
+    if (!selected.size && balancer.fallbackTag && outbounds.some((o) => o?.tag === balancer.fallbackTag && !isService(o))) selected.add(balancer.fallbackTag);
   }
   // If selectors are stale/mismatched, don't incorrectly conclude the source is empty.
   let candidates = selected.size ? outbounds.filter((o) => selected.has(o?.tag)) : [];
-  if (!candidates.length) candidates = outbounds.filter((o) => o && !isService(o) && (o.protocol || o.settings));
-  return candidates.filter((o) => o && !isService(o) && (o.protocol || o.settings)).map((outbound) => ({
+  if (!candidates.length) candidates = outbounds.filter((o) => o && !isService(o) && isProxyOutbound(o));
+  return candidates.filter((o) => o && !isService(o) && isProxyOutbound(o)).map((outbound) => ({
     outbound: structuredClone(outbound), name: String(outbound.remarks || parentName || outbound.tag || outbound.protocol || "server"), sourceTag: String(outbound.tag || "")
   }));
 }
@@ -166,7 +187,7 @@ function parseSource(raw) {
   const add = (node) => {
     if (!node?.outbound || isService(node.outbound)) return;
     if (sponsor(node.name) || sponsor(node.outbound)) { STATS.sponsorDropped++; return; }
-    const hash = crypto.createHash("sha256").update(JSON.stringify(node.outbound)).digest("hex");
+    const hash = nodeFingerprint(node.outbound);
     if (fingerprints.has(hash)) { STATS.duplicateDropped++; return; } fingerprints.add(hash); result.push({ ...node, sourceTag: String(node.sourceTag || "") });
   };
   const addUriText = (str) => {
@@ -199,14 +220,14 @@ function parseSource(raw) {
     }
     const name = String(value.remarks || value.name || value.title || parentName || "");
     if (Array.isArray(value.outbounds)) for (const node of extractOutboundNodes(value, name)) add(node);
-    if (value.protocol && !isService(value)) add({ outbound: structuredClone(value), name: String(value.remarks || value.name || value.tag || value.protocol), sourceTag: String(value.tag || "") });
+    if (isProxyOutbound(value) && !isService(value)) add({ outbound: structuredClone(value), name: String(value.remarks || value.name || value.tag || value.protocol), sourceTag: String(value.tag || "") });
     for (const [key, child] of Object.entries(value)) {
       if (["outbounds"].includes(key) && Array.isArray(child)) {
         // Already handled above; recursively inspect only nested profile-shaped entries.
         for (const item of child) if (item && typeof item === "object" && Array.isArray(item.outbounds)) walk(item, name, depth + 1);
         continue;
       }
-      if (/^(?:remarks|name|title|tag|protocol)$/i.test(key)) continue;
+      if (/^(?:remarks|name|title|tag|protocol|inbounds|routing|dns|observatory|burstObservatory|log|policy|stats|api)$/i.test(key)) continue;
       if (["nodes", "proxies", "servers", "configs", "data", "result", "subscription", "content", "config", "payload", "profiles"].includes(key) || typeof child === "string" || Array.isArray(child) || (child && typeof child === "object")) walk(child, name, depth + 1);
     }
   }
@@ -316,7 +337,7 @@ async function run() {
   const counts = new Map(); const seen = new Set(); const generated = [];
   for (const node of sourceNodes) {
     const c = detectCountry(`${node.name || ""} ${node.sourceTag || ""}`); const n = (counts.get(c.code) || 0) + 1;
-    const hash = crypto.createHash("sha256").update(JSON.stringify(node.outbound)).digest("hex"); if (seen.has(hash)) continue; seen.add(hash); counts.set(c.code,n);
+    const hash = nodeFingerprint(node.outbound); if (seen.has(hash)) continue; seen.add(hash); counts.set(c.code,n);
     const id = `${c.slug}-${String(n).padStart(2,"0")}`; const existingMetaPath = path.join(FREE_DIR,`${id}.meta.json`); let existing = null; try { if (fs.existsSync(existingMetaPath)) existing = readJson(existingMetaPath); } catch {}
     const name = `${c.flag} ${c.name} №${n}`; const meta = { id, name, country:c.code, tier:"free", enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", sourceHash:hash };
     const config = makeIndividualConfig(template,node.outbound,templateTags); config.remarks = name;
