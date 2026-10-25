@@ -11,6 +11,7 @@
     "freePath": "servers/free",
     "premiumPath": "servers/premium",
     "freeOrder": [
+      "tech",
       "auto",
       "estonia-01",
       "estonia-02",
