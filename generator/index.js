@@ -37,6 +37,7 @@ const COUNTRIES = [
   { code:"SG", slug:"singapore", flag:"🇸🇬", name:"Сингапур", matches:["singapore","сингапур","🇸🇬"] },
 ];
 
+const STATS = { sponsorDropped: 0, duplicateDropped: 0, uriBad: 0, uriSponsor: 0, uriSeen: 0 };
 function readJson(file) { return JSON.parse(fs.readFileSync(file, "utf8")); }
 function writeJson(file, value) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -97,12 +98,46 @@ function collectTextPayloads(root) {
   }
   walk(root); return out;
 }
+function describePayload(raw) {
+  const text = String(raw ?? "").replace(/^\uFEFF/, "").trim();
+  const decoded = decodeSubscription(text);
+  const schemes = {};
+  for (const m of decoded.matchAll(/(?:^|\n)\s*(vless|vmess|trojan|ss|hysteria2|hy2):\/\//gim)) schemes[m[1].toLowerCase()] = (schemes[m[1].toLowerCase()] || 0) + 1;
+  let kind = "text";
+  if (!text) kind = "empty";
+  else if (/^<(?:!doctype|html)/i.test(text)) kind = "html";
+  else if (text.startsWith("{") || text.startsWith("[")) kind = "json";
+  else if (decoded !== text) kind = "base64";
+  let jsonInfo = "";
+  try {
+    const v = JSON.parse(decoded);
+    if (Array.isArray(v)) jsonInfo = `array(${v.length})`;
+    else if (v && typeof v === "object") jsonInfo = `object(keys: ${Object.keys(v).slice(0, 12).join(",")})`;
+  } catch {}
+  return { kind, rawLength: text.length, decodedLength: decoded.length, schemes, jsonInfo, decoded };
+}
+function logPayload(raw, nodesFound) {
+  const d = describePayload(raw);
+  console.log(`После декодирования: длина ${d.decodedLength}`);
+  console.log(`URI по схемам: ${JSON.stringify(d.schemes)}${d.jsonInfo ? `; JSON: ${d.jsonInfo}` : ""}`);
+  console.log(`Отброшено: спонсор=${STATS.sponsorDropped + STATS.uriSponsor}, дубли=${STATS.duplicateDropped}, битые URI=${STATS.uriBad}`);
+  if (!nodesFound && d.decodedLength > 0 && d.decodedLength <= 600 && !/(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i.test(d.decoded)) {
+    console.log(`Короткий ответ без узлов (вероятная заглушка): ${JSON.stringify(d.decoded)}`);
+  }
+}
 async function fetchSource() {
   const url = process.env.FREE_UPSTREAM_URL;
   if (!url) throw new Error("Не задан FREE_UPSTREAM_URL. Добавь ссылку в GitHub Secrets → Actions.");
-  const response = await fetch(url, { headers: { "user-agent": "OokVPN-Subscription-Generator/1.1" }, signal: AbortSignal.timeout(30000) });
+  const ua = process.env.FREE_UPSTREAM_UA || "OokVPN-Subscription-Generator/1.1";
+  const started = Date.now();
+  const response = await fetch(url, { headers: { "user-agent": ua }, signal: AbortSignal.timeout(30000) });
+  const body = await response.text();
+  const h = (name) => response.headers.get(name) || "-";
+  console.log(`Источник: HTTP ${response.status}, ${Date.now() - started} мс, content-type=${h("content-type")}, redirected=${response.redirected}, subscription-userinfo=${response.headers.has("subscription-userinfo")}, profile-title=${response.headers.has("profile-title")}`);
   if (!response.ok) throw new Error(`Источник вернул HTTP ${response.status}`);
-  return decodeSubscription(await response.text());
+  const first = describePayload(body);
+  console.log(`Формат ответа: ${first.kind}, длина ${first.rawLength}`);
+  return decodeSubscription(body);
 }
 function safeDecode(value) { try { return decodeURIComponent(value || ""); } catch { return value || ""; } }
 function isService(outbound) {
@@ -129,15 +164,18 @@ function parseSource(raw) {
   const text = String(raw ?? "").trim(); if (!text) return [];
   const result = []; const fingerprints = new Set(); const visited = new Set();
   const add = (node) => {
-    if (!node?.outbound || isService(node.outbound) || sponsor(node.name) || sponsor(node.outbound)) return;
+    if (!node?.outbound || isService(node.outbound)) return;
+    if (sponsor(node.name) || sponsor(node.outbound)) { STATS.sponsorDropped++; return; }
     const hash = crypto.createHash("sha256").update(JSON.stringify(node.outbound)).digest("hex");
-    if (fingerprints.has(hash)) return; fingerprints.add(hash); result.push({ ...node, sourceTag: String(node.sourceTag || "") });
+    if (fingerprints.has(hash)) { STATS.duplicateDropped++; return; } fingerprints.add(hash); result.push({ ...node, sourceTag: String(node.sourceTag || "") });
   };
   const addUriText = (str) => {
     for (const line0 of String(str).split(/\r?\n/u)) {
-      const line = line0.trim(); if (!SUPPORTED_URI.test(line) || sponsor(line)) continue;
+      const line = line0.trim(); if (!SUPPORTED_URI.test(line)) continue;
+      STATS.uriSeen++;
+      if (sponsor(line) || sponsor(safeDecode(line))) { STATS.uriSponsor++; continue; }
       try { add({ ...parseUri(line), sourceTag: "" }); }
-      catch (error) { console.warn(`Пропуск URI: ${error.message}`); }
+      catch (error) { STATS.uriBad++; console.warn(`Пропуск URI: ${error.message}`); }
     }
   };
   function walk(value, parentName = "", depth = 0) {
@@ -263,7 +301,6 @@ function loadPremium() {
   });
 }
 function sortProfiles(items, order = []) { const p = new Map(order.map((id,i) => [id,i])); return items.sort((a,b) => (p.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (p.get(b.id) ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id)); }
-function main() { }
 async function run() {
   fs.mkdirSync(FREE_DIR,{recursive:true}); fs.mkdirSync(PREMIUM_DIR,{recursive:true}); fs.mkdirSync(OUTPUT_DIR,{recursive:true});
   if (!fs.existsSync(AUTO_TEMPLATE_PATH)) throw new Error("Не найден generator/templates/auto.json.");
@@ -271,6 +308,7 @@ async function run() {
   const template = readJson(AUTO_TEMPLATE_PATH); const autoMeta = readJson(AUTO_META_PATH);
   if (autoMeta.enabled === false) throw new Error("AUTO отключён в servers/free/auto.meta.json.");
   const raw = await fetchSource(); const sourceNodes = parseSource(raw);
+  logPayload(raw, sourceNodes.length);
   if (!sourceNodes.length) throw new Error("В источнике не найдено прокси-узлов. Старые файлы не очищены.");
   const oldManifest = fs.existsSync(MANIFEST_PATH) ? readJson(MANIFEST_PATH) : { generated:[] };
   const oldIds = Array.isArray(oldManifest.generated) ? oldManifest.generated : [];
