@@ -11,1126 +11,293 @@ const AUTO_META_PATH = path.join(FREE_DIR, "auto.meta.json");
 const AUTO_PATH = path.join(FREE_DIR, "auto.json");
 const AUTO_TEMPLATE_PATH = path.join(ROOT, "generator/templates/auto.json");
 const MANIFEST_PATH = path.join(FREE_DIR, ".generated-servers.json");
-
-const SPONSOR_MARKERS = (
-  Array.isArray(CONFIG.serverFilters?.sponsorMarkers)
-    ? CONFIG.serverFilters.sponsorMarkers
-    : ["Спонсор: @AloeVPNbot"]
-).map((item) => String(item).toLocaleLowerCase("ru-RU").trim()).filter(Boolean);
-
+const SUPPORTED_URI = /^(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i;
+const SPONSOR_MARKERS = (Array.isArray(CONFIG.serverFilters?.sponsorMarkers)
+  ? CONFIG.serverFilters.sponsorMarkers : ["Спонсор - @aloe_vpn_bot"])
+  .map((x) => String(x).toLocaleLowerCase("ru-RU").trim()).filter(Boolean);
 const COUNTRIES = [
-  { code: "EE", slug: "estonia", flag: "🇪🇪", name: "Эстония", matches: ["estonia", "eesti", "эстония", "🇪🇪"] },
-  { code: "PL", slug: "poland", flag: "🇵🇱", name: "Польша", matches: ["poland", "polska", "польша", "🇵🇱"] },
-  { code: "DE", slug: "germany", flag: "🇩🇪", name: "Германия", matches: ["germany", "deutschland", "германия", "🇩🇪"] },
-  { code: "NL", slug: "netherlands", flag: "🇳🇱", name: "Нидерланды", matches: ["netherlands", "holland", "нидерланды", "🇳🇱"] },
-  { code: "FI", slug: "finland", flag: "🇫🇮", name: "Финляндия", matches: ["finland", "suomi", "финляндия", "🇫🇮"] },
-  { code: "SE", slug: "sweden", flag: "🇸🇪", name: "Швеция", matches: ["sweden", "швеция", "🇸🇪"] },
-  { code: "CZ", slug: "czechia", flag: "🇨🇿", name: "Чехия", matches: ["czech", "чехия", "🇨🇿"] },
-  { code: "BE", slug: "belgium", flag: "🇧🇪", name: "Бельгия", matches: ["belgium", "бельгия", "🇧🇪"] },
-  { code: "FR", slug: "france", flag: "🇫🇷", name: "Франция", matches: ["france", "франция", "🇫🇷"] },
-  { code: "US", slug: "usa", flag: "🇺🇸", name: "США", matches: ["united states", "usa", "сша", "🇺🇸"] },
-  { code: "GB", slug: "uk", flag: "🇬🇧", name: "Великобритания", matches: ["united kingdom", "great britain", "uk", "британия", "🇬🇧"] },
-  { code: "TR", slug: "turkey", flag: "🇹🇷", name: "Турция", matches: ["turkey", "türkiye", "турция", "🇹🇷"] },
-  { code: "CH", slug: "switzerland", flag: "🇨🇭", name: "Швейцария", matches: ["switzerland", "швейцария", "🇨🇭"] },
-  { code: "AT", slug: "austria", flag: "🇦🇹", name: "Австрия", matches: ["austria", "австрия", "🇦🇹"] },
-  { code: "IT", slug: "italy", flag: "🇮🇹", name: "Италия", matches: ["italy", "италия", "🇮🇹"] },
-  { code: "ES", slug: "spain", flag: "🇪🇸", name: "Испания", matches: ["spain", "испания", "🇪🇸"] },
-  { code: "CA", slug: "canada", flag: "🇨🇦", name: "Канада", matches: ["canada", "канада", "🇨🇦"] },
-  { code: "JP", slug: "japan", flag: "🇯🇵", name: "Япония", matches: ["japan", "япония", "🇯🇵"] },
-  { code: "SG", slug: "singapore", flag: "🇸🇬", name: "Сингапур", matches: ["singapore", "сингапур", "🇸🇬"] },
+  { code:"EE", slug:"estonia", flag:"🇪🇪", name:"Эстония", matches:["estonia","eesti","эстония","🇪🇪"] },
+  { code:"PL", slug:"poland", flag:"🇵🇱", name:"Польша", matches:["poland","polska","польша","🇵🇱"] },
+  { code:"DE", slug:"germany", flag:"🇩🇪", name:"Германия", matches:["germany","deutschland","германия","🇩🇪"] },
+  { code:"NL", slug:"netherlands", flag:"🇳🇱", name:"Нидерланды", matches:["netherlands","holland","нидерланды","🇳🇱"] },
+  { code:"FI", slug:"finland", flag:"🇫🇮", name:"Финляндия", matches:["finland","suomi","финляндия","🇫🇮"] },
+  { code:"SE", slug:"sweden", flag:"🇸🇪", name:"Швеция", matches:["sweden","швеция","🇸🇪"] },
+  { code:"CZ", slug:"czechia", flag:"🇨🇿", name:"Чехия", matches:["czech","чехия","🇨🇿"] },
+  { code:"BE", slug:"belgium", flag:"🇧🇪", name:"Бельгия", matches:["belgium","бельгия","🇧🇪"] },
+  { code:"FR", slug:"france", flag:"🇫🇷", name:"Франция", matches:["france","франция","🇫🇷"] },
+  { code:"US", slug:"usa", flag:"🇺🇸", name:"США", matches:["united states","usa","сша","🇺🇸"] },
+  { code:"GB", slug:"uk", flag:"🇬🇧", name:"Великобритания", matches:["united kingdom","great britain","uk","британия","🇬🇧"] },
+  { code:"TR", slug:"turkey", flag:"🇹🇷", name:"Турция", matches:["turkey","türkiye","турция","🇹🇷"] },
+  { code:"CH", slug:"switzerland", flag:"🇨🇭", name:"Швейцария", matches:["switzerland","швейцария","🇨🇭"] },
+  { code:"AT", slug:"austria", flag:"🇦🇹", name:"Австрия", matches:["austria","австрия","🇦🇹"] },
+  { code:"IT", slug:"italy", flag:"🇮🇹", name:"Италия", matches:["italy","италия","🇮🇹"] },
+  { code:"ES", slug:"spain", flag:"🇪🇸", name:"Испания", matches:["spain","испания","🇪🇸"] },
+  { code:"CA", slug:"canada", flag:"🇨🇦", name:"Канада", matches:["canada","канада","🇨🇦"] },
+  { code:"JP", slug:"japan", flag:"🇯🇵", name:"Япония", matches:["japan","япония","🇯🇵"] },
+  { code:"SG", slug:"singapore", flag:"🇸🇬", name:"Сингапур", matches:["singapore","сингапур","🇸🇬"] },
 ];
 
-function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+function readJson(file) { return JSON.parse(fs.readFileSync(file, "utf8")); }
+function writeJson(file, value) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const temp = `${file}.tmp`;
+  fs.writeFileSync(temp, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  fs.renameSync(temp, file);
 }
-
-function writeJson(filePath, value) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  const tempPath = `${filePath}.tmp`;
-
-  fs.writeFileSync(
-    tempPath,
-    `${JSON.stringify(value, null, 2)}\n`,
-    "utf8"
-  );
-
-  fs.renameSync(tempPath, filePath);
+function sponsor(value) {
+  let text;
+  try { text = (typeof value === "string" ? value : JSON.stringify(value ?? "")).toLocaleLowerCase("ru-RU"); }
+  catch { text = String(value ?? "").toLocaleLowerCase("ru-RU"); }
+  return SPONSOR_MARKERS.some((m) => text.includes(m));
 }
-
-function hasSponsorMarker(value) {
-  const text = (
-    typeof value === "string"
-      ? value
-      : JSON.stringify(value ?? "")
-  ).toLocaleLowerCase("ru-RU");
-
-  return SPONSOR_MARKERS.some((marker) => text.includes(marker));
-}
-
-function safeDecode(value) {
-  try {
-    return decodeURIComponent(value || "");
-  } catch {
-    return value || "";
-  }
-}
-
 function decodeBase64(value) {
-  const input = value.replace(/-/g, "+").replace(/_/g, "/");
-
-  return Buffer.from(input, "base64")
-    .toString("utf8")
-    .replace(/^\uFEFF/, "")
-    .trim();
+  const input = String(value).trim().replace(/-/g, "+").replace(/_/g, "/");
+  if (!input || !/^[A-Za-z0-9+/=\s]+$/.test(input)) return "";
+  try { return Buffer.from(input, "base64").toString("utf8").replace(/^\uFEFF/, "").trim(); }
+  catch { return ""; }
 }
-
-function looksLikeConfigOrLinks(text) {
-  const value = text.trim();
-
-  return (
-    value.startsWith("{") ||
-    value.startsWith("[") ||
-    /(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i.test(value)
-  );
+function looksReadable(text) {
+  const s = String(text).trim();
+  return s.startsWith("{") || s.startsWith("[") || SUPPORTED_URI.test(s) || /(?:^|\n)\s*(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//im.test(s);
 }
-
 function decodeSubscription(raw) {
-  let current = raw.replace(/^\uFEFF/, "").trim();
-
-  for (let i = 0; i < 4; i += 1) {
-    if (looksLikeConfigOrLinks(current)) {
-      return current;
-    }
-
+  let current = String(raw ?? "").replace(/^\uFEFF/, "").trim();
+  // Accept JSON/URI text directly; otherwise try base64 at each layer.
+  for (let i = 0; i < 6; i++) {
+    if (looksReadable(current)) return current;
     const decoded = decodeBase64(current);
-
-    if (!decoded || decoded === current) {
-      break;
-    }
-
+    if (!decoded || decoded === current) break;
     current = decoded;
   }
-
-  throw new Error(
-    "Источник не похож на JSON или Base64-подписку с поддерживаемыми URI."
-  );
+  // Some subscription wrappers return JSON strings or an object containing a base64 payload.
+  try {
+    const value = JSON.parse(current);
+    const candidates = collectTextPayloads(value);
+    for (const candidate of candidates) {
+      if (looksReadable(candidate)) return candidate;
+      const decoded = decodeBase64(candidate);
+      if (looksReadable(decoded)) return decoded;
+    }
+  } catch {}
+  return current;
 }
-
+function collectTextPayloads(root) {
+  const out = []; const seen = new Set();
+  function walk(value, depth = 0) {
+    if (depth > 12 || value == null) return;
+    if (typeof value === "string") {
+      if (!seen.has(value)) { seen.add(value); out.push(value); }
+      return;
+    }
+    if (Array.isArray(value)) { for (const item of value) walk(item, depth + 1); return; }
+    if (typeof value === "object") for (const [key, item] of Object.entries(value)) {
+      if (/^(?:remarks|name|tag|protocol|type)$/i.test(key)) continue;
+      walk(item, depth + 1);
+    }
+  }
+  walk(root); return out;
+}
 async function fetchSource() {
   const url = process.env.FREE_UPSTREAM_URL;
-
-  if (!url) {
-    throw new Error(
-      "Не задан FREE_UPSTREAM_URL. Добавь ссылку в GitHub Secrets → Actions."
-    );
-  }
-
-  const response = await fetch(url, {
-    headers: {
-      "user-agent": "OokVPN-Subscription-Generator/1.0",
-    },
-    signal: AbortSignal.timeout(30000),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Источник вернул HTTP ${response.status}`);
-  }
-
+  if (!url) throw new Error("Не задан FREE_UPSTREAM_URL. Добавь ссылку в GitHub Secrets → Actions.");
+  const response = await fetch(url, { headers: { "user-agent": "OokVPN-Subscription-Generator/1.1" }, signal: AbortSignal.timeout(30000) });
+  if (!response.ok) throw new Error(`Источник вернул HTTP ${response.status}`);
   return decodeSubscription(await response.text());
 }
-
-function detectCountry(name = "") {
-  const text = String(name).toLocaleLowerCase("ru-RU");
-
-  for (const country of COUNTRIES) {
-    if (country.matches.some((match) => text.includes(match))) {
-      return country;
-    }
-
-    const codePattern = new RegExp(
-      `(^|[-_\\s])${country.code.toLowerCase()}($|[-_\\s])`,
-      "i"
-    );
-
-    if (codePattern.test(text)) {
-      return country;
-    }
-  }
-
-  return {
-    code: "UN",
-    slug: "other",
-    flag: "🌐",
-    name: "Другой регион",
-    matches: [],
-  };
+function safeDecode(value) { try { return decodeURIComponent(value || ""); } catch { return value || ""; } }
+function isService(outbound) {
+  const tag = String(outbound?.tag || "").toLowerCase(); const p = String(outbound?.protocol || "").toLowerCase();
+  return ["direct","block","dns","freedom","blackhole"].includes(tag) || ["freedom","blackhole","dns"].includes(p);
 }
-
-function makeStreamSettings(
-  network,
-  security,
-  params,
-  host,
-  pathValue = ""
-) {
-  const stream = {
-    network: network === "h2" ? "http" : network,
-    security: "none",
-  };
-
-  if (security === "tls" || security === "reality") {
-    stream.security = security;
-  }
-
-  if (stream.network === "ws") {
-    stream.wsSettings = {
-      path: pathValue || params.get("path") || "/",
-      headers: {
-        Host: params.get("host") || params.get("sni") || host,
-      },
-    };
-  } else if (stream.network === "grpc") {
-    stream.grpcSettings = {
-      serviceName: params.get("serviceName") || pathValue || "",
-    };
-  } else if (stream.network === "tcp") {
-    stream.tcpSettings = {};
-  } else if (stream.network === "http") {
-    stream.httpSettings = {
-      path: pathValue || params.get("path") || "/",
-    };
-  }
-
-  if (security === "reality") {
-    stream.realitySettings = {
-      serverName: params.get("sni") || host,
-      fingerprint: params.get("fp") || "chrome",
-      publicKey: params.get("pbk") || "",
-      shortId: params.get("sid") || "",
-      spiderX: params.get("spx") || "/",
-    };
-  } else if (security === "tls") {
-    stream.tlsSettings = {
-      serverName: params.get("sni") || host,
-      fingerprint: params.get("fp") || "chrome",
-      alpn: params.get("alpn")
-        ? params.get("alpn").split(",")
-        : ["h2", "http/1.1"],
-      allowInsecure: params.get("allowInsecure") === "1",
-    };
-  }
-
-  return stream;
-}
-
-function parseVmess(line) {
-  const withoutFragment = line.split("#")[0];
-  const encoded = withoutFragment.slice("vmess://".length);
-  const data = JSON.parse(decodeBase64(encoded));
-
-  const host = data.add;
-  const port = Number(data.port);
-
-  if (!host || !port || !data.id) {
-    throw new Error("Некорректный VMess URI");
-  }
-
-  const params = new URLSearchParams();
-
-  if (data.sni || data.host) {
-    params.set("sni", data.sni || data.host);
-  }
-
-  if (data.fp) params.set("fp", data.fp);
-  if (data.path) params.set("path", data.path);
-  if (data.host) params.set("host", data.host);
-
-  const network = data.net || "tcp";
-  const security = data.tls === "tls" ? "tls" : "none";
-
-  return {
-    name:
-      safeDecode(line.split("#").slice(1).join("#")) ||
-      data.ps ||
-      host,
-
-    outbound: {
-      protocol: "vmess",
-      settings: {
-        vnext: [
-          {
-            address: host,
-            port,
-            users: [
-              {
-                id: data.id,
-                alterId: Number(data.aid || 0),
-                security: data.scy || "auto",
-              },
-            ],
-          },
-        ],
-      },
-      streamSettings: makeStreamSettings(
-        network,
-        security,
-        params,
-        host,
-        data.path || ""
-      ),
-    },
-  };
-}
-
-function parseShadowsocks(line) {
-  const hashSplit = line.split("#");
-  const name = safeDecode(hashSplit.slice(1).join("#"));
-
-  let body = hashSplit[0].slice("ss://".length);
-
-  if (!body.includes("@")) {
-    const decoded = decodeBase64(body.split("?")[0]);
-
-    if (!decoded.includes("@")) {
-      throw new Error("Не удалось декодировать Shadowsocks URI");
-    }
-
-    body =
-      decoded +
-      (body.includes("?")
-        ? `?${body.split("?").slice(1).join("?")}`
-        : "");
-  }
-
-  const url = new URL(`ss://${body}`);
-
-  let userInfo = safeDecode(url.username);
-
-  if (!userInfo.includes(":")) {
-    try {
-      userInfo = decodeBase64(userInfo);
-    } catch {
-      // Ошибка будет обработана при проверке метода и пароля ниже.
-    }
-  }
-
-  const separator = userInfo.indexOf(":");
-
-  if (separator <= 0) {
-    throw new Error("Некорректный метод/пароль Shadowsocks");
-  }
-
-  return {
-    name: name || url.hostname,
-
-    outbound: {
-      protocol: "shadowsocks",
-      settings: {
-        servers: [
-          {
-            address: url.hostname,
-            port: Number(url.port),
-            method: userInfo.slice(0, separator),
-            password: userInfo.slice(separator + 1),
-          },
-        ],
-      },
-    },
-  };
-}
-
-function parseUri(line) {
-  const value = line.trim();
-  const scheme = value.slice(0, value.indexOf("://")).toLowerCase();
-
-  if (scheme === "vmess") return parseVmess(value);
-  if (scheme === "ss") return parseShadowsocks(value);
-
-  if (!["vless", "trojan", "hysteria2", "hy2"].includes(scheme)) {
-    throw new Error(`Неподдерживаемый URI: ${scheme || "unknown"}`);
-  }
-
-  const url = new URL(value);
-  const params = url.searchParams;
-  const host = url.hostname;
-  const port = Number(url.port || 443);
-  const name = safeDecode(url.hash.slice(1)) || host;
-  const network = params.get("type") || "tcp";
-
-  const security =
-    params.get("security") ||
-    (
-      scheme === "trojan" ||
-      scheme === "hysteria2" ||
-      scheme === "hy2"
-        ? "tls"
-        : "none"
-    );
-
-  if (scheme === "vless") {
-    const user = {
-      id: safeDecode(url.username),
-      encryption: params.get("encryption") || "none",
-    };
-
-    if (params.get("flow")) {
-      user.flow = params.get("flow");
-    }
-
-    return {
-      name,
-
-      outbound: {
-        protocol: "vless",
-        settings: {
-          vnext: [
-            {
-              address: host,
-              port,
-              users: [user],
-            },
-          ],
-        },
-        streamSettings: makeStreamSettings(
-          network,
-          security,
-          params,
-          host
-        ),
-      },
-    };
-  }
-
-  if (scheme === "trojan") {
-    return {
-      name,
-
-      outbound: {
-        protocol: "trojan",
-        settings: {
-          servers: [
-            {
-              address: host,
-              port,
-              password: safeDecode(url.username),
-            },
-          ],
-        },
-        streamSettings: makeStreamSettings(
-          network,
-          security,
-          params,
-          host
-        ),
-      },
-    };
-  }
-
-  return {
-    name,
-
-    outbound: {
-      protocol: "hysteria",
-      settings: {
-        address: host,
-        port,
-        version: 2,
-      },
-      streamSettings: {
-        network: "hysteria",
-        hysteriaSettings: {
-          version: 2,
-          auth: safeDecode(url.username),
-        },
-        security: "tls",
-        tlsSettings: {
-          serverName: params.get("sni") || host,
-          fingerprint: params.get("fp") || "chrome",
-          alpn: params.get("alpn")
-            ? params.get("alpn").split(",")
-            : ["h3"],
-          allowInsecure: params.get("insecure") === "1",
-        },
-      },
-    },
-  };
-}
-
-function isServiceOutbound(outbound) {
-  const tag = String(outbound?.tag || "").toLowerCase();
-  const protocol = String(outbound?.protocol || "").toLowerCase();
-
-  return (
-    ["direct", "block", "dns", "freedom", "blackhole"].includes(tag) ||
-    ["freedom", "blackhole", "dns"].includes(protocol)
-  );
-}
-
-function isTemplateNode(outbound) {
-  return (
-    typeof outbound?.tag === "string" &&
-    /^node-/i.test(outbound.tag) &&
-    !isServiceOutbound(outbound)
-  );
-}
-
 function extractOutboundNodes(config, parentName = "") {
-  const outbounds = Array.isArray(config?.outbounds)
-    ? config.outbounds
-    : [];
-
-  const balancers = Array.isArray(config?.routing?.balancers)
-    ? config.routing.balancers
-    : [];
-
-  const selectedTags = new Set();
-
+  const outbounds = Array.isArray(config?.outbounds) ? config.outbounds : [];
+  const balancers = Array.isArray(config?.routing?.balancers) ? config.routing.balancers : [];
+  const selected = new Set();
   for (const balancer of balancers) {
-    const selectors = Array.isArray(balancer.selector)
-      ? balancer.selector
-      : [];
-
-    for (const outbound of outbounds) {
-      if (
-        !isServiceOutbound(outbound) &&
-        typeof outbound?.tag === "string" &&
-        selectors.some((selector) => outbound.tag.startsWith(selector))
-      ) {
-        selectedTags.add(outbound.tag);
-      }
-    }
-
-    if (
-      balancer.fallbackTag &&
-      outbounds.some(
-        (item) =>
-          item?.tag === balancer.fallbackTag &&
-          !isServiceOutbound(item)
-      )
-    ) {
-      selectedTags.add(balancer.fallbackTag);
-    }
+    const selectors = Array.isArray(balancer.selector) ? balancer.selector.filter((x) => typeof x === "string" && x) : [];
+    for (const outbound of outbounds) if (!isService(outbound) && typeof outbound?.tag === "string" && selectors.some((prefix) => outbound.tag.startsWith(prefix))) selected.add(outbound.tag);
+    if (balancer.fallbackTag && outbounds.some((o) => o?.tag === balancer.fallbackTag && !isService(o))) selected.add(balancer.fallbackTag);
   }
-
-  const candidates = selectedTags.size
-    ? outbounds.filter((outbound) => selectedTags.has(outbound.tag))
-    : outbounds.filter(
-        (outbound) =>
-          outbound &&
-          !isServiceOutbound(outbound) &&
-          (outbound.protocol || outbound.settings)
-      );
-
-  return candidates.map((outbound) => ({
-    outbound: structuredClone(outbound),
-    name: String(
-      outbound.remarks ||
-      parentName ||
-      outbound.tag ||
-      outbound.protocol ||
-      "server"
-    ),
-    sourceTag: String(outbound.tag || ""),
+  // If selectors are stale/mismatched, don't incorrectly conclude the source is empty.
+  let candidates = selected.size ? outbounds.filter((o) => selected.has(o?.tag)) : [];
+  if (!candidates.length) candidates = outbounds.filter((o) => o && !isService(o) && (o.protocol || o.settings));
+  return candidates.filter((o) => o && !isService(o) && (o.protocol || o.settings)).map((outbound) => ({
+    outbound: structuredClone(outbound), name: String(outbound.remarks || parentName || outbound.tag || outbound.protocol || "server"), sourceTag: String(outbound.tag || "")
   }));
 }
-
 function parseSource(raw) {
-  const trimmed = raw.trim();
-
-  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
-    const parsed = JSON.parse(trimmed);
-
-    if (Array.isArray(parsed)) {
-      const result = [];
-
-      for (const entry of parsed) {
-        if (entry && Array.isArray(entry.outbounds)) {
-          result.push(
-            ...extractOutboundNodes(
-              entry,
-              entry.remarks || entry.name || ""
-            )
-          );
-        } else if (
-          entry &&
-          entry.protocol &&
-          !isServiceOutbound(entry)
-        ) {
-          result.push({
-            outbound: structuredClone(entry),
-            name: entry.remarks || entry.name || entry.tag || entry.protocol,
-            sourceTag: String(entry.tag || ""),
-          });
-        }
+  const text = String(raw ?? "").trim(); if (!text) return [];
+  const result = []; const fingerprints = new Set(); const visited = new Set();
+  const add = (node) => {
+    if (!node?.outbound || isService(node.outbound) || sponsor(node.name) || sponsor(node.outbound)) return;
+    const hash = crypto.createHash("sha256").update(JSON.stringify(node.outbound)).digest("hex");
+    if (fingerprints.has(hash)) return; fingerprints.add(hash); result.push({ ...node, sourceTag: String(node.sourceTag || "") });
+  };
+  const addUriText = (str) => {
+    for (const line0 of String(str).split(/\r?\n/u)) {
+      const line = line0.trim(); if (!SUPPORTED_URI.test(line) || sponsor(line)) continue;
+      try { add({ ...parseUri(line), sourceTag: "" }); }
+      catch (error) { console.warn(`Пропуск URI: ${error.message}`); }
+    }
+  };
+  function walk(value, parentName = "", depth = 0) {
+    if (depth > 14 || value == null) return;
+    if (typeof value === "string") {
+      const s = value.trim();
+      if (looksReadable(s)) {
+        if (s.startsWith("{") || s.startsWith("[")) { try { walk(JSON.parse(s), parentName, depth + 1); } catch { addUriText(s); } }
+        else addUriText(s);
+      } else {
+        const decoded = decodeBase64(s);
+        if (decoded && decoded !== s && looksReadable(decoded)) walk(decoded, parentName, depth + 1);
       }
-
-      return result;
+      return;
     }
-
-    if (!parsed || typeof parsed !== "object") {
-      throw new Error("JSON источника имеет неподдерживаемый формат");
+    if (typeof value !== "object" || visited.has(value)) return;
+    visited.add(value);
+    if (Array.isArray(value)) {
+      for (const item of value) walk(item, parentName, depth + 1);
+      return;
     }
-
-    return extractOutboundNodes(
-      parsed,
-      parsed.remarks || parsed.name || ""
-    );
-  }
-
-  const nodes = [];
-
-  for (const originalLine of trimmed.split(/\r?\n/u)) {
-    const line = originalLine.trim();
-
-    if (!line || hasSponsorMarker(line)) continue;
-
-    if (
-      !/^(vless|vmess|trojan|ss|hysteria2|hy2):\/\//i.test(line)
-    ) {
-      continue;
-    }
-
-    try {
-      const parsed = parseUri(line);
-      nodes.push({ ...parsed, sourceTag: "" });
-    } catch (error) {
-      console.warn(
-        `Пропуск неподдерживаемой строки подписки: ${error.message}`
-      );
+    const name = String(value.remarks || value.name || value.title || parentName || "");
+    if (Array.isArray(value.outbounds)) for (const node of extractOutboundNodes(value, name)) add(node);
+    if (value.protocol && !isService(value)) add({ outbound: structuredClone(value), name: String(value.remarks || value.name || value.tag || value.protocol), sourceTag: String(value.tag || "") });
+    for (const [key, child] of Object.entries(value)) {
+      if (["outbounds"].includes(key) && Array.isArray(child)) {
+        // Already handled above; recursively inspect only nested profile-shaped entries.
+        for (const item of child) if (item && typeof item === "object" && Array.isArray(item.outbounds)) walk(item, name, depth + 1);
+        continue;
+      }
+      if (/^(?:remarks|name|title|tag|protocol)$/i.test(key)) continue;
+      if (["nodes", "proxies", "servers", "configs", "data", "result", "subscription", "content", "config", "payload", "profiles"].includes(key) || typeof child === "string" || Array.isArray(child) || (child && typeof child === "object")) walk(child, name, depth + 1);
     }
   }
-
-  return nodes;
-}
-
-function primaryNodeOutbound(config) {
-  const outbounds = Array.isArray(config?.outbounds)
-    ? config.outbounds
-    : [];
-
-  return (
-    outbounds.find(
-      (outbound) =>
-        outbound?.tag === "proxy" &&
-        !isServiceOutbound(outbound)
-    ) ||
-    outbounds.find(
-      (outbound) =>
-        !isServiceOutbound(outbound) &&
-        !isTemplateNode(outbound)
-    )
-  );
-}
-
-function makeIndividualConfig(template, selectedOutbound, sourceNodeTags) {
-  const result = structuredClone(template);
-
-  const keepOutbounds = (
-    Array.isArray(result.outbounds) ? result.outbounds : []
-  ).filter(
-    (outbound) =>
-      !isTemplateNode(outbound) &&
-      !sourceNodeTags.has(outbound?.tag)
-  );
-
-  const selected = structuredClone(selectedOutbound);
-  selected.tag = "proxy";
-
-  result.outbounds = [
-    selected,
-    ...keepOutbounds.filter((outbound) => outbound.tag !== "proxy"),
-  ];
-
-  if (result.routing) {
-    delete result.routing.balancers;
-
-    if (Array.isArray(result.routing.rules)) {
-      result.routing.rules = result.routing.rules.map((originalRule) => {
-        const rule = structuredClone(originalRule);
-
-        if (Object.hasOwn(rule, "balancerTag")) {
-          delete rule.balancerTag;
-          rule.outboundTag = "proxy";
-        } else if (
-          sourceNodeTags.has(rule.outboundTag) ||
-          (
-            typeof rule.outboundTag === "string" &&
-            rule.outboundTag.startsWith("node-")
-          )
-        ) {
-          rule.outboundTag = "proxy";
-        }
-
-        return rule;
-      });
-    }
-  }
-
-  if (result.observatory) {
-    result.observatory.subjectSelector = ["proxy"];
-  }
-
-  if (result.burstObservatory) {
-    result.burstObservatory.subjectSelector = ["proxy"];
-  }
-
+  const s = text;
+  if (s.startsWith("{") || s.startsWith("[")) { try { walk(JSON.parse(s)); } catch { addUriText(s); } }
+  else addUriText(s);
   return result;
 }
-
-function makeNodeId(country, index) {
-  return `${country.slug}-${String(index).padStart(2, "0")}`;
+function parseUri(line) {
+  const scheme = line.slice(0, line.indexOf("://")).toLowerCase();
+  if (scheme === "vmess") {
+    const encoded = line.split("#")[0].slice(8); const data = JSON.parse(decodeBase64(encoded));
+    if (!data.add || !data.port || !data.id) throw new Error("Некорректный VMess URI");
+    const net = data.net || "tcp"; const tls = data.tls === "tls";
+    const stream = makeStream(net, tls ? "tls" : "none", { sni:data.sni || data.host, host:data.host, path:data.path, fp:data.fp, serviceName:data.path, alpn:data.alpn }, data.add);
+    return { name:safeDecode(line.split("#").slice(1).join("#")) || data.ps || data.add, outbound:{ protocol:"vmess", settings:{ vnext:[{ address:data.add, port:Number(data.port), users:[{ id:data.id, alterId:Number(data.aid || 0), security:data.scy || "auto" }] }] }, streamSettings:stream } };
+  }
+  if (scheme === "ss") {
+    const [beforeHash, ...hash] = line.split("#"); let body = beforeHash.slice(5); let parsedBody = body;
+    if (!parsedBody.includes("@")) { const d = decodeBase64(parsedBody.split("?")[0]); if (d.includes("@")) parsedBody = d + (parsedBody.includes("?") ? `?${parsedBody.split("?").slice(1).join("?")}` : ""); }
+    const url = new URL(`ss://${parsedBody}`); let user = safeDecode(url.username);
+    if (!user.includes(":")) user = decodeBase64(user);
+    const sep = user.indexOf(":"); if (sep <= 0) throw new Error("Некорректный Shadowsocks URI");
+    return { name:safeDecode(hash.join("#")) || url.hostname, outbound:{ protocol:"shadowsocks", settings:{ servers:[{ address:url.hostname, port:Number(url.port), method:user.slice(0,sep), password:user.slice(sep+1) }] } } };
+  }
+  if (!["vless","trojan","hysteria2","hy2"].includes(scheme)) throw new Error(`Неподдерживаемый URI: ${scheme}`);
+  const url = new URL(line); const p = url.searchParams; const host = url.hostname; const port = Number(url.port || 443);
+  const network = p.get("type") || "tcp"; const security = p.get("security") || (["trojan","hysteria2","hy2"].includes(scheme) ? "tls" : "none");
+  const stream = makeStream(network, security, { sni:p.get("sni"), host:p.get("host"), path:p.get("path"), fp:p.get("fp"), pbk:p.get("pbk"), sid:p.get("sid"), spx:p.get("spx"), serviceName:p.get("serviceName"), alpn:p.get("alpn") }, host);
+  const name = safeDecode(url.hash.slice(1)) || host;
+  if (scheme === "vless") { const user = { id:safeDecode(url.username), encryption:p.get("encryption") || "none" }; if (p.get("flow")) user.flow = p.get("flow"); return { name, outbound:{ protocol:"vless", settings:{ vnext:[{ address:host, port, users:[user] }] }, streamSettings:stream } }; }
+  if (scheme === "trojan") return { name, outbound:{ protocol:"trojan", settings:{ servers:[{ address:host, port, password:safeDecode(url.username) }] }, streamSettings:stream } };
+  return { name, outbound:{ protocol:"hysteria2", settings:{ servers:[{ address:host, port, password:safeDecode(url.username) }] }, streamSettings:stream } };
 }
-
-function getPreviousManifest() {
-  if (!fs.existsSync(MANIFEST_PATH)) {
-    return { generated: [] };
-  }
-
-  try {
-    const value = readJson(MANIFEST_PATH);
-
-    return {
-      generated: Array.isArray(value.generated)
-        ? value.generated
-        : [],
-    };
-  } catch {
-    return { generated: [] };
-  }
+function makeStream(network, security, p, host) {
+  const n = network === "h2" ? "http" : network; const out = { network:n, security:"none" };
+  if (security === "tls" || security === "reality") out.security = security;
+  if (n === "ws") out.wsSettings = { path:p.path || "/", headers:{ Host:p.host || p.sni || host } };
+  if (n === "grpc") out.grpcSettings = { serviceName:p.serviceName || p.path || "" };
+  if (n === "http") out.httpSettings = { path:p.path || "/" };
+  if (security === "reality") out.realitySettings = { serverName:p.sni || host, fingerprint:p.fp || "chrome", publicKey:p.pbk || "", shortId:p.sid || "", spiderX:p.spx || "/" };
+  if (security === "tls") out.tlsSettings = { serverName:p.sni || host, fingerprint:p.fp || "chrome", alpn:p.alpn ? String(p.alpn).split(",") : ["h2","http/1.1"] };
+  return out;
 }
-
-function getExistingMeta(id) {
-  const file = path.join(FREE_DIR, `${id}.meta.json`);
-
-  if (!fs.existsSync(file)) return null;
-
-  try {
-    return readJson(file);
-  } catch {
-    return null;
-  }
+function detectCountry(text = "") {
+  const s = String(text).toLocaleLowerCase("ru-RU");
+  for (const c of COUNTRIES) if (c.matches.some((m) => s.includes(m)) || new RegExp(`(^|[-_\\s])${c.code.toLowerCase()}($|[-_\\s])`, "i").test(s)) return c;
+  return { code:"UN", slug:"other", flag:"🌐", name:"Другой регион", matches:[] };
 }
-
-function clearLegacyFreeProfilesOnce() {
-  // Первый запуск: старые нерабочие профили удаляются,
-  // но auto.meta.json остаётся нетронутым.
-  for (const file of fs.readdirSync(FREE_DIR)) {
-    if (file === "auto.meta.json" || file === ".gitkeep") {
-      continue;
-    }
-
-    if (file.endsWith(".json") || file.endsWith(".meta.json")) {
-      const filePath = path.join(FREE_DIR, file);
-
-      if (fs.statSync(filePath).isFile()) {
-        fs.unlinkSync(filePath);
-      }
-    }
-  }
+function primaryOutbound(config) {
+  const arr = Array.isArray(config?.outbounds) ? config.outbounds : [];
+  return arr.find((o) => o?.tag === "proxy" && !isService(o)) || arr.find((o) => !isService(o) && !/^node-/i.test(String(o?.tag || "")) && (o?.protocol || o?.settings));
 }
-
-function removeStaleGenerated(previousIds, nextIds) {
-  const keep = new Set(nextIds);
-
-  for (const id of previousIds) {
-    if (keep.has(id) || id === "auto") continue;
-
-    for (const suffix of [".json", ".meta.json"]) {
-      const file = path.join(FREE_DIR, `${id}${suffix}`);
-
-      if (fs.existsSync(file)) {
-        fs.unlinkSync(file);
-      }
-    }
+function isTemplateNode(o) { return typeof o?.tag === "string" && /^node-/i.test(o.tag) && !isService(o); }
+function makeIndividualConfig(template, outbound, templateTags) {
+  const result = structuredClone(template); const selected = structuredClone(outbound); selected.tag = "proxy";
+  result.outbounds = [selected, ...(result.outbounds || []).filter((o) => !isTemplateNode(o) && !templateTags.has(o?.tag) && o?.tag !== "proxy")];
+  if (result.routing) {
+    delete result.routing.balancers;
+    if (Array.isArray(result.routing.rules)) result.routing.rules = result.routing.rules.map((r0) => { const r = structuredClone(r0); if (Object.hasOwn(r,"balancerTag")) { delete r.balancerTag; r.outboundTag = "proxy"; } else if (templateTags.has(r.outboundTag) || String(r.outboundTag || "").startsWith("node-")) r.outboundTag = "proxy"; return r; });
   }
+  if (result.observatory) result.observatory.subjectSelector = ["proxy"];
+  if (result.burstObservatory) result.burstObservatory.subjectSelector = ["proxy"];
+  return result;
 }
-
-function cleanTemplateForAuto(template, nodes) {
-  const auto = structuredClone(template);
-
-  const supportOutbounds = (auto.outbounds || []).filter(
-    (outbound) => !isTemplateNode(outbound)
-  );
-
-  const selectedNodes = [];
-  const autoTags = [];
-
-  for (const node of nodes) {
-    if (
-      !node.meta ||
-      node.meta.enabled === false ||
-      node.meta.auto === false ||
-      hasSponsorMarker(node.meta.name)
-    ) {
-      continue;
-    }
-
-    const original = primaryNodeOutbound(node.config);
-
-    if (!original) {
-      console.warn(
-        `Сервер ${node.id} не добавлен в AUTO: не найден proxy-outbound`
-      );
-      continue;
-    }
-
-    const tag = `node-${node.id}`;
-    const outbound = structuredClone(original);
-    outbound.tag = tag;
-
-    selectedNodes.push(outbound);
-    autoTags.push(tag);
+function cleanTemplateForAuto(template, profiles) {
+  const auto = structuredClone(template); const support = (auto.outbounds || []).filter((o) => !isTemplateNode(o) && !(!isService(o) && (o.protocol || o.settings) && o.tag !== "direct" && o.tag !== "block" && o.tag !== "dns"));
+  const selected = []; const tags = [];
+  for (const p of profiles) {
+    if (!p.meta || p.meta.enabled === false || p.meta.auto === false || sponsor(p.meta.name)) continue;
+    const original = primaryOutbound(p.config); if (!original) continue;
+    const tag = `node-${p.id}`; const out = structuredClone(original); out.tag = tag; selected.push(out); tags.push(tag);
   }
-
-  if (autoTags.length === 0) {
-    throw new Error(
-      "Не осталось активных узлов с meta.auto=true для AUTO. auto.json не обновлён."
-    );
-  }
-
-  auto.outbounds = [...selectedNodes, ...supportOutbounds];
-
-  if (auto.routing) {
-    const balancers = Array.isArray(auto.routing.balancers)
-      ? auto.routing.balancers
-      : [];
-
-    let autoBalancer = balancers.find((item) => item.tag === "auto");
-
-    if (!autoBalancer) {
-      autoBalancer = {
-        tag: "auto",
-        selector: [],
-        strategy: { type: "leastPing" },
-      };
-
-      auto.routing.balancers = [...balancers, autoBalancer];
-    }
-
-    autoBalancer.selector = autoTags;
-
-    if (!autoTags.includes(autoBalancer.fallbackTag)) {
-      autoBalancer.fallbackTag = autoTags[0];
-    }
-  } else {
-    throw new Error(
-      "В generator/templates/auto.json отсутствует routing; AUTO-шаблон не подходит."
-    );
-  }
-
-  if (auto.observatory) {
-    auto.observatory.subjectSelector = autoTags;
-  }
-
-  if (auto.burstObservatory) {
-    auto.burstObservatory.subjectSelector = autoTags;
-  }
-
-  return { config: auto, autoTags };
+  if (!tags.length) throw new Error("Не осталось активных узлов с meta.auto=true для AUTO. auto.json не обновлён.");
+  auto.outbounds = [...selected, ...support];
+  if (!auto.routing) throw new Error("В generator/templates/auto.json отсутствует routing.");
+  const balancers = Array.isArray(auto.routing.balancers) ? auto.routing.balancers : [];
+  // Keep the original balancer tag because routing.rules refer to PROXY in the template.
+  let balancer = balancers.find((b) => b.tag === "PROXY") || balancers.find((b) => b.tag === "auto") || balancers[0];
+  if (!balancer) { balancer = { tag:"PROXY", selector:[], strategy:{ type:"leastLoad" } }; auto.routing.balancers = [balancer]; }
+  balancer.selector = tags; balancer.fallbackTag = tags[0];
+  auto.routing.balancers = [balancer];
+  if (auto.observatory) auto.observatory.subjectSelector = tags;
+  if (auto.burstObservatory) auto.burstObservatory.subjectSelector = tags;
+  return { config:auto, tags };
 }
-
-function readFreeProfiles() {
-  const files = fs.readdirSync(FREE_DIR).filter(
-    (file) =>
-      file.endsWith(".json") &&
-      !file.endsWith(".meta.json") &&
-      file !== "auto.json"
-  );
-
-  const profiles = [];
-
-  for (const file of files) {
-    const id = file.slice(0, -5);
-    const configPath = path.join(FREE_DIR, file);
-    const metaPath = path.join(FREE_DIR, `${id}.meta.json`);
-
-    if (!fs.existsSync(metaPath)) {
-      console.warn(`Пропущен ${file}: нет файла ${id}.meta.json`);
-      continue;
-    }
-
-    try {
-      const serverConfig = readJson(configPath);
-      const meta = readJson(metaPath);
-
-      if (
-        meta.enabled === false ||
-        hasSponsorMarker(meta.name)
-      ) {
-        continue;
-      }
-
-      serverConfig.remarks = meta.name || serverConfig.remarks || id;
-
-      profiles.push({ id, config: serverConfig, meta });
-    } catch (error) {
-      console.warn(
-        `Не удалось прочитать ${file}: ${error.message}`
-      );
-    }
-  }
-
-  return profiles;
-}
-
-function loadPremiumProfiles() {
+function loadPremium() {
   if (!fs.existsSync(PREMIUM_DIR)) return [];
-
-  const files = fs.readdirSync(PREMIUM_DIR).filter(
-    (file) =>
-      file.endsWith(".json") &&
-      !file.endsWith(".meta.json")
-  );
-
-  const profiles = [];
-
-  for (const file of files) {
-    const id = file.slice(0, -5);
-    const metaPath = path.join(PREMIUM_DIR, `${id}.meta.json`);
-
-    if (!fs.existsSync(metaPath)) continue;
-
-    try {
-      const meta = readJson(metaPath);
-
-      if (
-        meta.enabled === false ||
-        hasSponsorMarker(meta.name)
-      ) {
-        continue;
-      }
-
-      const serverConfig = readJson(path.join(PREMIUM_DIR, file));
-      serverConfig.remarks = meta.name || serverConfig.remarks || id;
-
-      profiles.push({ id, config: serverConfig, meta });
-    } catch (error) {
-      console.warn(
-        `Не удалось прочитать Premium ${file}: ${error.message}`
-      );
-    }
-  }
-
-  return profiles;
-}
-
-function sortProfiles(profiles, order = []) {
-  const priorities = new Map(
-    order.map((id, index) => [id, index])
-  );
-
-  return profiles.sort((a, b) => {
-    const pa = priorities.has(a.id)
-      ? priorities.get(a.id)
-      : Number.MAX_SAFE_INTEGER;
-
-    const pb = priorities.has(b.id)
-      ? priorities.get(b.id)
-      : Number.MAX_SAFE_INTEGER;
-
-    return pa !== pb ? pa - pb : a.id.localeCompare(b.id);
+  return fs.readdirSync(PREMIUM_DIR).filter((f) => f.endsWith(".json") && !f.endsWith(".meta.json")).flatMap((file) => {
+    const id = file.slice(0,-5); const metaPath = path.join(PREMIUM_DIR,`${id}.meta.json`); if (!fs.existsSync(metaPath)) return [];
+    try { const meta = readJson(metaPath); if (meta.enabled === false || sponsor(meta.name)) return []; const config = readJson(path.join(PREMIUM_DIR,file)); config.remarks = meta.name || config.remarks || id; return [{id,config,meta}]; } catch (e) { console.warn(`Premium ${file}: ${e.message}`); return []; }
   });
 }
-
-function getAutoMeta() {
-  if (!fs.existsSync(AUTO_META_PATH)) {
-    throw new Error(
-      "Не найден servers/free/auto.meta.json. Этот файл нужно оставить в репозитории."
-    );
+function sortProfiles(items, order = []) { const p = new Map(order.map((id,i) => [id,i])); return items.sort((a,b) => (p.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (p.get(b.id) ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id)); }
+function main() { }
+async function run() {
+  fs.mkdirSync(FREE_DIR,{recursive:true}); fs.mkdirSync(PREMIUM_DIR,{recursive:true}); fs.mkdirSync(OUTPUT_DIR,{recursive:true});
+  if (!fs.existsSync(AUTO_TEMPLATE_PATH)) throw new Error("Не найден generator/templates/auto.json.");
+  if (!fs.existsSync(AUTO_META_PATH)) throw new Error("Не найден servers/free/auto.meta.json.");
+  const template = readJson(AUTO_TEMPLATE_PATH); const autoMeta = readJson(AUTO_META_PATH);
+  if (autoMeta.enabled === false) throw new Error("AUTO отключён в servers/free/auto.meta.json.");
+  const raw = await fetchSource(); const sourceNodes = parseSource(raw);
+  if (!sourceNodes.length) throw new Error("В источнике не найдено прокси-узлов. Старые файлы не очищены.");
+  const oldManifest = fs.existsSync(MANIFEST_PATH) ? readJson(MANIFEST_PATH) : { generated:[] };
+  const oldIds = Array.isArray(oldManifest.generated) ? oldManifest.generated : [];
+  const templateTags = new Set((template.outbounds || []).filter((o) => !isService(o) && (o.protocol || o.settings)).map((o) => o.tag).filter(Boolean));
+  const counts = new Map(); const seen = new Set(); const generated = [];
+  for (const node of sourceNodes) {
+    const c = detectCountry(`${node.name || ""} ${node.sourceTag || ""}`); const n = (counts.get(c.code) || 0) + 1;
+    const hash = crypto.createHash("sha256").update(JSON.stringify(node.outbound)).digest("hex"); if (seen.has(hash)) continue; seen.add(hash); counts.set(c.code,n);
+    const id = `${c.slug}-${String(n).padStart(2,"0")}`; const existingMetaPath = path.join(FREE_DIR,`${id}.meta.json`); let existing = null; try { if (fs.existsSync(existingMetaPath)) existing = readJson(existingMetaPath); } catch {}
+    const name = `${c.flag} ${c.name} №${n}`; const meta = { id, name, country:c.code, tier:"free", enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", sourceHash:hash };
+    const config = makeIndividualConfig(template,node.outbound,templateTags); config.remarks = name;
+    writeJson(path.join(FREE_DIR,`${id}.json`),config); writeJson(existingMetaPath,meta); generated.push({id,config,meta});
   }
-
-  const meta = readJson(AUTO_META_PATH);
-
-  if (meta.enabled === false) {
-    throw new Error(
-      "servers/free/auto.meta.json имеет enabled=false; AUTO отключён."
-    );
-  }
-
-  return meta;
-}
-
-async function main() {
-  fs.mkdirSync(FREE_DIR, { recursive: true });
-  fs.mkdirSync(PREMIUM_DIR, { recursive: true });
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-
-  if (!fs.existsSync(AUTO_TEMPLATE_PATH)) {
-    throw new Error(
-      "Не найден generator/templates/auto.json. Перенеси туда текущий auto.json перед запуском."
-    );
-  }
-
-  const template = readJson(AUTO_TEMPLATE_PATH);
-  const autoMeta = getAutoMeta();
-
-  const hadManifest = fs.existsSync(MANIFEST_PATH);
-  const oldManifest = getPreviousManifest();
-
-  // Сначала скачиваем и проверяем источник.
-  // Если подписка недоступна или пустая, старые файлы не очищаются.
-  const raw = await fetchSource();
-
-  const sourceNodes = parseSource(raw).filter(
-    (node) =>
-      !hasSponsorMarker(node.name) &&
-      !hasSponsorMarker(node.outbound)
-  );
-
-  if (sourceNodes.length === 0) {
-    throw new Error(
-      "В исходной подписке не найдено подходящих прокси-узлов. Файлы не очищены."
-    );
-  }
-
-  // Однократная миграция старой папки.
-  // Очищаем старые Free-конфиги, сохраняя auto.meta.json.
-  // На следующих запусках удаляются только устаревшие созданные файлы.
-  if (!hadManifest) {
-    clearLegacyFreeProfilesOnce();
-  }
-
-  const templateTags = new Set(
-    (template.outbounds || [])
-      .filter(isTemplateNode)
-      .map((outbound) => outbound.tag)
-  );
-
-  const countryCounts = new Map();
-  const nextIds = [];
-  const generated = [];
-  const hashCounts = new Set();
-
-  for (const sourceNode of sourceNodes) {
-    const displaySource =
-      `${sourceNode.name || ""} ${sourceNode.sourceTag || ""}`;
-
-    const country = detectCountry(displaySource);
-    const index = (countryCounts.get(country.code) || 0) + 1;
-
-    countryCounts.set(country.code, index);
-
-    const id = makeNodeId(country, index);
-    const name = `${country.flag} ${country.name} №${index}`;
-
-    const sourceHash = crypto
-      .createHash("sha256")
-      .update(JSON.stringify(sourceNode.outbound))
-      .digest("hex");
-
-    if (hashCounts.has(sourceHash)) {
-      console.log(`Дубликат узла пропущен: ${name}`);
-      countryCounts.set(country.code, index - 1);
-      continue;
-    }
-
-    hashCounts.add(sourceHash);
-
-    // Сохраняем настройки enabled и auto на повторных запусках.
-    const existingMeta = getExistingMeta(id);
-
-    const meta = {
-      id,
-      name,
-      country: country.code,
-      tier: "free",
-      enabled: existingMeta?.enabled !== false,
-      auto: existingMeta?.auto !== false,
-      generatedBy: "upstream",
-      sourceHash,
-    };
-
-    const serverConfig = makeIndividualConfig(
-      template,
-      sourceNode.outbound,
-      templateTags
-    );
-
-    serverConfig.remarks = name;
-
-    writeJson(
-      path.join(FREE_DIR, `${id}.json`),
-      serverConfig
-    );
-
-    writeJson(
-      path.join(FREE_DIR, `${id}.meta.json`),
-      meta
-    );
-
-    nextIds.push(id);
-    generated.push({ id, config: serverConfig, meta });
-  }
-
-  if (generated.length === 0) {
-    throw new Error(
-      "Все узлы были отфильтрованы. Генерация остановлена."
-    );
-  }
-
-  // Удаляем устаревшие профили, созданные предыдущим запуском.
-  removeStaleGenerated(oldManifest.generated, nextIds);
-
-  writeJson(MANIFEST_PATH, { generated: nextIds });
-
-  // Собираем все Free-серверы, которым разрешено участвовать в AUTO.
-  const freeProfiles = readFreeProfiles();
-  const allProfilesById = new Map(
-    freeProfiles.map((profile) => [profile.id, profile])
-  );
-
-  for (const profile of generated) {
-    allProfilesById.set(profile.id, profile);
-  }
-
-  const allProfiles = [...allProfilesById.values()];
-
-  // AUTO создаётся заново из шаблона с актуальным набором узлов.
-  const autoResult = cleanTemplateForAuto(template, allProfiles);
-  const autoConfig = autoResult.config;
-
-  autoConfig.remarks =
-    autoMeta.name || "🇪🇺 ⚡ AUTO — САМЫЙ БЫСТРЫЙ";
-
-  writeJson(AUTO_PATH, autoConfig);
-
-  // Формируем итоговые подписки.
-  const finalFreeProfiles = readFreeProfiles();
-
-  finalFreeProfiles.push({
-    id: "auto",
-    config: autoConfig,
-    meta: autoMeta,
+  if (!generated.length) throw new Error("Все узлы отфильтрованы; старые файлы сохранены.");
+  // Only remove files explicitly listed in the previous manifest; never bulk-clear the Free directory.
+  const newIds = generated.map((x) => x.id); const keep = new Set(newIds);
+  for (const id of oldIds) if (!keep.has(id) && id !== "auto") for (const ext of [".json",".meta.json"]) { const f = path.join(FREE_DIR,`${id}${ext}`); if (fs.existsSync(f)) fs.unlinkSync(f); }
+  writeJson(MANIFEST_PATH,{generated:newIds});
+  const manual = fs.readdirSync(FREE_DIR).filter((f) => f.endsWith(".json") && !f.endsWith(".meta.json") && f !== "auto.json" && f !== ".generated-servers.json").flatMap((f) => {
+    const id = f.slice(0,-5); const mp = path.join(FREE_DIR,`${id}.meta.json`); if (!fs.existsSync(mp)) return [];
+    try { const config = readJson(path.join(FREE_DIR,f)); const meta = readJson(mp); if (meta.enabled === false || sponsor(meta.name)) return []; config.remarks = meta.name || config.remarks || id; return [{id,config,meta}]; } catch { return []; }
   });
-
-  const finalFree = sortProfiles(
-    finalFreeProfiles,
-    CONFIG.servers?.freeOrder || []
-  );
-
-  const premium = sortProfiles(
-    loadPremiumProfiles(),
-    CONFIG.servers?.premiumOrder || []
-  );
-
-  writeJson(
-    path.join(OUTPUT_DIR, "free.json"),
-    finalFree.map((item) => item.config)
-  );
-
-  writeJson(
-    path.join(OUTPUT_DIR, "premium.json"),
-    premium.map((item) => item.config)
-  );
-
-  console.log(`Создано узлов из источника: ${generated.length}`);
-  console.log(`Узлов включено в AUTO: ${autoResult.autoTags.length}`);
-  console.log(`Free-профилей в подписке: ${finalFree.length}`);
-  console.log(`Premium-профилей в подписке: ${premium.length}`);
-  console.log("Генерация завершена.");
+  const byId = new Map(manual.map((p) => [p.id,p])); for (const p of generated) byId.set(p.id,p);
+  const profiles = [...byId.values()]; const autoResult = cleanTemplateForAuto(template,profiles); autoResult.config.remarks = autoMeta.name || "🇪🇺 ⚡ Авто-выбор"; writeJson(AUTO_PATH,autoResult.config);
+  const free = sortProfiles([...profiles.filter((p) => p.id !== "auto"),{id:"auto",config:autoResult.config,meta:autoMeta}],CONFIG.servers?.freeOrder || []);
+  const premium = sortProfiles(loadPremium(),CONFIG.servers?.premiumOrder || []);
+  writeJson(path.join(OUTPUT_DIR,"free.json"),free.map((x) => x.config)); writeJson(path.join(OUTPUT_DIR,"premium.json"),premium.map((x) => x.config));
+  console.log(`Узлов из источника: ${generated.length}`); console.log(`Узлов в AUTO: ${autoResult.tags.length}`); console.log(`Free-профилей: ${free.length}`); console.log(`Premium-профилей: ${premium.length}`); console.log("Генерация завершена.");
 }
-
-main().catch((error) => {
-  console.error(`Ошибка генерации: ${error.message}`);
-  process.exitCode = 1;
-});
+run().catch((error) => { console.error(`Ошибка генерации: ${error.message}`); process.exitCode = 1; });
