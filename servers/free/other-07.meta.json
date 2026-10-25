@@ -1,0 +1,10 @@
+{
+  "id": "other-07",
+  "name": "🌐 Другой регион №7",
+  "country": "UN",
+  "tier": "free",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "sourceHash": "9408fa40a91d84a1396a6f0c8313b70b99e8f154629048bdec4fefaa8996ef7c"
+}
