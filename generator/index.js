@@ -98,6 +98,77 @@ function collectTextPayloads(root) {
   }
   walk(root); return out;
 }
+function decodeEntities(str) {
+  const named = { quot: '"', amp: "&", lt: "<", gt: ">", apos: "'", nbsp: " ", sol: "/", colon: ":" };
+  return String(str).replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, g) => {
+    if (g[0] === "#") {
+      const code = g[1].toLowerCase() === "x" ? parseInt(g.slice(2), 16) : parseInt(g.slice(1), 10);
+      try { return String.fromCodePoint(code); } catch { return m; }
+    }
+    return Object.hasOwn(named, g.toLowerCase()) ? named[g.toLowerCase()] : m;
+  });
+}
+function unescapeJs(str) {
+  return String(str)
+    .replace(/\\u([0-9a-f]{4})/gi, (m, h) => String.fromCharCode(parseInt(h, 16)))
+    .replace(/\\x([0-9a-f]{2})/gi, (m, h) => String.fromCharCode(parseInt(h, 16)))
+    .replace(/\\\//g, "/").replace(/\\"/g, '"').replace(/\\n/g, "\n").replace(/\\\\/g, "\\");
+}
+function isHtmlText(text) { return /^\s*<(?:!doctype|html|head|body)/i.test(String(text)); }
+function findJsonBlocks(text, limit = 200) {
+  const blocks = []; let i = 0; let attempts = 0;
+  while (i < text.length && attempts < 4000 && blocks.length < limit) {
+    const ch = text[i];
+    if ((ch === "[" || ch === "{") && /[\s\[{"]/.test(text[i + 1] || "")) {
+      attempts++;
+      let depth = 0; let inStr = false; let esc = false; let end = -1;
+      for (let j = i; j < text.length; j++) {
+        const c = text[j];
+        if (inStr) { if (esc) esc = false; else if (c === "\\") esc = true; else if (c === '"') inStr = false; continue; }
+        if (c === '"') inStr = true;
+        else if (c === "[" || c === "{") depth++;
+        else if (c === "]" || c === "}") { depth--; if (depth === 0) { end = j; break; } }
+      }
+      if (end > i) {
+        const chunk = text.slice(i, end + 1);
+        if (/outbounds|"vnext"|"protocol"|vless|vmess|trojan/i.test(chunk)) {
+          try { blocks.push(JSON.parse(chunk)); i = end + 1; continue; } catch {}
+        }
+      }
+    }
+    i++;
+  }
+  return blocks;
+}
+function htmlChunks(html) {
+  const chunks = []; const push = (t) => { const v = String(t || "").trim(); if (v.length > 20) chunks.push(v); };
+  for (const m of html.matchAll(/<(textarea|pre|code|script|template|noscript)\b[^>]*>([\s\S]*?)<\/\1>/gi)) push(m[2]);
+  for (const m of html.matchAll(/\s[\w:-]+\s*=\s*"([^"]{40,})"/g)) push(m[1]);
+  for (const m of html.matchAll(/\s[\w:-]+\s*=\s*'([^']{40,})'/g)) push(m[1]);
+  push(html);
+  return chunks;
+}
+function extractFromHtml(html) {
+  const out = []; const seen = new Set();
+  const consider = (text) => {
+    const variants = new Set([text, decodeEntities(text), unescapeJs(text), unescapeJs(decodeEntities(text))]);
+    for (const v of variants) {
+      if (seen.has(v)) continue; seen.add(v);
+      for (const block of findJsonBlocks(v)) out.push(block);
+      if (/(?:^|[\s"'>])(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i.test(v)) out.push(v);
+      for (const m of v.matchAll(/[A-Za-z0-9+/_=-]{200,}/g)) { const d = decodeBase64(m[0]); if (d && looksReadable(d)) out.push(d); }
+    }
+  };
+  for (const chunk of htmlChunks(html)) consider(chunk);
+  return out;
+}
+function htmlHints(html) {
+  const count = (re) => (html.match(re) || []).length;
+  const escaped = decodeEntities(html);
+  const maskPath = (p) => p.split("?")[0].split("/").map((seg) => (seg.length > 12 && /[0-9a-f-]{12,}/i.test(seg) ? "***" : seg)).join("/");
+  const apis = [...new Set([...html.matchAll(/(?:fetch|axios\.(?:get|post)|XMLHttpRequest[^;]*open)\s*\(\s*[`'"]([^`'"]+)[`'"]/g)].map((m) => maskPath(m[1])))].slice(0, 5);
+  return `script=${count(/<script\b/gi)}, textarea=${count(/<textarea\b/gi)}, outbounds(raw)=${count(/"outbounds"/g)}, outbounds(entity)=${count(/&quot;outbounds&quot;/g)}, outbounds(js-escaped)=${count(/\\"outbounds\\"/g)}, outbounds(после декодирования)=${count(/"outbounds"/g) + (escaped.match(/"outbounds"/g) || []).length}, fetch/api: ${apis.join(" | ") || "-"}`;
+}
 function describePayload(raw) {
   const text = String(raw ?? "").replace(/^\uFEFF/, "").trim();
   const decoded = decodeSubscription(text);
@@ -114,13 +185,26 @@ function describePayload(raw) {
     if (Array.isArray(v)) jsonInfo = `array(${v.length})`;
     else if (v && typeof v === "object") jsonInfo = `object(keys: ${Object.keys(v).slice(0, 12).join(",")})`;
   } catch {}
-  return { kind, rawLength: text.length, decodedLength: decoded.length, schemes, jsonInfo, decoded };
+  let htmlInfo = "";
+  if (kind === "html") {
+    const title = (text.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1];
+    const lower = text.toLowerCase();
+    const flags = [];
+    if (/just a moment|cf-chl|challenge-platform|cf-browser-verification/.test(lower)) flags.push("cloudflare-challenge");
+    if (/captcha|recaptcha|hcaptcha/.test(lower)) flags.push("captcha");
+    if (/access denied|forbidden|blocked/.test(lower)) flags.push("denied-words");
+    if (/<script[^>]+src=/.test(lower) && /<div id="root"|<div id="app"|__next|id="__nuxt"/.test(lower)) flags.push("spa-page");
+    if (/vless(?:%3a|:)(?:%2f|\\?\/){2}/i.test(text)) flags.push("contains-vless-link");
+    htmlInfo = `title=${JSON.stringify((title || "").replace(/\s+/g, " ").trim().slice(0, 120))}; признаки: ${flags.join(",") || "-"}`;
+  }
+  return { kind, rawLength: text.length, decodedLength: decoded.length, schemes, jsonInfo, htmlInfo, decoded };
 }
 function logPayload(raw, nodesFound) {
   const d = describePayload(raw);
   console.log(`После декодирования: длина ${d.decodedLength}`);
   console.log(`URI по схемам: ${JSON.stringify(d.schemes)}${d.jsonInfo ? `; JSON: ${d.jsonInfo}` : ""}`);
   console.log(`Отброшено: спонсор=${STATS.sponsorDropped + STATS.uriSponsor}, дубли=${STATS.duplicateDropped}, битые URI=${STATS.uriBad}`);
+  if (!nodesFound && d.kind === "html") console.log("Источник вернул веб-страницу вместо подписки: сервер, вероятно, определяет клиента по User-Agent или блокирует адреса GitHub Actions.");
   if (!nodesFound && d.decodedLength > 0 && d.decodedLength <= 600 && !/(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i.test(d.decoded)) {
     console.log(`Короткий ответ без узлов (вероятная заглушка): ${JSON.stringify(d.decoded)}`);
   }
@@ -128,7 +212,7 @@ function logPayload(raw, nodesFound) {
 async function fetchSource() {
   const url = process.env.FREE_UPSTREAM_URL;
   if (!url) throw new Error("Не задан FREE_UPSTREAM_URL. Добавь ссылку в GitHub Secrets → Actions.");
-  const ua = process.env.FREE_UPSTREAM_UA || "OokVPN-Subscription-Generator/1.1";
+  const ua = "OokVPN-Subscription-Generator/1.1";
   const started = Date.now();
   let response;
   for (let attempt = 1; attempt <= 3; attempt++) {
@@ -148,6 +232,7 @@ async function fetchSource() {
   if (!response.ok) throw new Error(`Источник вернул HTTP ${response.status}`);
   const first = describePayload(body);
   console.log(`Формат ответа: ${first.kind}, длина ${first.rawLength}`);
+  if (first.htmlInfo) { console.log(`HTML: ${first.htmlInfo}`); console.log(`HTML-структура: ${htmlHints(body)}`); }
   return decodeSubscription(body);
 }
 function safeDecode(value) { try { return decodeURIComponent(value || ""); } catch { return value || ""; } }
@@ -232,7 +317,8 @@ function parseSource(raw) {
     }
   }
   const s = text;
-  if (s.startsWith("{") || s.startsWith("[")) { try { walk(JSON.parse(s)); } catch { addUriText(s); } }
+  if (isHtmlText(s)) { for (const piece of extractFromHtml(s)) walk(piece); }
+  else if (s.startsWith("{") || s.startsWith("[")) { try { walk(JSON.parse(s)); } catch { addUriText(s); } }
   else addUriText(s);
   return result;
 }
