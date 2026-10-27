@@ -12,6 +12,7 @@
     "premiumPath": "servers/premium",
     "freeOrder": [
       "tech",
+      "bypass",
       "auto",
       "estonia-01",
       "estonia-02",
