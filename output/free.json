@@ -935,7 +935,7 @@
             "serverName": "de-b1.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -965,7 +965,7 @@
             "serverName": "de-b1.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "5fkwwCKZzMsE6Eb_b3iqluu-1AWIfnYl-p0N3EL9Al8",
-            "shortId": "713e9e2cca714dfa",
+            "shortId": "1b21fca2edd3872b",
             "spiderX": "/"
           }
         },
@@ -1024,7 +1024,7 @@
             "serverName": "nl-s-2.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "bdf5852d1423e694",
+            "shortId": "a3565610aa574a6e",
             "spiderX": "/"
           }
         },
@@ -1142,7 +1142,7 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "a3565610aa574a6e",
+            "shortId": "78f97d82e16aaad6",
             "spiderX": "/"
           }
         },
@@ -1171,7 +1171,7 @@
             "serverName": "fl.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -1200,7 +1200,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -1230,7 +1230,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-            "shortId": "aca600d9df96453c",
+            "shortId": "c9cf45cddb319c23",
             "spiderX": "/"
           }
         },
@@ -1259,7 +1259,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -1289,7 +1289,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "safari",
             "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-            "shortId": "71d3e27e8115fab1",
+            "shortId": "2171ecf33df62f7e",
             "spiderX": "/"
           }
         },
@@ -1348,7 +1348,7 @@
             "serverName": "be.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-            "shortId": "5f0e533560ec8582",
+            "shortId": "7d3e668e0cb831f1",
             "spiderX": "/"
           }
         },
@@ -1377,7 +1377,7 @@
             "serverName": "fr.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -1466,7 +1466,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "ios",
             "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-            "shortId": "3cbf2ac918af2294",
+            "shortId": "29d0ae077b80be26",
             "spiderX": "/"
           }
         },
@@ -1534,6 +1534,113 @@
       ]
     },
     "remarks": "🇪🇺 ⚡ AUTO — САМЫЙ БЫСТРЫЙ"
+  },
+  {
+    "dns": {
+      "servers": [
+        "1.1.1.1",
+        "1.0.0.1"
+      ],
+      "queryStrategy": "UseIP"
+    },
+    "routing": {
+      "rules": [
+        {
+          "type": "field",
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "direct"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "IPIfNonMatch"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "sub-edge-12-1g.xrent.cloud",
+              "port": 11451,
+              "users": [
+                {
+                  "id": "fc56c6e4-bf25-4f1f-af23-eac53216f778",
+                  "encryption": "none",
+                  "flow": ""
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "xhttp",
+          "xhttpSettings": {
+            "mode": "auto",
+            "host": "",
+            "path": "/"
+          },
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "max.ru",
+            "publicKey": "kDEc42JBZxig3BrLD3V1ofs3oJZk15-ANWN-rM0JW10",
+            "shortId": "f28145401b4f633a",
+            "spiderX": "/",
+            "fingerprint": "chrome"
+          }
+        }
+      },
+      {
+        "tag": "direct",
+        "protocol": "freedom"
+      },
+      {
+        "tag": "block",
+        "protocol": "blackhole"
+      }
+    ],
+    "remarks": "🇪🇺 LTE | Обход 📡"
   },
   {
     "dns": {
@@ -2380,7 +2487,7 @@
             "serverName": "de-b1.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -3254,7 +3361,7 @@
             "serverName": "de-b1.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "5fkwwCKZzMsE6Eb_b3iqluu-1AWIfnYl-p0N3EL9Al8",
-            "shortId": "713e9e2cca714dfa",
+            "shortId": "1b21fca2edd3872b",
             "spiderX": "/"
           }
         },
@@ -5001,7 +5108,7 @@
             "serverName": "nl-s-2.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "bdf5852d1423e694",
+            "shortId": "a3565610aa574a6e",
             "spiderX": "/"
           }
         },
@@ -8495,7 +8602,7 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "a3565610aa574a6e",
+            "shortId": "78f97d82e16aaad6",
             "spiderX": "/"
           }
         },
@@ -9368,7 +9475,7 @@
             "serverName": "fl.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -10241,7 +10348,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -11115,7 +11222,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-            "shortId": "aca600d9df96453c",
+            "shortId": "c9cf45cddb319c23",
             "spiderX": "/"
           }
         },
@@ -11988,7 +12095,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -12862,7 +12969,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "safari",
             "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-            "shortId": "71d3e27e8115fab1",
+            "shortId": "2171ecf33df62f7e",
             "spiderX": "/"
           }
         },
@@ -14609,7 +14716,7 @@
             "serverName": "be.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-            "shortId": "5f0e533560ec8582",
+            "shortId": "7d3e668e0cb831f1",
             "spiderX": "/"
           }
         },
@@ -15482,7 +15589,7 @@
             "serverName": "fr.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -18103,7 +18210,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "ios",
             "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-            "shortId": "3cbf2ac918af2294",
+            "shortId": "29d0ae077b80be26",
             "spiderX": "/"
           }
         },
