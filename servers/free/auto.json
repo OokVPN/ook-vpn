@@ -914,7 +914,7 @@
           "serverName": "de-b1.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "5fkwwCKZzMsE6Eb_b3iqluu-1AWIfnYl-p0N3EL9Al8",
-          "shortId": "1b21fca2edd3872b",
+          "shortId": "2c9a2790ad5900b2",
           "spiderX": "/"
         }
       },
@@ -973,7 +973,7 @@
           "serverName": "nl-s-2.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "a3565610aa574a6e",
+          "shortId": "dfff7a7a4c7e5f33",
           "spiderX": "/"
         }
       },
@@ -1002,7 +1002,7 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
@@ -1032,7 +1032,7 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
-          "shortId": "acccaaaa9f72147d",
+          "shortId": "986ede37bf6925ae",
           "spiderX": "/"
         }
       },
@@ -1091,7 +1091,7 @@
           "serverName": "fi-b2.pythonsetupbib.online",
           "fingerprint": "firefox",
           "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "78f97d82e16aaad6",
+          "shortId": "bdf5852d1423e694",
           "spiderX": "/"
         }
       },
@@ -1102,7 +1102,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "fl.golangwikito.cfd",
+            "address": "fl-b1.golangwikito.cfd",
             "port": 61374,
             "users": [
               {
@@ -1117,7 +1117,7 @@
         "network": "xhttp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "fl.golangwikito.cfd",
+          "serverName": "fl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "40a4b9403abe554c",
@@ -1179,7 +1179,7 @@
           "serverName": "se-2-b1.pythonsetupbib.online",
           "fingerprint": "firefox",
           "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-          "shortId": "c9cf45cddb319c23",
+          "shortId": "aca600d9df96453c",
           "spiderX": "/"
         }
       },
@@ -1208,7 +1208,7 @@
           "serverName": "cz.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
@@ -1297,7 +1297,7 @@
           "serverName": "be.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-          "shortId": "7d3e668e0cb831f1",
+          "shortId": "01d2246b4bd92f49",
           "spiderX": "/"
         }
       },
@@ -1326,7 +1326,7 @@
           "serverName": "fr.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -1415,7 +1415,7 @@
           "serverName": "ee.golangwikito.cfd",
           "fingerprint": "ios",
           "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-          "shortId": "29d0ae077b80be26",
+          "shortId": "c1037eecbbb5e655",
           "spiderX": "/"
         }
       },
