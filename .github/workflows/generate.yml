@@ -18,7 +18,7 @@ concurrency:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -28,6 +28,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Install Xray
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/xray"
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/xray.zip" https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
+          unzip -q -o "$RUNNER_TEMP/xray.zip" xray -d "$RUNNER_TEMP/xray"
+          chmod +x "$RUNNER_TEMP/xray/xray"
+          "$RUNNER_TEMP/xray/xray" version
+          echo "XRAY_BIN=$RUNNER_TEMP/xray/xray" >> "$GITHUB_ENV"
 
       - name: Generate subscriptions
         run: npm run generate
