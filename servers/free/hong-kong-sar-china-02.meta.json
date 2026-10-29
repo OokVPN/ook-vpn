@@ -1,0 +1,11 @@
+{
+  "id": "hong-kong-sar-china-02",
+  "name": "🇭🇰 Гонконг (САР) №2",
+  "country": "HK",
+  "tier": "free",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "ip",
+  "sourceHash": "e09cd9f9eee6482ceb68d9bb92779e47d0a298663e64d324b431186a39d9ae78"
+}

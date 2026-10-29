@@ -279,26 +279,30 @@
       "settings": {
         "vnext": [
           {
-            "address": "31.56.188.157",
-            "port": 443,
+            "address": "193.233.193.53",
+            "port": 8443,
             "users": [
               {
                 "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/v3/playlist/chunk",
+          "host": "mbr-coach.com",
+          "mode": "stream-one"
+        },
         "realitySettings": {
-          "serverName": "2clients.com",
+          "serverName": "mbr-coach.com",
           "fingerprint": "edge",
-          "publicKey": "Y-i7PU_wry5Zc8BodTEjpDp2xOOoLu1eaPSBwoqI70c",
-          "shortId": "4fd33b35908cd75d",
+          "publicKey": "nA92aCP6TN6HmUJVlt_CIOiX-fRe3Dq7kzkbHeZYWEA",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -329,5 +333,5 @@
       "proxy"
     ]
   },
-  "remarks": "🌐 Другой регион №3"
+  "remarks": "🇭🇰 Гонконг (САР) №2"
 }

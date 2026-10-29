@@ -280,25 +280,29 @@
         "vnext": [
           {
             "address": "185.236.24.244",
-            "port": 443,
+            "port": 8443,
             "users": [
               {
                 "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/v3/playlist/chunk",
+          "host": "dsavenkov.dev",
+          "mode": "stream-one"
+        },
         "realitySettings": {
           "serverName": "dsavenkov.dev",
           "fingerprint": "edge",
-          "publicKey": "0ymuN9OUqZ3Gh69n-KpjAZuvxFxsJ95DCN1nRdUhRmA",
-          "shortId": "a84e5fbbda7ae595",
+          "publicKey": "oP127jyeJz8VpSlo0OSFfUphP0ZwOcZdP76UK7WMfz8",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -329,5 +333,5 @@
       "proxy"
     ]
   },
-  "remarks": "🌐 Другой регион №5"
+  "remarks": "🇫🇮 Финляндия №2"
 }

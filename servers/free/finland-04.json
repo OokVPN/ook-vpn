@@ -280,25 +280,29 @@
         "vnext": [
           {
             "address": "130.12.45.183",
-            "port": 443,
+            "port": 8443,
             "users": [
               {
                 "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/v3/playlist/chunk",
+          "host": "nasa3.arsen.me",
+          "mode": "stream-one"
+        },
         "realitySettings": {
           "serverName": "nasa3.arsen.me",
           "fingerprint": "edge",
-          "publicKey": "O3ZPjD9f4kZ7zCpydSm3eYQ4aaD0I1c6Cq7fvjDUYn0",
-          "shortId": "eddaa1906d03947a",
+          "publicKey": "FgOOgorEeEDvnyjVUg4U1AqvHz8hO0UJONa2E_S9Sjw",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -329,5 +333,5 @@
       "proxy"
     ]
   },
-  "remarks": "🌐 Другой регион №7"
+  "remarks": "🇫🇮 Финляндия №4"
 }

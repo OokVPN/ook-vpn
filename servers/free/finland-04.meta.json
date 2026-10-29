@@ -1,0 +1,11 @@
+{
+  "id": "finland-04",
+  "name": "🇫🇮 Финляндия №4",
+  "country": "FI",
+  "tier": "free",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "ip",
+  "sourceHash": "249436d4d43fa512e6a87f2931e1498666f8c5044c89e09dc7b2223cdf0703f7"
+}

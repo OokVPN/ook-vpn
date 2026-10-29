@@ -279,25 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "193.233.193.53",
-            "port": 8443,
+            "address": "31.56.188.157",
+            "port": 443,
             "users": [
               {
                 "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "mbr-coach.com",
+          "serverName": "2clients.com",
           "fingerprint": "edge",
-          "publicKey": "nA92aCP6TN6HmUJVlt_CIOiX-fRe3Dq7kzkbHeZYWEA",
-          "shortId": "",
+          "publicKey": "Y-i7PU_wry5Zc8BodTEjpDp2xOOoLu1eaPSBwoqI70c",
+          "shortId": "9951c5c00086eecd",
           "spiderX": "/"
         }
       },
@@ -328,5 +329,5 @@
       "proxy"
     ]
   },
-  "remarks": "🌐 Другой регион №12"
+  "remarks": "🇵🇱 Польша №1"
 }

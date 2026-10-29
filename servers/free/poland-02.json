@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "147.45.124.173",
+            "address": "31.56.188.157",
             "port": 8443,
             "users": [
               {
@@ -293,11 +293,16 @@
       "streamSettings": {
         "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/v3/playlist/chunk",
+          "host": "wellvps.com",
+          "mode": "stream-one"
+        },
         "realitySettings": {
-          "serverName": "explore-bulgaria.com",
+          "serverName": "wellvps.com",
           "fingerprint": "edge",
-          "publicKey": "A7j0RYJSfkBkbYjoLJWZCm1HdNr17wWKPOG5vToPsmc",
-          "shortId": "",
+          "publicKey": "2Dttk8wiTIu9rLKr5kUMt5hrWrZ_WMrtrRAnegULQTU",
+          "shortId": "0fa622b5f19c524c",
           "spiderX": "/"
         }
       },
@@ -328,5 +333,5 @@
       "proxy"
     ]
   },
-  "remarks": "🌐 Другой регион №10"
+  "remarks": "🇵🇱 Польша №2"
 }

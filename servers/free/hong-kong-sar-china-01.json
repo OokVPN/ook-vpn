@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "127.0.0.1",
-            "port": 10808,
+            "address": "193.233.193.53",
+            "port": 443,
             "users": [
               {
-                "id": "00000000-0000-0000-0000-000000000000",
+                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -293,7 +293,14 @@
       },
       "streamSettings": {
         "network": "tcp",
-        "security": "none"
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "yaosheng.io",
+          "fingerprint": "edge",
+          "publicKey": "mUE8YhhmcvkB1JGQyvdfMBTYJhKE20w3XQiReKLADm8",
+          "shortId": "0e8176dc6c0d43ca",
+          "spiderX": "/"
+        }
       },
       "tag": "proxy"
     },
@@ -322,5 +329,5 @@
       "proxy"
     ]
   },
-  "remarks": "🌐 Другой регион №13"
+  "remarks": "🇭🇰 Гонконг (САР) №1"
 }

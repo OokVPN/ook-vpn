@@ -279,26 +279,30 @@
       "settings": {
         "vnext": [
           {
-            "address": "194.48.141.16",
-            "port": 443,
+            "address": "147.45.124.173",
+            "port": 8443,
             "users": [
               {
                 "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/v3/playlist/chunk",
+          "host": "explore-bulgaria.com",
+          "mode": "stream-one"
+        },
         "realitySettings": {
-          "serverName": "theverge.com",
+          "serverName": "explore-bulgaria.com",
           "fingerprint": "edge",
-          "publicKey": "d1hCrgQISDeQIzWAudFDhOZRH2kAdJZYirmGnmI_LAA",
-          "shortId": "06954fd1b0648c6f",
+          "publicKey": "A7j0RYJSfkBkbYjoLJWZCm1HdNr17wWKPOG5vToPsmc",
+          "shortId": "eeeef14e2d6139e5",
           "spiderX": "/"
         }
       },
@@ -329,5 +333,5 @@
       "proxy"
     ]
   },
-  "remarks": "🌐 Другой регион №1"
+  "remarks": "🇺🇸 США №2"
 }

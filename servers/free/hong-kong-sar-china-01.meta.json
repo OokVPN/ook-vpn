@@ -1,10 +1,11 @@
 {
-  "id": "other-11",
-  "name": "🌐 Другой регион №11",
-  "country": "UN",
+  "id": "hong-kong-sar-china-01",
+  "name": "🇭🇰 Гонконг (САР) №1",
+  "country": "HK",
   "tier": "free",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
+  "geoSource": "ip",
   "sourceHash": "5e59b5eaf2b759df3b3268db3b6c39f82cf4be4efd3dc5c870a3daa8bbe91063"
 }
