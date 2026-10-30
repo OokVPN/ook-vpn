@@ -44,6 +44,8 @@ jobs:
         run: npm run generate
         env:
           FREE_UPSTREAM_URL: ${{ secrets.FREE_UPSTREAM_URL }}
+          FREE_UPSTREAM_URL_2: ${{ secrets.FREE_UPSTREAM_URL_2 }}
+          FREE_UPSTREAM_URL_3: ${{ secrets.FREE_UPSTREAM_URL_3 }}
 
       - name: Commit generated files
         run: |
