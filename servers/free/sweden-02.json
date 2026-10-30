@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "cz.pythonmakemigreat.wiki",
+            "address": "se-2-b1.pythonsetupbib.online",
             "port": 443,
             "users": [
               {
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "cz.pythonmakemigreat.wiki",
-          "fingerprint": "safari",
-          "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-          "shortId": "3b306f15c6057d55",
+          "serverName": "se-2-b1.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
+          "shortId": "266e9b1bbaf6bba2",
           "spiderX": "/"
         }
       },
@@ -329,5 +329,5 @@
       "proxy"
     ]
   },
-  "remarks": "🇵🇱 Польша №6"
+  "remarks": "🇸🇪 Швеция №2"
 }

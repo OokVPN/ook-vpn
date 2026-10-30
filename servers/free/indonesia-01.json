@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "fi-b2.pythonsetupbib.online",
+            "address": "31.58.235.32",
             "port": 443,
             "users": [
               {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "fi-b2.pythonsetupbib.online",
-          "fingerprint": "firefox",
-          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "78f97d82e16aaad6",
+          "serverName": "2clients.com",
+          "fingerprint": "edge",
+          "publicKey": "Y-i7PU_wry5Zc8BodTEjpDp2xOOoLu1eaPSBwoqI70c",
+          "shortId": "9951c5c00086eecd",
           "spiderX": "/"
         }
       },
@@ -329,5 +329,5 @@
       "proxy"
     ]
   },
-  "remarks": "🇫🇮 Финляндия №6"
+  "remarks": "🇮🇩 Индонезия №1"
 }

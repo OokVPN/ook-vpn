@@ -279,30 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "147.45.124.173",
-            "port": 8443,
+            "address": "be.golangwikito.cfd",
+            "port": 443,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "explore-bulgaria.com",
-          "mode": "stream-one"
-        },
         "realitySettings": {
-          "serverName": "explore-bulgaria.com",
-          "fingerprint": "edge",
-          "publicKey": "A7j0RYJSfkBkbYjoLJWZCm1HdNr17wWKPOG5vToPsmc",
-          "shortId": "eeeef14e2d6139e5",
+          "serverName": "be.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
+          "shortId": "74de1ccddccaa017",
           "spiderX": "/"
         }
       },
@@ -333,5 +329,5 @@
       "proxy"
     ]
   },
-  "remarks": "🇺🇸 США №2"
+  "remarks": "🇩🇪 Германия №4"
 }

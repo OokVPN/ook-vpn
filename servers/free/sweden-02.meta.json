@@ -1,0 +1,13 @@
+{
+  "id": "sweden-02",
+  "name": "🇸🇪 Швеция №2",
+  "country": "SE",
+  "tier": "free",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "ip",
+  "sourceHash": "9cc49fa0c3e179a959c75f25470541a538dffd2bb3385c5f69410a19d872d4da",
+  "reachable": true,
+  "source": 2
+}

@@ -241,14 +241,14 @@
           "node-finland-02",
           "node-finland-03",
           "node-finland-04",
-          "node-finland-05",
-          "node-finland-06",
-          "node-finland-07",
-          "node-finland-08",
           "node-germany-01",
           "node-germany-02",
+          "node-germany-03",
+          "node-germany-04",
           "node-hong-kong-sar-china-01",
           "node-hong-kong-sar-china-02",
+          "node-indonesia-01",
+          "node-indonesia-02",
           "node-netherlands-01",
           "node-netherlands-02",
           "node-netherlands-03",
@@ -256,10 +256,8 @@
           "node-poland-02",
           "node-poland-03",
           "node-poland-04",
-          "node-poland-05",
-          "node-poland-06",
-          "node-usa-01",
-          "node-usa-02"
+          "node-sweden-01",
+          "node-sweden-02"
         ],
         "strategy": {
           "type": "leastLoad",
@@ -394,75 +392,11 @@
           "serverName": "ee.golangwikito.cfd",
           "fingerprint": "ios",
           "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-          "shortId": "6051794d7ff7ae0e",
+          "shortId": "3cbf2ac918af2294",
           "spiderX": "/"
         }
       },
       "tag": "node-estonia-02"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "185.236.24.244",
-            "port": 443,
-            "users": [
-              {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "dsavenkov.dev",
-          "fingerprint": "edge",
-          "publicKey": "0ymuN9OUqZ3Gh69n-KpjAZuvxFxsJ95DCN1nRdUhRmA",
-          "shortId": "44090656dabce4b8",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-finland-01"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "185.236.24.244",
-            "port": 8443,
-            "users": [
-              {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "security": "reality",
-        "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "dsavenkov.dev",
-          "mode": "stream-one"
-        },
-        "realitySettings": {
-          "serverName": "dsavenkov.dev",
-          "fingerprint": "edge",
-          "publicKey": "oP127jyeJz8VpSlo0OSFfUphP0ZwOcZdP76UK7WMfz8",
-          "shortId": "f8b3b680351b9e93",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-finland-02"
     },
     {
       "protocol": "vless",
@@ -488,11 +422,11 @@
           "serverName": "nasa3.arsen.me",
           "fingerprint": "edge",
           "publicKey": "O3ZPjD9f4kZ7zCpydSm3eYQ4aaD0I1c6Cq7fvjDUYn0",
-          "shortId": "eddaa1906d03947a",
+          "shortId": "fda6bf98428a8544",
           "spiderX": "/"
         }
       },
-      "tag": "node-finland-03"
+      "tag": "node-finland-01"
     },
     {
       "protocol": "vless",
@@ -522,11 +456,11 @@
           "serverName": "nasa3.arsen.me",
           "fingerprint": "edge",
           "publicKey": "FgOOgorEeEDvnyjVUg4U1AqvHz8hO0UJONa2E_S9Sjw",
-          "shortId": "3d519a50ff61dd4e",
+          "shortId": "",
           "spiderX": "/"
         }
       },
-      "tag": "node-finland-04"
+      "tag": "node-finland-02"
     },
     {
       "protocol": "vless",
@@ -565,11 +499,11 @@
           "serverName": "fi-b2.pythonsetupbib.online",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
-      "tag": "node-finland-05"
+      "tag": "node-finland-03"
     },
     {
       "protocol": "vless",
@@ -595,18 +529,18 @@
           "serverName": "fi-b2.pythonsetupbib.online",
           "fingerprint": "firefox",
           "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "78f97d82e16aaad6",
+          "shortId": "dfff7a7a4c7e5f33",
           "spiderX": "/"
         }
       },
-      "tag": "node-finland-06"
+      "tag": "node-finland-04"
     },
     {
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "se-2-b1.pythonsetupbib.online",
+            "address": "nl-s-2.pythonmakemigreat.wiki",
             "port": 61374,
             "users": [
               {
@@ -622,7 +556,7 @@
         "security": "reality",
         "xhttpSettings": {
           "path": "/",
-          "host": "se-2-b1.pythonsetupbib.online",
+          "host": "nl-s-1.pythonmakemigreat.wiki",
           "mode": "packet-up",
           "extra": {
             "xmux": {
@@ -635,21 +569,21 @@
           }
         },
         "realitySettings": {
-          "serverName": "se-2-b1.pythonsetupbib.online",
+          "serverName": "nl-s-2.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
-      "tag": "node-finland-07"
+      "tag": "node-germany-01"
     },
     {
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "se-2-b1.pythonsetupbib.online",
+            "address": "nl-s-2.pythonmakemigreat.wiki",
             "port": 443,
             "users": [
               {
@@ -665,14 +599,14 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "se-2-b1.pythonsetupbib.online",
+          "serverName": "nl-s-2.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
-          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-          "shortId": "aca600d9df96453c",
+          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+          "shortId": "78f97d82e16aaad6",
           "spiderX": "/"
         }
       },
-      "tag": "node-finland-08"
+      "tag": "node-germany-02"
     },
     {
       "protocol": "vless",
@@ -715,7 +649,7 @@
           "spiderX": "/"
         }
       },
-      "tag": "node-germany-01"
+      "tag": "node-germany-03"
     },
     {
       "protocol": "vless",
@@ -741,11 +675,11 @@
           "serverName": "be.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-          "shortId": "5f0e533560ec8582",
+          "shortId": "74de1ccddccaa017",
           "spiderX": "/"
         }
       },
-      "tag": "node-germany-02"
+      "tag": "node-germany-04"
     },
     {
       "protocol": "vless",
@@ -805,11 +739,75 @@
           "serverName": "mbr-coach.com",
           "fingerprint": "edge",
           "publicKey": "nA92aCP6TN6HmUJVlt_CIOiX-fRe3Dq7kzkbHeZYWEA",
-          "shortId": "b1851ba9e81e0eef",
+          "shortId": "",
           "spiderX": "/"
         }
       },
       "tag": "node-hong-kong-sar-china-02"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "31.58.235.32",
+            "port": 443,
+            "users": [
+              {
+                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "2clients.com",
+          "fingerprint": "edge",
+          "publicKey": "Y-i7PU_wry5Zc8BodTEjpDp2xOOoLu1eaPSBwoqI70c",
+          "shortId": "9951c5c00086eecd",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-indonesia-01"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "31.58.235.32",
+            "port": 8443,
+            "users": [
+              {
+                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/v3/playlist/chunk",
+          "host": "wellvps.com",
+          "mode": "stream-one"
+        },
+        "realitySettings": {
+          "serverName": "wellvps.com",
+          "fingerprint": "edge",
+          "publicKey": "2Dttk8wiTIu9rLKr5kUMt5hrWrZ_WMrtrRAnegULQTU",
+          "shortId": "0fa622b5f19c524c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-indonesia-02"
     },
     {
       "protocol": "vless",
@@ -912,75 +910,11 @@
           "serverName": "fl-b2.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-netherlands-03"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "31.56.188.157",
-            "port": 443,
-            "users": [
-              {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "2clients.com",
-          "fingerprint": "edge",
-          "publicKey": "Y-i7PU_wry5Zc8BodTEjpDp2xOOoLu1eaPSBwoqI70c",
-          "shortId": "9951c5c00086eecd",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-poland-01"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "31.56.188.157",
-            "port": 8443,
-            "users": [
-              {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "security": "reality",
-        "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "wellvps.com",
-          "mode": "stream-one"
-        },
-        "realitySettings": {
-          "serverName": "wellvps.com",
-          "fingerprint": "edge",
-          "publicKey": "2Dttk8wiTIu9rLKr5kUMt5hrWrZ_WMrtrRAnegULQTU",
           "shortId": "",
           "spiderX": "/"
         }
       },
-      "tag": "node-poland-02"
+      "tag": "node-netherlands-03"
     },
     {
       "protocol": "vless",
@@ -1019,11 +953,11 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
-      "tag": "node-poland-03"
+      "tag": "node-poland-01"
     },
     {
       "protocol": "vless",
@@ -1049,11 +983,11 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
-          "shortId": "acccaaaa9f72147d",
+          "shortId": "986ede37bf6925ae",
           "spiderX": "/"
         }
       },
-      "tag": "node-poland-04"
+      "tag": "node-poland-02"
     },
     {
       "protocol": "vless",
@@ -1092,11 +1026,11 @@
           "serverName": "cz.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
-      "tag": "node-poland-05"
+      "tag": "node-poland-03"
     },
     {
       "protocol": "vless",
@@ -1122,22 +1056,65 @@
           "serverName": "cz.pythonmakemigreat.wiki",
           "fingerprint": "safari",
           "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-          "shortId": "3b306f15c6057d55",
+          "shortId": "71d3e27e8115fab1",
           "spiderX": "/"
         }
       },
-      "tag": "node-poland-06"
+      "tag": "node-poland-04"
     },
     {
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "147.45.124.173",
+            "address": "se-2-b1.pythonsetupbib.online",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "se-2-b1.pythonsetupbib.online",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "se-2-b1.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-sweden-01"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "se-2-b1.pythonsetupbib.online",
             "port": 443,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -1149,48 +1126,14 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "usacip.com",
-          "fingerprint": "edge",
-          "publicKey": "-Z4ARYlSJ470iYtKJG-CK6wrqLdOAHHnK3e4h1WmNmA",
-          "shortId": "9686199f69c8f744",
+          "serverName": "se-2-b1.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
+          "shortId": "266e9b1bbaf6bba2",
           "spiderX": "/"
         }
       },
-      "tag": "node-usa-01"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "147.45.124.173",
-            "port": 8443,
-            "users": [
-              {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "security": "reality",
-        "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "explore-bulgaria.com",
-          "mode": "stream-one"
-        },
-        "realitySettings": {
-          "serverName": "explore-bulgaria.com",
-          "fingerprint": "edge",
-          "publicKey": "A7j0RYJSfkBkbYjoLJWZCm1HdNr17wWKPOG5vToPsmc",
-          "shortId": "eeeef14e2d6139e5",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-usa-02"
+      "tag": "node-sweden-02"
     },
     {
       "tag": "block",
@@ -1220,14 +1163,14 @@
       "node-finland-02",
       "node-finland-03",
       "node-finland-04",
-      "node-finland-05",
-      "node-finland-06",
-      "node-finland-07",
-      "node-finland-08",
       "node-germany-01",
       "node-germany-02",
+      "node-germany-03",
+      "node-germany-04",
       "node-hong-kong-sar-china-01",
       "node-hong-kong-sar-china-02",
+      "node-indonesia-01",
+      "node-indonesia-02",
       "node-netherlands-01",
       "node-netherlands-02",
       "node-netherlands-03",
@@ -1235,10 +1178,8 @@
       "node-poland-02",
       "node-poland-03",
       "node-poland-04",
-      "node-poland-05",
-      "node-poland-06",
-      "node-usa-01",
-      "node-usa-02"
+      "node-sweden-01",
+      "node-sweden-02"
     ]
   },
   "remarks": "🇪🇺 ⚡ AUTO — САМЫЙ БЫСТРЫЙ"

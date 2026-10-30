@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "185.236.24.244",
+            "address": "130.12.45.183",
             "port": 443,
             "users": [
               {
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "dsavenkov.dev",
+          "serverName": "nasa3.arsen.me",
           "fingerprint": "edge",
-          "publicKey": "0ymuN9OUqZ3Gh69n-KpjAZuvxFxsJ95DCN1nRdUhRmA",
-          "shortId": "44090656dabce4b8",
+          "publicKey": "O3ZPjD9f4kZ7zCpydSm3eYQ4aaD0I1c6Cq7fvjDUYn0",
+          "shortId": "fda6bf98428a8544",
           "spiderX": "/"
         }
       },

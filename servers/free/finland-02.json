@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "185.236.24.244",
+            "address": "130.12.45.183",
             "port": 8443,
             "users": [
               {
@@ -295,14 +295,14 @@
         "security": "reality",
         "xhttpSettings": {
           "path": "/v3/playlist/chunk",
-          "host": "dsavenkov.dev",
+          "host": "nasa3.arsen.me",
           "mode": "stream-one"
         },
         "realitySettings": {
-          "serverName": "dsavenkov.dev",
+          "serverName": "nasa3.arsen.me",
           "fingerprint": "edge",
-          "publicKey": "oP127jyeJz8VpSlo0OSFfUphP0ZwOcZdP76UK7WMfz8",
-          "shortId": "f8b3b680351b9e93",
+          "publicKey": "FgOOgorEeEDvnyjVUg4U1AqvHz8hO0UJONa2E_S9Sjw",
+          "shortId": "",
           "spiderX": "/"
         }
       },
