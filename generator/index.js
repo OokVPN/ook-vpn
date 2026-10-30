@@ -203,19 +203,25 @@ function describePayload(raw) {
   }
   return { kind, rawLength: text.length, decodedLength: decoded.length, schemes, jsonInfo, htmlInfo, decoded };
 }
-function logPayload(raw, nodesFound) {
+function logPayload(raw, nodesFound, label = "") {
   const d = describePayload(raw);
-  console.log(`После декодирования: длина ${d.decodedLength}`);
-  console.log(`URI по схемам: ${JSON.stringify(d.schemes)}${d.jsonInfo ? `; JSON: ${d.jsonInfo}` : ""}`);
-  console.log(`Отброшено: спонсор=${STATS.sponsorDropped + STATS.uriSponsor}, дубли=${STATS.duplicateDropped}, битые URI=${STATS.uriBad}`);
-  if (!nodesFound && d.kind === "html") console.log("Источник вернул веб-страницу вместо подписки: сервер, вероятно, определяет клиента по User-Agent или блокирует адреса GitHub Actions.");
+  const log = (msg) => console.log(label ? `[${label}] ${msg}` : msg);
+  log(`После декодирования: длина ${d.decodedLength}`);
+  log(`URI по схемам: ${JSON.stringify(d.schemes)}${d.jsonInfo ? `; JSON: ${d.jsonInfo}` : ""}`);
+  log(`Отброшено: спонсор=${STATS.sponsorDropped + STATS.uriSponsor}, дубли=${STATS.duplicateDropped}, битые URI=${STATS.uriBad}`);
+  if (!nodesFound && d.kind === "html") log("Источник вернул веб-страницу вместо подписки: сервер, вероятно, определяет клиента по User-Agent или блокирует адреса GitHub Actions.");
   if (!nodesFound && d.decodedLength > 0 && d.decodedLength <= 600 && !/(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i.test(d.decoded)) {
-    console.log(`Короткий ответ без узлов (вероятная заглушка): ${JSON.stringify(d.decoded)}`);
+    log(`Короткий ответ без узлов (вероятная заглушка): ${JSON.stringify(d.decoded)}`);
   }
 }
-async function fetchSource() {
-  const url = process.env.FREE_UPSTREAM_URL;
-  if (!url) throw new Error("Не задан FREE_UPSTREAM_URL. Добавь ссылку в GitHub Secrets → Actions.");
+function upstreamUrls() {
+  const keys = Object.keys(process.env).filter((k) => /^FREE_UPSTREAM_URL_\d+$/.test(k)).sort((a, b) => Number(a.split("_").pop()) - Number(b.split("_").pop()));
+  const text = [process.env.FREE_UPSTREAM_URL, ...keys.map((k) => process.env[k])].filter(Boolean).join("\n");
+  return [...new Set(text.split(/[\s,;]+/).map((x) => x.trim()).filter((x) => /^https?:\/\//i.test(x)))];
+}
+function resetStats() { for (const k of Object.keys(STATS)) STATS[k] = 0; }
+async function fetchSource(url, label = "") {
+  const tag = label ? `[${label}] ` : "";
   const ua = "OokVPN-Subscription-Generator/1.1";
   const started = Date.now();
   let response;
@@ -223,20 +229,20 @@ async function fetchSource() {
     try {
       response = await fetch(url, { headers: { "user-agent": ua }, signal: AbortSignal.timeout(60000) });
       if (response.status < 500) break;
-      console.warn(`Попытка ${attempt}: HTTP ${response.status}`);
+      console.warn(`${tag}Попытка ${attempt}: HTTP ${response.status}`);
     } catch (error) {
-      console.warn(`Попытка ${attempt}: ${error.name === "TimeoutError" ? "таймаут 60 с" : error.message}`);
+      console.warn(`${tag}Попытка ${attempt}: ${error.name === "TimeoutError" ? "таймаут 60 с" : error.message}`);
       if (attempt === 3) throw error;
     }
     await new Promise((r) => setTimeout(r, 5000 * attempt));
   }
   const body = await response.text();
   const h = (name) => response.headers.get(name) || "-";
-  console.log(`Источник: HTTP ${response.status}, ${Date.now() - started} мс, content-type=${h("content-type")}, redirected=${response.redirected}, subscription-userinfo=${response.headers.has("subscription-userinfo")}, profile-title=${response.headers.has("profile-title")}`);
-  if (!response.ok) throw new Error(`Источник вернул HTTP ${response.status}`);
+  console.log(`${tag}Источник: HTTP ${response.status}, ${Date.now() - started} мс, content-type=${h("content-type")}, redirected=${response.redirected}, subscription-userinfo=${response.headers.has("subscription-userinfo")}, profile-title=${response.headers.has("profile-title")}`);
+  if (!response.ok) throw new Error(`источник вернул HTTP ${response.status}`);
   const first = describePayload(body);
-  console.log(`Формат ответа: ${first.kind}, длина ${first.rawLength}`);
-  if (first.htmlInfo) { console.log(`HTML: ${first.htmlInfo}`); console.log(`HTML-структура: ${htmlHints(body)}`); }
+  console.log(`${tag}Формат ответа: ${first.kind}, длина ${first.rawLength}`);
+  if (first.htmlInfo) { console.log(`${tag}HTML: ${first.htmlInfo}`); console.log(`${tag}HTML-структура: ${htmlHints(body)}`); }
   return decodeSubscription(body);
 }
 function safeDecode(value) { try { return decodeURIComponent(value || ""); } catch { return value || ""; } }
@@ -436,9 +442,25 @@ async function run() {
   if (!fs.existsSync(AUTO_META_PATH)) throw new Error("Не найден servers/free/auto.meta.json.");
   const template = readJson(AUTO_TEMPLATE_PATH); const autoMeta = readJson(AUTO_META_PATH);
   if (autoMeta.enabled === false) throw new Error("AUTO отключён в servers/free/auto.meta.json.");
-  const raw = await fetchSource(); const sourceNodes = parseSource(raw);
-  logPayload(raw, sourceNodes.length);
-  if (!sourceNodes.length) throw new Error("В источнике не найдено прокси-узлов. Старые файлы не очищены.");
+  const urls = upstreamUrls();
+  if (!urls.length) throw new Error("Не задан FREE_UPSTREAM_URL. Добавь ссылку (или несколько, по одной в строке) в GitHub Secrets → Actions.");
+  const sourceNodes = []; const mergedHashes = new Set(); let failedSources = 0; let crossDuplicates = 0; const totalStats = { placeholder:0, sponsor:0 };
+  for (let k = 0; k < urls.length; k++) {
+    const label = urls.length > 1 ? `Источник ${k + 1}/${urls.length}` : "";
+    resetStats(); let nodes = [];
+    try {
+      const raw = await fetchSource(urls[k], label); nodes = parseSource(raw); logPayload(raw, nodes.length, label);
+      if (!nodes.length) throw new Error(`${label ? `${label}: ` : ""}не найдено прокси-узлов`);
+    } catch (error) { failedSources++; console.warn(`${label ? `${label}: ` : ""}пропущен: ${error.message}`); continue; }
+    totalStats.placeholder += STATS.placeholderDropped; totalStats.sponsor += STATS.sponsorDropped + STATS.uriSponsor;
+    let added = 0;
+    for (const node of nodes) { const h = nodeFingerprint(node.outbound); if (mergedHashes.has(h)) { crossDuplicates++; continue; } mergedHashes.add(h); sourceNodes.push({ ...node, sourceIndex:k + 1 }); added++; }
+    if (urls.length > 1) console.log(`${label}: узлов ${nodes.length}, добавлено ${added}`);
+  }
+  STATS.placeholderDropped = totalStats.placeholder;
+  if (urls.length > 1) console.log(`Источников: ${urls.length}, не сработало: ${failedSources}, общих узлов между источниками: ${crossDuplicates}`);
+  if (!sourceNodes.length) throw new Error("Ни один источник не дал прокси-узлов. Старые файлы не очищены.");
+  if (failedSources && process.env.UPSTREAM_REQUIRE_ALL === "1") throw new Error(`Не сработало источников: ${failedSources}. Старые файлы не очищены (UPSTREAM_REQUIRE_ALL=1).`);
   const oldManifest = fs.existsSync(MANIFEST_PATH) ? readJson(MANIFEST_PATH) : { generated:[] };
   const oldIds = Array.isArray(oldManifest.generated) ? oldManifest.generated : [];
   const templateTags = new Set((template.outbounds || []).filter((o) => !isService(o) && (o.protocol || o.settings)).map((o) => o.tag).filter(Boolean));
@@ -459,6 +481,7 @@ async function run() {
     const id = `${c.slug}-${String(n).padStart(2,"0")}`; const existingMetaPath = path.join(FREE_DIR,`${id}.meta.json`); let existing = null; try { if (fs.existsSync(existingMetaPath)) existing = readJson(existingMetaPath); } catch {}
     const name = `${c.flag} ${c.name} №${n}`; const meta = { id, name, country:c.code, tier:"free", enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", geoSource, sourceHash:hash };
     if (g.reachable !== null) meta.reachable = g.reachable;
+    if (node.sourceIndex && urls.length > 1) meta.source = node.sourceIndex;
     const config = makeIndividualConfig(template,node.outbound,templateTags); config.remarks = name;
     writeJson(path.join(FREE_DIR,`${id}.json`),config); writeJson(existingMetaPath,meta); generated.push({id,config,meta});
   }
@@ -473,6 +496,7 @@ async function run() {
     let meta = null; try { meta = readJson(path.join(FREE_DIR, f)); } catch {}
     if (isGeneratedMeta(id, meta)) staleIds.add(id);
   }
+  if (failedSources) { console.log("Часть источников не сработала: устаревшие серверы не удаляются в этом запуске."); staleIds.clear(); }
   for (const id of staleIds) if (!keep.has(id)) for (const ext of [".json",".meta.json"]) { const f = path.join(FREE_DIR,`${id}${ext}`); if (fs.existsSync(f)) { fs.unlinkSync(f); if (ext === ".json") removed.push(id); } }
   if (removed.length) console.log(`Удалены устаревшие серверы (${removed.length}): ${removed.sort().join(", ")}`);
   writeJson(MANIFEST_PATH,{generated:newIds});
