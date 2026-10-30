@@ -16,9 +16,12 @@ const GEO_CACHE_PATH = path.join(FREE_DIR, ".geo-cache.json");
 const GEO_OVERRIDES_PATH = path.join(ROOT, "servers/geo-overrides.json");
 const OTHER_COUNTRY = { code:"UN", slug:"other", flag:"🌐", name:"Другой регион", matches:[] };
 const SUPPORTED_URI = /^(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i;
+function normalizeSponsorText(value) {
+  return String(value ?? "").toLocaleLowerCase("ru-RU").replace(/[\u2010-\u2015\u2212]/g, "-").replace(/\s+/g, " ").replace(/\s*-\s*/g, "-").trim();
+}
 const SPONSOR_MARKERS = (Array.isArray(CONFIG.serverFilters?.sponsorMarkers)
   ? CONFIG.serverFilters.sponsorMarkers : ["Спонсор - @aloe_vpn_bot"])
-  .map((x) => String(x).toLocaleLowerCase("ru-RU").trim()).filter(Boolean);
+  .map(normalizeSponsorText).filter(Boolean);
 const COUNTRIES = [
   { code:"EE", slug:"estonia", flag:"🇪🇪", name:"Эстония", matches:["estonia","eesti","эстония","🇪🇪"] },
   { code:"PL", slug:"poland", flag:"🇵🇱", name:"Польша", matches:["poland","polska","польша","🇵🇱"] },
@@ -51,8 +54,9 @@ function writeJson(file, value) {
 }
 function sponsor(value) {
   let text;
-  try { text = (typeof value === "string" ? value : JSON.stringify(value ?? "")).toLocaleLowerCase("ru-RU"); }
-  catch { text = String(value ?? "").toLocaleLowerCase("ru-RU"); }
+  try { text = typeof value === "string" ? value : JSON.stringify(value ?? ""); }
+  catch { text = String(value ?? ""); }
+  text = normalizeSponsorText(text);
   return SPONSOR_MARKERS.some((m) => text.includes(m));
 }
 function decodeBase64(value) {
@@ -252,9 +256,26 @@ function isProxyOutbound(o) {
   if (!st || typeof st !== "object") return false;
   return Array.isArray(st.vnext) || Array.isArray(st.servers) || Array.isArray(st.peers) || (typeof st.address === "string" && st.port != null);
 }
-function nodeFingerprint(outbound) {
+function nodeFingerprint(outbound, deps = []) {
   const { tag, ...rest } = outbound || {};
-  return crypto.createHash("sha256").update(JSON.stringify(rest)).digest("hex");
+  const chain = Array.isArray(deps) && deps.length ? deps : undefined;
+  return crypto.createHash("sha256").update(JSON.stringify(chain ? [rest, chain] : rest)).digest("hex");
+}
+function dependencyTags(o) {
+  const tags = [];
+  const a = o?.proxySettings?.tag; if (typeof a === "string" && a) tags.push(a);
+  const b = o?.streamSettings?.sockopt?.dialerProxy; if (typeof b === "string" && b) tags.push(b);
+  return tags;
+}
+function collectDeps(outbound, outbounds) {
+  const byTag = new Map((outbounds || []).filter((o) => typeof o?.tag === "string").map((o) => [o.tag, o]));
+  const out = []; const seen = new Set([outbound?.tag]);
+  const visit = (o) => { for (const t of dependencyTags(o)) { if (seen.has(t)) continue; seen.add(t); const d = byTag.get(t); if (d && !isService(d)) { out.push(structuredClone(d)); visit(d); } } };
+  visit(outbound); return out;
+}
+function renameDependencyRefs(o, map) {
+  if (o?.proxySettings?.tag && map.has(o.proxySettings.tag)) o.proxySettings.tag = map.get(o.proxySettings.tag);
+  if (o?.streamSettings?.sockopt?.dialerProxy && map.has(o.streamSettings.sockopt.dialerProxy)) o.streamSettings.sockopt.dialerProxy = map.get(o.streamSettings.sockopt.dialerProxy);
 }
 function isService(outbound) {
   const tag = String(outbound?.tag || "").toLowerCase(); const p = String(outbound?.protocol || "").toLowerCase();
@@ -273,7 +294,7 @@ function extractOutboundNodes(config, parentName = "") {
   let candidates = selected.size ? outbounds.filter((o) => selected.has(o?.tag)) : [];
   if (!candidates.length) candidates = outbounds.filter((o) => o && !isService(o) && isProxyOutbound(o));
   return candidates.filter((o) => o && !isService(o) && isProxyOutbound(o)).map((outbound) => ({
-    outbound: structuredClone(outbound), name: String(outbound.remarks || parentName || outbound.tag || outbound.protocol || "server"), sourceTag: String(outbound.tag || "")
+    outbound: structuredClone(outbound), deps: collectDeps(outbound, outbounds), name: String(outbound.remarks || parentName || outbound.tag || outbound.protocol || "server"), sourceTag: String(outbound.tag || "")
   }));
 }
 function parseSource(raw) {
@@ -283,7 +304,7 @@ function parseSource(raw) {
     if (!node?.outbound || isService(node.outbound)) return;
     if (isPlaceholderOutbound(node.outbound)) { STATS.placeholderDropped++; return; }
     if (sponsor(node.name) || sponsor(node.outbound)) { STATS.sponsorDropped++; return; }
-    const hash = nodeFingerprint(node.outbound);
+    const hash = nodeFingerprint(node.outbound, node.deps);
     if (fingerprints.has(hash)) { STATS.duplicateDropped++; return; } fingerprints.add(hash); result.push({ ...node, sourceTag: String(node.sourceTag || "") });
   };
   const addUriText = (str) => {
@@ -396,9 +417,10 @@ function primaryOutbound(config) {
   return arr.find((o) => o?.tag === "proxy" && !isService(o)) || arr.find((o) => !isService(o) && !/^node-/i.test(String(o?.tag || "")) && (o?.protocol || o?.settings));
 }
 function isTemplateNode(o) { return typeof o?.tag === "string" && /^node-/i.test(o.tag) && !isService(o); }
-function makeIndividualConfig(template, outbound, templateTags) {
+function makeIndividualConfig(template, outbound, templateTags, deps = []) {
   const result = structuredClone(template); const selected = structuredClone(outbound); selected.tag = "proxy";
-  result.outbounds = [selected, ...(result.outbounds || []).filter((o) => !isTemplateNode(o) && !templateTags.has(o?.tag) && o?.tag !== "proxy")];
+  const hops = (deps || []).map((d) => structuredClone(d)); const hopTags = new Set(hops.map((d) => d.tag));
+  result.outbounds = [selected, ...hops, ...(result.outbounds || []).filter((o) => !isTemplateNode(o) && !templateTags.has(o?.tag) && o?.tag !== "proxy" && !hopTags.has(o?.tag))];
   if (result.routing) {
     delete result.routing.balancers;
     if (Array.isArray(result.routing.rules)) result.routing.rules = result.routing.rules.map((r0) => { const r = structuredClone(r0); if (Object.hasOwn(r,"balancerTag")) { delete r.balancerTag; r.outboundTag = "proxy"; } else if (templateTags.has(r.outboundTag) || String(r.outboundTag || "").startsWith("node-")) r.outboundTag = "proxy"; return r; });
@@ -409,14 +431,18 @@ function makeIndividualConfig(template, outbound, templateTags) {
 }
 function cleanTemplateForAuto(template, profiles) {
   const auto = structuredClone(template); const support = (auto.outbounds || []).filter((o) => !isTemplateNode(o) && !(!isService(o) && (o.protocol || o.settings) && o.tag !== "direct" && o.tag !== "block" && o.tag !== "dns"));
-  const selected = []; const tags = [];
+  const selected = []; const tags = []; const hopOutbounds = [];
   for (const p of profiles) {
     if (!p.meta || p.meta.enabled === false || p.meta.auto === false || sponsor(p.meta.name)) continue;
     const original = primaryOutbound(p.config); if (!original || isPlaceholderOutbound(original)) continue;
-    const tag = `node-${p.id}`; const out = structuredClone(original); out.tag = tag; selected.push(out); tags.push(tag);
+    const tag = `node-${p.id}`; const out = structuredClone(original); out.tag = tag;
+    const hops = collectDeps(original, p.config.outbounds); const rename = new Map(hops.map((h, i) => [h.tag, `hop-${p.id}-${i + 1}`]));
+    renameDependencyRefs(out, rename);
+    for (const h of hops) { const copy = structuredClone(h); renameDependencyRefs(copy, rename); copy.tag = rename.get(h.tag); hopOutbounds.push(copy); }
+    selected.push(out); tags.push(tag);
   }
   if (!tags.length) throw new Error("Не осталось активных узлов с meta.auto=true для AUTO. auto.json не обновлён.");
-  auto.outbounds = [...selected, ...support];
+  auto.outbounds = [...selected, ...hopOutbounds, ...support];
   if (!auto.routing) throw new Error("В generator/templates/auto.json отсутствует routing.");
   const balancers = Array.isArray(auto.routing.balancers) ? auto.routing.balancers : [];
   // Keep the original balancer tag because routing.rules refer to PROXY in the template.
@@ -454,7 +480,7 @@ async function run() {
     } catch (error) { failedSources++; console.warn(`${label ? `${label}: ` : ""}пропущен: ${error.message}`); continue; }
     totalStats.placeholder += STATS.placeholderDropped; totalStats.sponsor += STATS.sponsorDropped + STATS.uriSponsor;
     let added = 0;
-    for (const node of nodes) { const h = nodeFingerprint(node.outbound); if (mergedHashes.has(h)) { crossDuplicates++; continue; } mergedHashes.add(h); sourceNodes.push({ ...node, sourceIndex:k + 1 }); added++; }
+    for (const node of nodes) { const h = nodeFingerprint(node.outbound, node.deps); if (mergedHashes.has(h)) { crossDuplicates++; continue; } mergedHashes.add(h); sourceNodes.push({ ...node, sourceIndex:k + 1 }); added++; }
     if (urls.length > 1) console.log(`${label}: узлов ${nodes.length}, добавлено ${added}`);
   }
   STATS.placeholderDropped = totalStats.placeholder;
@@ -465,13 +491,18 @@ async function run() {
   const oldIds = Array.isArray(oldManifest.generated) ? oldManifest.generated : [];
   const templateTags = new Set((template.outbounds || []).filter((o) => !isService(o) && (o.protocol || o.settings)).map((o) => o.tag).filter(Boolean));
   const { results: geo, stats: geoStats } = await resolveGeo(sourceNodes, { cacheFile:GEO_CACHE_PATH, overridesFile:GEO_OVERRIDES_PATH });
-  console.log(`Страны: xray=${geoStats.xrayUsed ? "да" : "нет"}, по выходу=${geoStats.exit}, по IP сервера=${geoStats.ip}, ручные=${geoStats.override}, не определено=${geoStats.none}`);
-  if (geoStats.xrayUsed) console.log(`Проверка через xray: ответили=${geoStats.xrayOk}, не ответили=${geoStats.xrayFail}`);
-  const counts = new Map(); const seen = new Set(); const generated = []; let unreachableDropped = 0;
+  console.log(`Страны: xray=${geoStats.xrayUsed ? "да" : "нет"}, по выходу=${geoStats.exit}, по IP сервера=${geoStats.ip}, из кэша=${geoStats.cache}, ручные=${geoStats.override}, не определено=${geoStats.none}`);
+  if (geoStats.xrayUsed) console.log(`Проверка через xray: ответили=${geoStats.xrayOk}, не ответили=${geoStats.xrayFail}, оставлено по кэшу при сбое=${geoStats.grace}`);
+  const requireCountry = process.env.GEO_REQUIRE_COUNTRY !== "0";
+  const toDrop = requireCountry ? geo.filter((g) => g.drop).length : 0;
+  const maxRatio = Number(process.env.GEO_MAX_DROP_RATIO ?? 0.5);
+  if (toDrop && sourceNodes.length >= 2 && toDrop / sourceNodes.length > maxRatio) throw new Error(`Страну не удалось определить у ${toDrop} из ${sourceNodes.length} узлов (порог ${Math.round(maxRatio * 100)}%): похоже на сбой GeoIP/сети, а не на мёртвые серверы. Старые файлы не очищены.`);
+  if (toDrop) console.log(`Отброшено как нерабочие: ${toDrop} (не отвечают: ${geoStats.dead}, страна не определена: ${geoStats.unknown})`);
+  const counts = new Map(); const seen = new Set(); const generated = [];
   for (let i = 0; i < sourceNodes.length; i++) {
     const node = sourceNodes[i]; const g = geo[i];
-    if (g.reachable === false && process.env.GEO_DROP_UNREACHABLE === "1") { unreachableDropped++; continue; }
-    const hash = nodeFingerprint(node.outbound); if (seen.has(hash)) continue; seen.add(hash);
+    if (requireCountry && g.drop) continue;
+    const hash = nodeFingerprint(node.outbound, node.deps); if (seen.has(hash)) continue; seen.add(hash);
     const named = detectCountryStrict(`${node.name || ""} ${node.sourceTag || ""}`); const byGeo = g.code ? countryByCode(g.code) : null;
     let c = OTHER_COUNTRY; let geoSource = "none";
     if (byGeo && (g.source === "override" || g.source === "exit")) { c = byGeo; geoSource = g.source; }
@@ -482,10 +513,9 @@ async function run() {
     const name = `${c.flag} ${c.name} №${n}`; const meta = { id, name, country:c.code, tier:"free", enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", geoSource, sourceHash:hash };
     if (g.reachable !== null) meta.reachable = g.reachable;
     if (node.sourceIndex && urls.length > 1) meta.source = node.sourceIndex;
-    const config = makeIndividualConfig(template,node.outbound,templateTags); config.remarks = name;
+    const config = makeIndividualConfig(template,node.outbound,templateTags,node.deps); config.remarks = name;
     writeJson(path.join(FREE_DIR,`${id}.json`),config); writeJson(existingMetaPath,meta); generated.push({id,config,meta});
   }
-  if (unreachableDropped) console.log(`Отброшено недоступных через xray: ${unreachableDropped}`);
   if (!generated.length) throw new Error("Все узлы отфильтрованы; старые файлы сохранены.");
   const newIds = generated.map((x) => x.id); const keep = new Set(newIds); const removed = [];
   const isGeneratedMeta = (id, meta) => { if (!meta || meta.manual === true) return false; if (meta.generatedBy === "upstream") return true; if (meta.generatedBy) return false; return /-\d{2}$/.test(id) && /№\s*\d+\s*$/.test(String(meta.name || "")); };
