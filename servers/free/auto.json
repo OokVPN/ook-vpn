@@ -235,16 +235,29 @@
       {
         "tag": "MAIN_BALANCER",
         "selector": [
+          "node-estonia-01",
+          "node-estonia-02",
           "node-finland-01",
           "node-finland-02",
           "node-finland-03",
           "node-finland-04",
+          "node-finland-05",
+          "node-finland-06",
+          "node-finland-07",
+          "node-finland-08",
+          "node-germany-01",
+          "node-germany-02",
           "node-hong-kong-sar-china-01",
           "node-hong-kong-sar-china-02",
           "node-netherlands-01",
           "node-netherlands-02",
+          "node-netherlands-03",
           "node-poland-01",
           "node-poland-02",
+          "node-poland-03",
+          "node-poland-04",
+          "node-poland-05",
+          "node-poland-06",
           "node-usa-01",
           "node-usa-02"
         ],
@@ -268,7 +281,7 @@
             "tolerance": 0.1
           }
         },
-        "fallbackTag": "node-finland-01"
+        "fallbackTag": "node-estonia-01"
       }
     ],
     "domainMatcher": "hybrid",
@@ -319,6 +332,79 @@
       "settings": {
         "vnext": [
           {
+            "address": "ee.golangwikito.cfd",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "ee.golangwikito.cfd",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "ee.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-estonia-01"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "ee.golangwikito.cfd",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "ee.golangwikito.cfd",
+          "fingerprint": "ios",
+          "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
+          "shortId": "3cbf2ac918af2294",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-estonia-02"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
             "address": "185.236.24.244",
             "port": 443,
             "users": [
@@ -338,7 +424,7 @@
           "serverName": "dsavenkov.dev",
           "fingerprint": "edge",
           "publicKey": "0ymuN9OUqZ3Gh69n-KpjAZuvxFxsJ95DCN1nRdUhRmA",
-          "shortId": "44090656dabce4b8",
+          "shortId": "a84e5fbbda7ae595",
           "spiderX": "/"
         }
       },
@@ -436,11 +522,230 @@
           "serverName": "nasa3.arsen.me",
           "fingerprint": "edge",
           "publicKey": "FgOOgorEeEDvnyjVUg4U1AqvHz8hO0UJONa2E_S9Sjw",
-          "shortId": "",
+          "shortId": "3d519a50ff61dd4e",
           "spiderX": "/"
         }
       },
       "tag": "node-finland-04"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "fi-b2.pythonsetupbib.online",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "fi-b2.pythonsetupbib.online",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "fi-b2.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-finland-05"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "fi-b2.pythonsetupbib.online",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "fi-b2.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+          "shortId": "dfff7a7a4c7e5f33",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-finland-06"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "se-2-b1.pythonsetupbib.online",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "se-2-b1.pythonsetupbib.online",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "se-2-b1.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-finland-07"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "se-2-b1.pythonsetupbib.online",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "se-2-b1.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
+          "shortId": "aca600d9df96453c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-finland-08"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "be.golangwikito.cfd",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "be.golangwikito.cfd",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "be.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-germany-01"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "be.golangwikito.cfd",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "be.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
+          "shortId": "5f0e533560ec8582",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-germany-02"
     },
     {
       "protocol": "vless",
@@ -466,7 +771,7 @@
           "serverName": "yaosheng.io",
           "fingerprint": "edge",
           "publicKey": "mUE8YhhmcvkB1JGQyvdfMBTYJhKE20w3XQiReKLADm8",
-          "shortId": "0e8176dc6c0d43ca",
+          "shortId": "2216e5d495b3bdbe",
           "spiderX": "/"
         }
       },
@@ -500,7 +805,7 @@
           "serverName": "mbr-coach.com",
           "fingerprint": "edge",
           "publicKey": "nA92aCP6TN6HmUJVlt_CIOiX-fRe3Dq7kzkbHeZYWEA",
-          "shortId": "b1851ba9e81e0eef",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -530,7 +835,7 @@
           "serverName": "theverge.com",
           "fingerprint": "edge",
           "publicKey": "d1hCrgQISDeQIzWAudFDhOZRH2kAdJZYirmGnmI_LAA",
-          "shortId": "06954fd1b0648c6f",
+          "shortId": "e31e1803e6c4d925",
           "spiderX": "/"
         }
       },
@@ -575,6 +880,49 @@
       "settings": {
         "vnext": [
           {
+            "address": "fl-b2.golangwikito.cfd",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "fl-b2.golangwikito.cfd",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "fl-b2.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-netherlands-03"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
             "address": "31.56.188.157",
             "port": 443,
             "users": [
@@ -594,7 +942,7 @@
           "serverName": "2clients.com",
           "fingerprint": "edge",
           "publicKey": "Y-i7PU_wry5Zc8BodTEjpDp2xOOoLu1eaPSBwoqI70c",
-          "shortId": "9951c5c00086eecd",
+          "shortId": "4fd33b35908cd75d",
           "spiderX": "/"
         }
       },
@@ -628,11 +976,157 @@
           "serverName": "wellvps.com",
           "fingerprint": "edge",
           "publicKey": "2Dttk8wiTIu9rLKr5kUMt5hrWrZ_WMrtrRAnegULQTU",
-          "shortId": "",
+          "shortId": "0fa622b5f19c524c",
           "spiderX": "/"
         }
       },
       "tag": "node-poland-02"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "pl-b1.golangwikito.cfd",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "pl-b1.golangwikito.cfd",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "pl-b1.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-poland-03"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "pl-b1.golangwikito.cfd",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "pl-b1.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
+          "shortId": "f8b695e5c59d028c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-poland-04"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "cz.pythonmakemigreat.wiki",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "cz.pythonmakemigreat.wiki",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "cz.pythonmakemigreat.wiki",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-poland-05"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "cz.pythonmakemigreat.wiki",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "cz.pythonmakemigreat.wiki",
+          "fingerprint": "safari",
+          "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
+          "shortId": "3b306f15c6057d55",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-poland-06"
     },
     {
       "protocol": "vless",
@@ -720,16 +1214,29 @@
       "destination": "https://www.gstatic.com/generate_204"
     },
     "subjectSelector": [
+      "node-estonia-01",
+      "node-estonia-02",
       "node-finland-01",
       "node-finland-02",
       "node-finland-03",
       "node-finland-04",
+      "node-finland-05",
+      "node-finland-06",
+      "node-finland-07",
+      "node-finland-08",
+      "node-germany-01",
+      "node-germany-02",
       "node-hong-kong-sar-china-01",
       "node-hong-kong-sar-china-02",
       "node-netherlands-01",
       "node-netherlands-02",
+      "node-netherlands-03",
       "node-poland-01",
       "node-poland-02",
+      "node-poland-03",
+      "node-poland-04",
+      "node-poland-05",
+      "node-poland-06",
       "node-usa-01",
       "node-usa-02"
     ]

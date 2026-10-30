@@ -8,5 +8,6 @@
   "generatedBy": "upstream",
   "geoSource": "exit",
   "sourceHash": "5a65b2ab778f50224835b328e3ff09787b9cab15e9c4a7923233c1a3226e2e77",
-  "reachable": true
+  "reachable": true,
+  "source": 1
 }
