@@ -72,9 +72,10 @@ async function mapLimit(items, limit, fn) {
   await Promise.all(workers);
 }
 
-function fingerprintOf(outbound) {
+function fingerprintOf(outbound, deps = []) {
   const { tag, ...rest } = outbound || {};
-  return crypto.createHash("sha256").update(JSON.stringify(rest)).digest("hex").slice(0, 24);
+  const chain = Array.isArray(deps) && deps.length ? deps : undefined;
+  return crypto.createHash("sha256").update(JSON.stringify(chain ? [rest, chain] : rest)).digest("hex").slice(0, 24);
 }
 
 async function resolveIp(host) {
@@ -143,7 +144,7 @@ export function getViaHttpProxy(proxyPort, urlString, { timeoutMs = 10000, tlsOp
   });
 }
 
-export async function checkViaXray(bin, outbound, { urls, tlsOptions } = {}) {
+export async function checkViaXray(bin, outbound, { urls, tlsOptions, deps = [] } = {}) {
   const exitUrls = urls || String(process.env.GEO_EXIT_URLS || "https://api.country.is/,https://ipwho.is/?fields=success,country_code,ip,https://ipinfo.io/json").split(",").map((x) => x.trim()).filter(Boolean);
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ook-geo-"));
   let child = null;
@@ -152,7 +153,7 @@ export async function checkViaXray(bin, outbound, { urls, tlsOptions } = {}) {
     const config = {
       log: { loglevel: "none" },
       inbounds: [{ tag: "in", listen: "127.0.0.1", port, protocol: "http", settings: {} }],
-      outbounds: [{ ...structuredClone(outbound), tag: "proxy" }, { tag: "direct", protocol: "freedom" }],
+      outbounds: [{ ...structuredClone(outbound), tag: "proxy" }, ...structuredClone(deps), { tag: "direct", protocol: "freedom" }],
       routing: { rules: [{ type: "field", inboundTag: ["in"], outboundTag: "proxy" }] }
     };
     const file = path.join(dir, "config.json");
@@ -214,9 +215,12 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions }
   const now = Date.now();
   const cache = readJsonSafe(cacheFile, {});
   const overrides = readJsonSafe(overridesFile, {});
+  const deadAfter = Math.max(1, Number(process.env.GEO_DEAD_AFTER || 2));
   const fresh = (entry, ttl) => entry && normalizeCode(entry.code) && now - Number(entry.at || 0) < ttl;
-  const results = nodes.map(() => ({ code: null, source: null, ip: null, host: null, reachable: null }));
-  const stats = { override: 0, exit: 0, ip: 0, none: 0, xrayUsed: false, xrayOk: 0, xrayFail: 0 };
+  const results = nodes.map(() => ({ code: null, source: null, ip: null, host: null, reachable: null, failCount: 0, dead: false, drop: false, reason: null }));
+  const stats = { override: 0, exit: 0, ip: 0, cache: 0, none: 0, xrayUsed: false, xrayOk: 0, xrayFail: 0, grace: 0, dead: 0, unknown: 0 };
+  const nodeKey = (i) => `node:${fingerprintOf(nodes[i].outbound, nodes[i].deps)}`;
+  const failKey = (i) => `fail:${fingerprintOf(nodes[i].outbound, nodes[i].deps)}`;
 
   await mapLimit(nodes, 8, async (node, i) => {
     const ep = endpointOf(node.outbound);
@@ -234,25 +238,25 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions }
   const bin = findXray();
   stats.xrayUsed = Boolean(bin);
   if (bin) {
-    const queue = [];
-    nodes.forEach((node, i) => {
-      if (results[i].code) return;
-      const key = `node:${fingerprintOf(node.outbound)}`;
-      if (fresh(cache[key], NODE_TTL)) { results[i].code = cache[key].code; results[i].source = "exit"; results[i].reachable = true; stats.exit++; stats.xrayOk++; return; }
-      queue.push(i);
-    });
     const xrayDeadline = Date.now() + Number(process.env.GEO_XRAY_BUDGET_MS || 150000);
-    await mapLimit(queue, 4, async (i) => {
+    await mapLimit(nodes.map((_, i) => i), 4, async (i) => {
       const r = results[i];
       if (Date.now() > xrayDeadline) return;
       let check;
-      try { check = await checkViaXray(bin, nodes[i].outbound, { tlsOptions }); }
+      try { check = await checkViaXray(bin, nodes[i].outbound, { tlsOptions, deps: nodes[i].deps }); }
       catch (error) { check = { ok: false, code: null, reason: error.message }; }
       r.reachable = check.ok;
-      if (check.ok) stats.xrayOk++; else stats.xrayFail++;
-      if (check.code) {
-        r.code = check.code; r.source = "exit"; stats.exit++;
-        cache[`node:${fingerprintOf(nodes[i].outbound)}`] = { code: check.code, at: Date.now() };
+      if (check.ok) {
+        stats.xrayOk++; delete cache[failKey(i)];
+        if (check.code) {
+          cache[nodeKey(i)] = { code: check.code, at: Date.now() };
+          if (!r.code) { r.code = check.code; r.source = "exit"; stats.exit++; }
+        }
+      } else {
+        stats.xrayFail++;
+        const n = Number(cache[failKey(i)]?.n || 0) + 1;
+        cache[failKey(i)] = { n, at: Date.now() };
+        r.failCount = n;
       }
     });
   }
@@ -260,9 +264,16 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions }
   const needIp = [];
   nodes.forEach((node, i) => {
     const r = results[i];
-    if (r.code || !r.ip) return;
-    const entry = cache[`ip:${r.ip}`];
-    if (fresh(entry, IP_TTL)) { r.code = entry.code; r.source = "ip"; stats.ip++; return; }
+    if (r.code) return;
+    const known = normalizeCode(cache[nodeKey(i)]?.code) ? cache[nodeKey(i)] : (r.ip && normalizeCode(cache[`ip:${r.ip}`]?.code) ? cache[`ip:${r.ip}`] : null);
+    if (r.reachable === false) {
+      if (known && r.failCount < deadAfter) { r.code = known.code; r.source = "cache"; stats.cache++; stats.grace++; }
+      else r.dead = true;
+      return;
+    }
+    if (fresh(cache[nodeKey(i)], IP_TTL)) { r.code = cache[nodeKey(i)].code; r.source = "cache"; stats.cache++; return; }
+    if (!r.ip) return;
+    if (fresh(cache[`ip:${r.ip}`], IP_TTL)) { r.code = cache[`ip:${r.ip}`].code; r.source = "ip"; stats.ip++; return; }
     needIp.push(i);
   });
   if (needIp.length) {
@@ -273,8 +284,14 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions }
     }
   }
 
+  for (const r of results) {
+    if (r.code || r.reachable === true) continue;
+    r.drop = true;
+    r.reason = r.dead ? "dead" : "unknown";
+    if (r.dead) stats.dead++; else stats.unknown++;
+  }
   stats.none = results.filter((r) => !r.code).length;
   for (const key of Object.keys(cache)) if (now - Number(cache[key]?.at || 0) > CACHE_KEEP) delete cache[key];
   writeJsonSafe(cacheFile, cache);
   return { results, stats };
-    }
+}
