@@ -86,7 +86,7 @@
         },
         "security": "reality",
         "realitySettings": {
-          "serverName": "max.ru",
+          "serverName": "ligastavok.ru",
           "publicKey": "kDEc42JBZxig3BrLD3V1ofs3oJZk15-ANWN-rM0JW10",
           "shortId": "f28145401b4f633a",
           "spiderX": "/",
@@ -103,5 +103,5 @@
       "protocol": "blackhole"
     }
   ],
-  "remarks": "🇪🇺 LTE | Обход 📡"
+  "remarks": "Антиглушилка"
 }
