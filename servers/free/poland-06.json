@@ -279,39 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "be.golangwikito.cfd",
-            "port": 61374,
+            "address": "cz.pythonmakemigreat.wiki",
+            "port": 443,
             "users": [
               {
                 "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none"
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "path": "/",
-          "host": "be.golangwikito.cfd",
-          "mode": "packet-up",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
         "realitySettings": {
-          "serverName": "be.golangwikito.cfd",
-          "fingerprint": "firefox",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "serverName": "cz.pythonmakemigreat.wiki",
+          "fingerprint": "safari",
+          "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
+          "shortId": "6addc3f2d5de1eca",
           "spiderX": "/"
         }
       },
@@ -342,5 +329,5 @@
       "proxy"
     ]
   },
-  "remarks": "🇩🇪 Германия №3"
+  "remarks": "🇵🇱 Польша №6"
 }

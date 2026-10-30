@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "31.58.235.32",
+            "address": "nl-s-2.pythonmakemigreat.wiki",
             "port": 443,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "2clients.com",
-          "fingerprint": "edge",
-          "publicKey": "Y-i7PU_wry5Zc8BodTEjpDp2xOOoLu1eaPSBwoqI70c",
-          "shortId": "9951c5c00086eecd",
+          "serverName": "nl-s-2.pythonmakemigreat.wiki",
+          "fingerprint": "firefox",
+          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+          "shortId": "dfff7a7a4c7e5f33",
           "spiderX": "/"
         }
       },
@@ -329,5 +329,5 @@
       "proxy"
     ]
   },
-  "remarks": "🇮🇩 Индонезия №1"
+  "remarks": "🇺🇸 США №2"
 }

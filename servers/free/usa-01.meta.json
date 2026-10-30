@@ -1,0 +1,13 @@
+{
+  "id": "usa-01",
+  "name": "🇺🇸 США №1",
+  "country": "US",
+  "tier": "free",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "ip",
+  "sourceHash": "ea0f3568df6aea35ca60cfc6bac49b4a5e5cbe054e83c8b78274265111840b17",
+  "reachable": true,
+  "source": 2
+}
