@@ -3,6 +3,7 @@
   "name": "🇵🇱 Польша №4",
   "country": "PL",
   "tier": "free",
+  "kind": "standard",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",

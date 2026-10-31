@@ -3,6 +3,7 @@
   "name": "🇩🇪 Германия №1",
   "country": "DE",
   "tier": "free",
+  "kind": "standard",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",

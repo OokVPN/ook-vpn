@@ -223,7 +223,7 @@
         "port": 443,
         "type": "field",
         "network": "udp",
-        "outboundTag": "proxy"
+        "outboundTag": "block"
       },
       {
         "type": "field",
@@ -311,7 +311,7 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
@@ -330,17 +330,5 @@
       "protocol": "dns"
     }
   ],
-  "burstObservatory": {
-    "pingConfig": {
-      "timeout": "5s",
-      "interval": "30s",
-      "sampling": 3,
-      "httpMethod": "HEAD",
-      "destination": "https://www.gstatic.com/generate_204"
-    },
-    "subjectSelector": [
-      "proxy"
-    ]
-  },
   "remarks": "🇵🇱 Польша №1"
 }

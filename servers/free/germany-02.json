@@ -223,7 +223,7 @@
         "port": 443,
         "type": "field",
         "network": "udp",
-        "outboundTag": "proxy"
+        "outboundTag": "block"
       },
       {
         "type": "field",
@@ -298,7 +298,7 @@
           "serverName": "be.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-          "shortId": "01d2246b4bd92f49",
+          "shortId": "7d3e668e0cb831f1",
           "spiderX": "/"
         }
       },
@@ -317,17 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "burstObservatory": {
-    "pingConfig": {
-      "timeout": "5s",
-      "interval": "30s",
-      "sampling": 3,
-      "httpMethod": "HEAD",
-      "destination": "https://www.gstatic.com/generate_204"
-    },
-    "subjectSelector": [
-      "proxy"
-    ]
-  },
   "remarks": "🇩🇪 Германия №2"
 }

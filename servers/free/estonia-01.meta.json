@@ -3,6 +3,7 @@
   "name": "🇪🇪 Эстония №1",
   "country": "EE",
   "tier": "free",
+  "kind": "standard",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",

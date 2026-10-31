@@ -3,11 +3,12 @@
   "name": "🇫🇮 Финляндия №3",
   "country": "FI",
   "tier": "free",
+  "kind": "standard",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
   "geoSource": "exit",
-  "sourceHash": "ffe6a59a4ccd9d8acadcc898a4013ff3b78b20d95832222dc566fb4924723763",
+  "sourceHash": "177994a72f518fbd2dd693e984c9cb56dabf1f097c50c24afb65527796b7dc0c",
   "reachable": true,
   "source": 2
 }

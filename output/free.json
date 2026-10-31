@@ -381,7 +381,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "quic-reject"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -555,7 +555,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "ios",
             "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-            "shortId": "3cbf2ac918af2294",
+            "shortId": "29d0ae077b80be26",
             "spiderX": "/"
           }
         },
@@ -598,7 +598,7 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -628,7 +628,7 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "a3565610aa574a6e",
+            "shortId": "dfff7a7a4c7e5f33",
             "spiderX": "/"
           }
         },
@@ -671,7 +671,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -701,7 +701,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-            "shortId": "c9cf45cddb319c23",
+            "shortId": "266e9b1bbaf6bba2",
             "spiderX": "/"
           }
         },
@@ -847,7 +847,7 @@
             "serverName": "be.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-            "shortId": "01d2246b4bd92f49",
+            "shortId": "7d3e668e0cb831f1",
             "spiderX": "/"
           }
         },
@@ -1100,7 +1100,7 @@
             "serverName": "fl-b2.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -1216,7 +1216,7 @@
             "serverName": "pl-b1.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -1289,7 +1289,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -1771,7 +1771,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -1878,18 +1878,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇪🇪 Эстония №1"
   },
   {
@@ -2117,7 +2105,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -2192,7 +2180,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "ios",
             "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-            "shortId": "3cbf2ac918af2294",
+            "shortId": "29d0ae077b80be26",
             "spiderX": "/"
           }
         },
@@ -2211,18 +2199,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇪🇪 Эстония №2"
   },
   {
@@ -2450,7 +2426,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -2538,7 +2514,7 @@
             "serverName": "pl-b1.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -2557,18 +2533,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇵🇱 Польша №1"
   },
   {
@@ -2796,7 +2760,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -2890,18 +2854,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇵🇱 Польша №2"
   },
   {
@@ -3129,7 +3081,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -3236,18 +3188,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇩🇪 Германия №1"
   },
   {
@@ -3475,7 +3415,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -3550,7 +3490,7 @@
             "serverName": "be.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-            "shortId": "01d2246b4bd92f49",
+            "shortId": "7d3e668e0cb831f1",
             "spiderX": "/"
           }
         },
@@ -3569,18 +3509,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇩🇪 Германия №2"
   },
   {
@@ -3808,7 +3736,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -3896,7 +3824,7 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -3915,18 +3843,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇫🇮 Финляндия №1"
   },
   {
@@ -4154,7 +4070,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -4229,7 +4145,7 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "a3565610aa574a6e",
+            "shortId": "dfff7a7a4c7e5f33",
             "spiderX": "/"
           }
         },
@@ -4248,18 +4164,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇫🇮 Финляндия №2"
   },
   {
@@ -4487,7 +4391,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -4575,7 +4479,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -4594,18 +4498,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇫🇮 Финляндия №3"
   },
   {
@@ -4833,7 +4725,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -4908,7 +4800,7 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-            "shortId": "c9cf45cddb319c23",
+            "shortId": "266e9b1bbaf6bba2",
             "spiderX": "/"
           }
         },
@@ -4927,18 +4819,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇫🇮 Финляндия №4"
   },
   {
@@ -7873,7 +7753,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -7961,7 +7841,7 @@
             "serverName": "fl-b2.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -7980,18 +7860,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇳🇱 Нидерланды №1"
   },
   {
@@ -8898,7 +8766,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -8986,7 +8854,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -9005,18 +8873,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇵🇱 Польша №3"
   },
   {
@@ -9244,7 +9100,7 @@
           "port": 443,
           "type": "field",
           "network": "udp",
-          "outboundTag": "proxy"
+          "outboundTag": "block"
         },
         {
           "type": "field",
@@ -9338,18 +9194,6 @@
         "protocol": "dns"
       }
     ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
     "remarks": "🇵🇱 Польша №4"
   },
   {
