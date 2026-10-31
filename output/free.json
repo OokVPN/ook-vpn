@@ -555,7 +555,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "ios",
             "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-            "shortId": "6051794d7ff7ae0e",
+            "shortId": "3cbf2ac918af2294",
             "spiderX": "/"
           }
         },
@@ -609,6 +609,36 @@
         "settings": {
           "vnext": [
             {
+              "address": "fi-b2.pythonsetupbib.online",
+              "port": 443,
+              "users": [
+                {
+                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "fi-b2.pythonsetupbib.online",
+            "fingerprint": "firefox",
+            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+            "shortId": "a3565610aa574a6e",
+            "spiderX": "/"
+          }
+        },
+        "tag": "node-finland-02"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
               "address": "se-2-b1.pythonsetupbib.online",
               "port": 61374,
               "users": [
@@ -641,11 +671,11 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
-        "tag": "node-finland-02"
+        "tag": "node-finland-03"
       },
       {
         "protocol": "vless",
@@ -672,36 +702,6 @@
             "fingerprint": "firefox",
             "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
             "shortId": "c9cf45cddb319c23",
-            "spiderX": "/"
-          }
-        },
-        "tag": "node-finland-03"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "fi-b2.pythonsetupbib.online",
-              "port": 443,
-              "users": [
-                {
-                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "fi-b2.pythonsetupbib.online",
-            "fingerprint": "firefox",
-            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "a3565610aa574a6e",
             "spiderX": "/"
           }
         },
@@ -1289,7 +1289,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -1319,7 +1319,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "safari",
             "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-            "shortId": "3b306f15c6057d55",
+            "shortId": "6addc3f2d5de1eca",
             "spiderX": "/"
           }
         },
@@ -2192,7 +2192,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "ios",
             "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-            "shortId": "6051794d7ff7ae0e",
+            "shortId": "3cbf2ac918af2294",
             "spiderX": "/"
           }
         },
@@ -4210,39 +4210,26 @@
         "settings": {
           "vnext": [
             {
-              "address": "se-2-b1.pythonsetupbib.online",
-              "port": 61374,
+              "address": "fi-b2.pythonsetupbib.online",
+              "port": 443,
               "users": [
                 {
                   "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none"
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "xhttp",
+          "network": "tcp",
           "security": "reality",
-          "xhttpSettings": {
-            "path": "/",
-            "host": "se-2-b1.pythonsetupbib.online",
-            "mode": "packet-up",
-            "extra": {
-              "xmux": {
-                "maxConnections": 3
-              },
-              "xPaddingBytes": "100-500",
-              "scMaxBufferedPosts": 10,
-              "scMaxEachPostBytes": "500000-1000000",
-              "scMinPostsIntervalMs": "20-40"
-            }
-          },
           "realitySettings": {
-            "serverName": "se-2-b1.pythonsetupbib.online",
+            "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
-            "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+            "shortId": "a3565610aa574a6e",
             "spiderX": "/"
           }
         },
@@ -4557,25 +4544,38 @@
           "vnext": [
             {
               "address": "se-2-b1.pythonsetupbib.online",
-              "port": 443,
+              "port": 61374,
               "users": [
                 {
                   "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
+                  "encryption": "none"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "tcp",
+          "network": "xhttp",
           "security": "reality",
+          "xhttpSettings": {
+            "path": "/",
+            "host": "se-2-b1.pythonsetupbib.online",
+            "mode": "packet-up",
+            "extra": {
+              "xmux": {
+                "maxConnections": 3
+              },
+              "xPaddingBytes": "100-500",
+              "scMaxBufferedPosts": 10,
+              "scMaxEachPostBytes": "500000-1000000",
+              "scMinPostsIntervalMs": "20-40"
+            }
+          },
           "realitySettings": {
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
-            "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-            "shortId": "c9cf45cddb319c23",
+            "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -4889,7 +4889,7 @@
         "settings": {
           "vnext": [
             {
-              "address": "fi-b2.pythonsetupbib.online",
+              "address": "se-2-b1.pythonsetupbib.online",
               "port": 443,
               "users": [
                 {
@@ -4905,10 +4905,10 @@
           "network": "tcp",
           "security": "reality",
           "realitySettings": {
-            "serverName": "fi-b2.pythonsetupbib.online",
+            "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
-            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "a3565610aa574a6e",
+            "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
+            "shortId": "c9cf45cddb319c23",
             "spiderX": "/"
           }
         },
@@ -8986,7 +8986,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -9319,7 +9319,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "safari",
             "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-            "shortId": "3b306f15c6057d55",
+            "shortId": "6addc3f2d5de1eca",
             "spiderX": "/"
           }
         },

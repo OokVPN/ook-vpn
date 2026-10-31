@@ -6,7 +6,7 @@
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
-  "geoSource": "cache",
+  "geoSource": "exit",
   "sourceHash": "540eda56206bc4878369fe3550e5a5f6f1427780ff1a10cbbc9ba71bdb3e5748",
   "reachable": true,
   "source": 2
