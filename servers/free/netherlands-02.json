@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "194.146.223.27",
-            "port": 8443,
+            "address": "fl-b2.golangwikito.cfd",
+            "port": 61374,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
                 "encryption": "none"
               }
             ]
@@ -294,15 +294,24 @@
         "network": "xhttp",
         "security": "reality",
         "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "idealista.com",
-          "mode": "stream-one"
+          "path": "/",
+          "host": "fl-b2.golangwikito.cfd",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
         },
         "realitySettings": {
-          "serverName": "idealista.com",
-          "fingerprint": "edge",
-          "publicKey": "fA__7DH2qV9GHvLGF_PclC4WSykvRFQzUneo4Fn3N00",
-          "shortId": "e0409925beaca288",
+          "serverName": "fl-b2.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },

@@ -400,14 +400,13 @@
             "node-finland-03",
             "node-finland-04",
             "node-finland-05",
+            "node-finland-06",
             "node-germany-01",
             "node-germany-02",
-            "node-germany-03",
             "node-hong-kong-sar-china-01",
             "node-hong-kong-sar-china-02",
             "node-netherlands-01",
             "node-netherlands-02",
-            "node-netherlands-03",
             "node-poland-01",
             "node-poland-02",
             "node-poland-03",
@@ -415,9 +414,7 @@
             "node-poland-05",
             "node-poland-06",
             "node-usa-01",
-            "node-usa-02",
-            "node-usa-03",
-            "node-usa-04"
+            "node-usa-02"
           ],
           "strategy": {
             "type": "leastLoad",
@@ -522,7 +519,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -582,7 +579,7 @@
             "serverName": "nasa3.arsen.me",
             "fingerprint": "edge",
             "publicKey": "O3ZPjD9f4kZ7zCpydSm3eYQ4aaD0I1c6Cq7fvjDUYn0",
-            "shortId": "fda6bf98428a8544",
+            "shortId": "eddaa1906d03947a",
             "spiderX": "/"
           }
         },
@@ -659,11 +656,41 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
         "tag": "node-finland-03"
+      },
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "fi-b2.pythonsetupbib.online",
+              "port": 443,
+              "users": [
+                {
+                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "fi-b2.pythonsetupbib.online",
+            "fingerprint": "firefox",
+            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+            "shortId": "a3565610aa574a6e",
+            "spiderX": "/"
+          }
+        },
+        "tag": "node-finland-04"
       },
       {
         "protocol": "vless",
@@ -702,11 +729,11 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
-        "tag": "node-finland-04"
+        "tag": "node-finland-05"
       },
       {
         "protocol": "vless",
@@ -732,41 +759,11 @@
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-            "shortId": "266e9b1bbaf6bba2",
+            "shortId": "a1037b25dcef6aa7",
             "spiderX": "/"
           }
         },
-        "tag": "node-finland-05"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "nl-s-2.pythonmakemigreat.wiki",
-              "port": 443,
-              "users": [
-                {
-                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "nl-s-2.pythonmakemigreat.wiki",
-            "fingerprint": "firefox",
-            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "78f97d82e16aaad6",
-            "spiderX": "/"
-          }
-        },
-        "tag": "node-germany-01"
+        "tag": "node-finland-06"
       },
       {
         "protocol": "vless",
@@ -805,11 +802,11 @@
             "serverName": "be.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
-        "tag": "node-germany-02"
+        "tag": "node-germany-01"
       },
       {
         "protocol": "vless",
@@ -839,7 +836,7 @@
             "spiderX": "/"
           }
         },
-        "tag": "node-germany-03"
+        "tag": "node-germany-02"
       },
       {
         "protocol": "vless",
@@ -911,36 +908,6 @@
           "vnext": [
             {
               "address": "194.146.223.27",
-              "port": 443,
-              "users": [
-                {
-                  "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "theverge.com",
-            "fingerprint": "edge",
-            "publicKey": "d1hCrgQISDeQIzWAudFDhOZRH2kAdJZYirmGnmI_LAA",
-            "shortId": "06954fd1b0648c6f",
-            "spiderX": "/"
-          }
-        },
-        "tag": "node-netherlands-01"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "194.146.223.27",
               "port": 8443,
               "users": [
                 {
@@ -967,7 +934,7 @@
             "spiderX": "/"
           }
         },
-        "tag": "node-netherlands-02"
+        "tag": "node-netherlands-01"
       },
       {
         "protocol": "vless",
@@ -1010,7 +977,7 @@
             "spiderX": "/"
           }
         },
-        "tag": "node-netherlands-03"
+        "tag": "node-netherlands-02"
       },
       {
         "protocol": "vless",
@@ -1070,7 +1037,7 @@
             "serverName": "wellvps.com",
             "fingerprint": "edge",
             "publicKey": "2Dttk8wiTIu9rLKr5kUMt5hrWrZ_WMrtrRAnegULQTU",
-            "shortId": "0fa622b5f19c524c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -1143,7 +1110,7 @@
             "serverName": "pl-b1.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
-            "shortId": "f8b695e5c59d028c",
+            "shortId": "acccaaaa9f72147d",
             "spiderX": "/"
           }
         },
@@ -1216,7 +1183,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "safari",
             "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-            "shortId": "3b306f15c6057d55",
+            "shortId": "71d3e27e8115fab1",
             "spiderX": "/"
           }
         },
@@ -1280,84 +1247,11 @@
             "serverName": "pay-mora.com",
             "fingerprint": "edge",
             "publicKey": "A7j0RYJSfkBkbYjoLJWZCm1HdNr17wWKPOG5vToPsmc",
-            "shortId": "",
+            "shortId": "eeeef14e2d6139e5",
             "spiderX": "/"
           }
         },
         "tag": "node-usa-02"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "nl-s-2.pythonmakemigreat.wiki",
-              "port": 61374,
-              "users": [
-                {
-                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "xhttp",
-          "security": "reality",
-          "xhttpSettings": {
-            "path": "/",
-            "host": "nl-s-1.pythonmakemigreat.wiki",
-            "mode": "packet-up",
-            "extra": {
-              "xmux": {
-                "maxConnections": 3
-              },
-              "xPaddingBytes": "100-500",
-              "scMaxBufferedPosts": 10,
-              "scMaxEachPostBytes": "500000-1000000",
-              "scMinPostsIntervalMs": "20-40"
-            }
-          },
-          "realitySettings": {
-            "serverName": "nl-s-2.pythonmakemigreat.wiki",
-            "fingerprint": "firefox",
-            "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
-            "spiderX": "/"
-          }
-        },
-        "tag": "node-usa-03"
-      },
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "fi-b2.pythonsetupbib.online",
-              "port": 443,
-              "users": [
-                {
-                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "fi-b2.pythonsetupbib.online",
-            "fingerprint": "firefox",
-            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "bdf5852d1423e694",
-            "spiderX": "/"
-          }
-        },
-        "tag": "node-usa-04"
       },
       {
         "tag": "block",
@@ -1388,14 +1282,13 @@
         "node-finland-03",
         "node-finland-04",
         "node-finland-05",
+        "node-finland-06",
         "node-germany-01",
         "node-germany-02",
-        "node-germany-03",
         "node-hong-kong-sar-china-01",
         "node-hong-kong-sar-china-02",
         "node-netherlands-01",
         "node-netherlands-02",
-        "node-netherlands-03",
         "node-poland-01",
         "node-poland-02",
         "node-poland-03",
@@ -1403,9 +1296,7 @@
         "node-poland-05",
         "node-poland-06",
         "node-usa-01",
-        "node-usa-02",
-        "node-usa-03",
-        "node-usa-04"
+        "node-usa-02"
       ]
     },
     "remarks": "🇪🇺 ⚡ AUTO — САМЫЙ БЫСТРЫЙ"
@@ -1723,7 +1614,7 @@
             "serverName": "ee.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
+            "shortId": "40a4b9403abe554c",
             "spiderX": "/"
           }
         },
@@ -2726,7 +2617,7 @@
             "serverName": "wellvps.com",
             "fingerprint": "edge",
             "publicKey": "2Dttk8wiTIu9rLKr5kUMt5hrWrZ_WMrtrRAnegULQTU",
-            "shortId": "0fa622b5f19c524c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -2758,339 +2649,6 @@
       ]
     },
     "remarks": "🇵🇱 Польша №2"
-  },
-  {
-    "dns": {
-      "tag": "dns-module",
-      "servers": [
-        {
-          "address": "77.88.8.8",
-          "domains": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "skipFallback": true
-        },
-        "https://1.1.1.1/dns-query",
-        "https://8.8.8.8/dns-query"
-      ],
-      "disableCache": false,
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "loglevel": "none"
-    },
-    "policy": {
-      "levels": {
-        "0": {
-          "connIdle": 300,
-          "handshake": 4
-        }
-      },
-      "system": {
-        "statsOutboundUplink": false,
-        "statsOutboundDownlink": false
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": [
-            "77.88.8.8",
-            "77.88.8.1"
-          ],
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "port": 53,
-          "type": "field",
-          "outboundTag": "dns-out"
-        },
-        {
-          "type": "field",
-          "protocol": [
-            "bittorrent"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:doubleclick.net",
-            "domain:googlesyndication.com",
-            "domain:googleadservices.com",
-            "domain:adservice.google.com",
-            "domain:googletagservices.com",
-            "domain:an.yandex.ru",
-            "domain:yabs.yandex.ru",
-            "domain:adfox.ru",
-            "domain:adfox.yandex.ru",
-            "domain:yandexadexchange.net",
-            "domain:ad.mail.ru",
-            "domain:ads.vk.com",
-            "domain:adnxs.com",
-            "domain:criteo.com",
-            "domain:criteo.net",
-            "domain:taboola.com",
-            "domain:outbrain.com",
-            "domain:amazon-adsystem.com",
-            "domain:adsrvr.org",
-            "domain:rubiconproject.com",
-            "domain:pubmatic.com",
-            "domain:openx.net",
-            "domain:moatads.com",
-            "domain:smartadserver.com",
-            "domain:bidswitch.net",
-            "domain:scorecardresearch.com",
-            "domain:unityads.unity3d.com",
-            "domain:applovin.com",
-            "domain:applvn.com",
-            "domain:supersonicads.com",
-            "domain:chartboost.com",
-            "domain:vungle.com",
-            "domain:inmobi.com",
-            "domain:adcolony.com",
-            "domain:startappservice.com",
-            "domain:mopub.com"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "10.0.0.0/8",
-            "100.64.0.0/10",
-            "127.0.0.0/8",
-            "169.254.0.0/16",
-            "172.16.0.0/12",
-            "192.168.0.0/16",
-            "::1/128",
-            "fc00::/7",
-            "fe80::/10"
-          ],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "domain": [
-            "domain:instagram.com",
-            "domain:cdninstagram.com",
-            "domain:facebook.com",
-            "domain:facebook.net",
-            "domain:fbcdn.net",
-            "domain:fbsbx.com",
-            "domain:threads.net"
-          ],
-          "network": "udp",
-          "outboundTag": "block"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "network": "udp",
-          "outboundTag": "proxy"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "outboundTag": "proxy"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth"
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "nl-s-2.pythonmakemigreat.wiki",
-              "port": 443,
-              "users": [
-                {
-                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "nl-s-2.pythonmakemigreat.wiki",
-            "fingerprint": "firefox",
-            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "78f97d82e16aaad6",
-            "spiderX": "/"
-          }
-        },
-        "tag": "proxy"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "dns-out",
-        "protocol": "dns"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
-    "remarks": "🇩🇪 Германия №1"
   },
   {
     "dns": {
@@ -3405,7 +2963,340 @@
             "serverName": "be.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
+            "spiderX": "/"
+          }
+        },
+        "tag": "proxy"
+      },
+      {
+        "tag": "block",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "direct",
+        "protocol": "freedom"
+      },
+      {
+        "tag": "dns-out",
+        "protocol": "dns"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "5s",
+        "interval": "30s",
+        "sampling": 3,
+        "httpMethod": "HEAD",
+        "destination": "https://www.gstatic.com/generate_204"
+      },
+      "subjectSelector": [
+        "proxy"
+      ]
+    },
+    "remarks": "🇩🇪 Германия №1"
+  },
+  {
+    "dns": {
+      "tag": "dns-module",
+      "servers": [
+        {
+          "address": "77.88.8.8",
+          "domains": [
+            "domain:ru",
+            "domain:su",
+            "domain:xn--p1ai",
+            "domain:xn--p1acf",
+            "domain:xn--80adxhks",
+            "domain:moscow",
+            "domain:tatar",
+            "domain:vk.com",
+            "domain:vk.me",
+            "domain:vkuser.net",
+            "domain:userapi.com",
+            "domain:vk-cdn.net",
+            "domain:vkuservideo.net",
+            "domain:vkuseraudio.net",
+            "domain:vk-portal.net",
+            "domain:mycdn.me",
+            "domain:vkontakte.com",
+            "domain:yandex.net",
+            "domain:yandex.com",
+            "domain:yastatic.net",
+            "domain:yandexcloud.net",
+            "domain:yandex.by",
+            "domain:yandex.kz",
+            "domain:turbopages.org",
+            "domain:mradx.net",
+            "domain:ozon.com",
+            "domain:ozonusercontent.com",
+            "domain:wbstatic.net",
+            "domain:wbcontent.net",
+            "domain:avito.st",
+            "domain:sberbank.com",
+            "domain:2gis.com",
+            "domain:qiwi.com",
+            "domain:okko.tv",
+            "domain:more.tv",
+            "domain:premier.one",
+            "domain:emias.info",
+            "domain:lenta.com",
+            "domain:pobeda.aero",
+            "domain:steamcontent.com"
+          ],
+          "skipFallback": true
+        },
+        "https://1.1.1.1/dns-query",
+        "https://8.8.8.8/dns-query"
+      ],
+      "disableCache": false,
+      "queryStrategy": "UseIPv4"
+    },
+    "log": {
+      "loglevel": "none"
+    },
+    "policy": {
+      "levels": {
+        "0": {
+          "connIdle": 300,
+          "handshake": 4
+        }
+      },
+      "system": {
+        "statsOutboundUplink": false,
+        "statsOutboundDownlink": false
+      }
+    },
+    "routing": {
+      "rules": [
+        {
+          "ip": [
+            "77.88.8.8",
+            "77.88.8.1"
+          ],
+          "type": "field",
+          "inboundTag": [
+            "dns-module"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "inboundTag": [
+            "dns-module"
+          ],
+          "outboundTag": "proxy"
+        },
+        {
+          "port": 53,
+          "type": "field",
+          "outboundTag": "dns-out"
+        },
+        {
+          "type": "field",
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "block"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "domain:doubleclick.net",
+            "domain:googlesyndication.com",
+            "domain:googleadservices.com",
+            "domain:adservice.google.com",
+            "domain:googletagservices.com",
+            "domain:an.yandex.ru",
+            "domain:yabs.yandex.ru",
+            "domain:adfox.ru",
+            "domain:adfox.yandex.ru",
+            "domain:yandexadexchange.net",
+            "domain:ad.mail.ru",
+            "domain:ads.vk.com",
+            "domain:adnxs.com",
+            "domain:criteo.com",
+            "domain:criteo.net",
+            "domain:taboola.com",
+            "domain:outbrain.com",
+            "domain:amazon-adsystem.com",
+            "domain:adsrvr.org",
+            "domain:rubiconproject.com",
+            "domain:pubmatic.com",
+            "domain:openx.net",
+            "domain:moatads.com",
+            "domain:smartadserver.com",
+            "domain:bidswitch.net",
+            "domain:scorecardresearch.com",
+            "domain:unityads.unity3d.com",
+            "domain:applovin.com",
+            "domain:applvn.com",
+            "domain:supersonicads.com",
+            "domain:chartboost.com",
+            "domain:vungle.com",
+            "domain:inmobi.com",
+            "domain:adcolony.com",
+            "domain:startappservice.com",
+            "domain:mopub.com"
+          ],
+          "outboundTag": "block"
+        },
+        {
+          "ip": [
+            "10.0.0.0/8",
+            "100.64.0.0/10",
+            "127.0.0.0/8",
+            "169.254.0.0/16",
+            "172.16.0.0/12",
+            "192.168.0.0/16",
+            "::1/128",
+            "fc00::/7",
+            "fe80::/10"
+          ],
+          "type": "field",
+          "outboundTag": "direct"
+        },
+        {
+          "type": "field",
+          "domain": [
+            "domain:ru",
+            "domain:su",
+            "domain:xn--p1ai",
+            "domain:xn--p1acf",
+            "domain:xn--80adxhks",
+            "domain:moscow",
+            "domain:tatar",
+            "domain:vk.com",
+            "domain:vk.me",
+            "domain:vkuser.net",
+            "domain:userapi.com",
+            "domain:vk-cdn.net",
+            "domain:vkuservideo.net",
+            "domain:vkuseraudio.net",
+            "domain:vk-portal.net",
+            "domain:mycdn.me",
+            "domain:vkontakte.com",
+            "domain:yandex.net",
+            "domain:yandex.com",
+            "domain:yastatic.net",
+            "domain:yandexcloud.net",
+            "domain:yandex.by",
+            "domain:yandex.kz",
+            "domain:turbopages.org",
+            "domain:mradx.net",
+            "domain:ozon.com",
+            "domain:ozonusercontent.com",
+            "domain:wbstatic.net",
+            "domain:wbcontent.net",
+            "domain:avito.st",
+            "domain:sberbank.com",
+            "domain:2gis.com",
+            "domain:qiwi.com",
+            "domain:okko.tv",
+            "domain:more.tv",
+            "domain:premier.one",
+            "domain:emias.info",
+            "domain:lenta.com",
+            "domain:pobeda.aero",
+            "domain:steamcontent.com"
+          ],
+          "outboundTag": "direct"
+        },
+        {
+          "port": 443,
+          "type": "field",
+          "domain": [
+            "domain:instagram.com",
+            "domain:cdninstagram.com",
+            "domain:facebook.com",
+            "domain:facebook.net",
+            "domain:fbcdn.net",
+            "domain:fbsbx.com",
+            "domain:threads.net"
+          ],
+          "network": "udp",
+          "outboundTag": "block"
+        },
+        {
+          "port": 443,
+          "type": "field",
+          "network": "udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "type": "field",
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        }
+      ],
+      "domainMatcher": "hybrid",
+      "domainStrategy": "AsIs"
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": true,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "allowTransparent": false
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": true,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "be.golangwikito.cfd",
+              "port": 443,
+              "users": [
+                {
+                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "serverName": "be.golangwikito.cfd",
+            "fingerprint": "firefox",
+            "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
+            "shortId": "01d2246b4bd92f49",
             "spiderX": "/"
           }
         },
@@ -3738,7 +3629,7 @@
             "serverName": "nasa3.arsen.me",
             "fingerprint": "edge",
             "publicKey": "O3ZPjD9f4kZ7zCpydSm3eYQ4aaD0I1c6Cq7fvjDUYn0",
-            "shortId": "fda6bf98428a8544",
+            "shortId": "eddaa1906d03947a",
             "spiderX": "/"
           }
         },
@@ -4421,7 +4312,7 @@
             "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
             "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -4735,39 +4626,26 @@
         "settings": {
           "vnext": [
             {
-              "address": "se-2-b1.pythonsetupbib.online",
-              "port": 61374,
+              "address": "fi-b2.pythonsetupbib.online",
+              "port": 443,
               "users": [
                 {
                   "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none"
+                  "encryption": "none",
+                  "flow": "xtls-rprx-vision"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "xhttp",
+          "network": "tcp",
           "security": "reality",
-          "xhttpSettings": {
-            "path": "/",
-            "host": "se-2-b1.pythonsetupbib.online",
-            "mode": "packet-up",
-            "extra": {
-              "xmux": {
-                "maxConnections": 3
-              },
-              "xPaddingBytes": "100-500",
-              "scMaxBufferedPosts": 10,
-              "scMaxEachPostBytes": "500000-1000000",
-              "scMinPostsIntervalMs": "20-40"
-            }
-          },
           "realitySettings": {
-            "serverName": "se-2-b1.pythonsetupbib.online",
+            "serverName": "fi-b2.pythonsetupbib.online",
             "fingerprint": "firefox",
-            "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "40a4b9403abe554c",
+            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+            "shortId": "a3565610aa574a6e",
             "spiderX": "/"
           }
         },
@@ -5082,25 +4960,38 @@
           "vnext": [
             {
               "address": "se-2-b1.pythonsetupbib.online",
-              "port": 443,
+              "port": 61374,
               "users": [
                 {
                   "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
+                  "encryption": "none"
                 }
               ]
             }
           ]
         },
         "streamSettings": {
-          "network": "tcp",
+          "network": "xhttp",
           "security": "reality",
+          "xhttpSettings": {
+            "path": "/",
+            "host": "se-2-b1.pythonsetupbib.online",
+            "mode": "packet-up",
+            "extra": {
+              "xmux": {
+                "maxConnections": 3
+              },
+              "xPaddingBytes": "100-500",
+              "scMaxBufferedPosts": 10,
+              "scMaxEachPostBytes": "500000-1000000",
+              "scMinPostsIntervalMs": "20-40"
+            }
+          },
           "realitySettings": {
             "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
-            "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-            "shortId": "266e9b1bbaf6bba2",
+            "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+            "shortId": "",
             "spiderX": "/"
           }
         },
@@ -5414,7 +5305,7 @@
         "settings": {
           "vnext": [
             {
-              "address": "be.golangwikito.cfd",
+              "address": "se-2-b1.pythonsetupbib.online",
               "port": 443,
               "users": [
                 {
@@ -5430,10 +5321,10 @@
           "network": "tcp",
           "security": "reality",
           "realitySettings": {
-            "serverName": "be.golangwikito.cfd",
+            "serverName": "se-2-b1.pythonsetupbib.online",
             "fingerprint": "firefox",
-            "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-            "shortId": "01d2246b4bd92f49",
+            "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
+            "shortId": "a1037b25dcef6aa7",
             "spiderX": "/"
           }
         },
@@ -5464,7 +5355,7 @@
         "proxy"
       ]
     },
-    "remarks": "🇩🇪 Германия №3"
+    "remarks": "🇫🇮 Финляндия №6"
   },
   {
     "dns": {
@@ -6418,339 +6309,6 @@
           "vnext": [
             {
               "address": "194.146.223.27",
-              "port": 443,
-              "users": [
-                {
-                  "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "theverge.com",
-            "fingerprint": "edge",
-            "publicKey": "d1hCrgQISDeQIzWAudFDhOZRH2kAdJZYirmGnmI_LAA",
-            "shortId": "06954fd1b0648c6f",
-            "spiderX": "/"
-          }
-        },
-        "tag": "proxy"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "dns-out",
-        "protocol": "dns"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
-    "remarks": "🇳🇱 Нидерланды №1"
-  },
-  {
-    "dns": {
-      "tag": "dns-module",
-      "servers": [
-        {
-          "address": "77.88.8.8",
-          "domains": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "skipFallback": true
-        },
-        "https://1.1.1.1/dns-query",
-        "https://8.8.8.8/dns-query"
-      ],
-      "disableCache": false,
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "loglevel": "none"
-    },
-    "policy": {
-      "levels": {
-        "0": {
-          "connIdle": 300,
-          "handshake": 4
-        }
-      },
-      "system": {
-        "statsOutboundUplink": false,
-        "statsOutboundDownlink": false
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": [
-            "77.88.8.8",
-            "77.88.8.1"
-          ],
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "port": 53,
-          "type": "field",
-          "outboundTag": "dns-out"
-        },
-        {
-          "type": "field",
-          "protocol": [
-            "bittorrent"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:doubleclick.net",
-            "domain:googlesyndication.com",
-            "domain:googleadservices.com",
-            "domain:adservice.google.com",
-            "domain:googletagservices.com",
-            "domain:an.yandex.ru",
-            "domain:yabs.yandex.ru",
-            "domain:adfox.ru",
-            "domain:adfox.yandex.ru",
-            "domain:yandexadexchange.net",
-            "domain:ad.mail.ru",
-            "domain:ads.vk.com",
-            "domain:adnxs.com",
-            "domain:criteo.com",
-            "domain:criteo.net",
-            "domain:taboola.com",
-            "domain:outbrain.com",
-            "domain:amazon-adsystem.com",
-            "domain:adsrvr.org",
-            "domain:rubiconproject.com",
-            "domain:pubmatic.com",
-            "domain:openx.net",
-            "domain:moatads.com",
-            "domain:smartadserver.com",
-            "domain:bidswitch.net",
-            "domain:scorecardresearch.com",
-            "domain:unityads.unity3d.com",
-            "domain:applovin.com",
-            "domain:applvn.com",
-            "domain:supersonicads.com",
-            "domain:chartboost.com",
-            "domain:vungle.com",
-            "domain:inmobi.com",
-            "domain:adcolony.com",
-            "domain:startappservice.com",
-            "domain:mopub.com"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "10.0.0.0/8",
-            "100.64.0.0/10",
-            "127.0.0.0/8",
-            "169.254.0.0/16",
-            "172.16.0.0/12",
-            "192.168.0.0/16",
-            "::1/128",
-            "fc00::/7",
-            "fe80::/10"
-          ],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "domain": [
-            "domain:instagram.com",
-            "domain:cdninstagram.com",
-            "domain:facebook.com",
-            "domain:facebook.net",
-            "domain:fbcdn.net",
-            "domain:fbsbx.com",
-            "domain:threads.net"
-          ],
-          "network": "udp",
-          "outboundTag": "block"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "network": "udp",
-          "outboundTag": "proxy"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "outboundTag": "proxy"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth"
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "194.146.223.27",
               "port": 8443,
               "users": [
                 {
@@ -6804,7 +6362,7 @@
         "proxy"
       ]
     },
-    "remarks": "🇳🇱 Нидерланды №2"
+    "remarks": "🇳🇱 Нидерланды №1"
   },
   {
     "dns": {
@@ -7150,7 +6708,7 @@
         "proxy"
       ]
     },
-    "remarks": "🇳🇱 Нидерланды №3"
+    "remarks": "🇳🇱 Нидерланды №2"
   },
   {
     "dns": {
@@ -7798,7 +7356,7 @@
             "serverName": "pl-b1.golangwikito.cfd",
             "fingerprint": "firefox",
             "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
-            "shortId": "f8b695e5c59d028c",
+            "shortId": "acccaaaa9f72147d",
             "spiderX": "/"
           }
         },
@@ -8477,7 +8035,7 @@
             "serverName": "cz.pythonmakemigreat.wiki",
             "fingerprint": "safari",
             "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-            "shortId": "3b306f15c6057d55",
+            "shortId": "71d3e27e8115fab1",
             "spiderX": "/"
           }
         },
@@ -9147,7 +8705,7 @@
             "serverName": "pay-mora.com",
             "fingerprint": "edge",
             "publicKey": "A7j0RYJSfkBkbYjoLJWZCm1HdNr17wWKPOG5vToPsmc",
-            "shortId": "",
+            "shortId": "eeeef14e2d6139e5",
             "spiderX": "/"
           }
         },
@@ -9179,684 +8737,5 @@
       ]
     },
     "remarks": "🇺🇸 США №2"
-  },
-  {
-    "dns": {
-      "tag": "dns-module",
-      "servers": [
-        {
-          "address": "77.88.8.8",
-          "domains": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "skipFallback": true
-        },
-        "https://1.1.1.1/dns-query",
-        "https://8.8.8.8/dns-query"
-      ],
-      "disableCache": false,
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "loglevel": "none"
-    },
-    "policy": {
-      "levels": {
-        "0": {
-          "connIdle": 300,
-          "handshake": 4
-        }
-      },
-      "system": {
-        "statsOutboundUplink": false,
-        "statsOutboundDownlink": false
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": [
-            "77.88.8.8",
-            "77.88.8.1"
-          ],
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "port": 53,
-          "type": "field",
-          "outboundTag": "dns-out"
-        },
-        {
-          "type": "field",
-          "protocol": [
-            "bittorrent"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:doubleclick.net",
-            "domain:googlesyndication.com",
-            "domain:googleadservices.com",
-            "domain:adservice.google.com",
-            "domain:googletagservices.com",
-            "domain:an.yandex.ru",
-            "domain:yabs.yandex.ru",
-            "domain:adfox.ru",
-            "domain:adfox.yandex.ru",
-            "domain:yandexadexchange.net",
-            "domain:ad.mail.ru",
-            "domain:ads.vk.com",
-            "domain:adnxs.com",
-            "domain:criteo.com",
-            "domain:criteo.net",
-            "domain:taboola.com",
-            "domain:outbrain.com",
-            "domain:amazon-adsystem.com",
-            "domain:adsrvr.org",
-            "domain:rubiconproject.com",
-            "domain:pubmatic.com",
-            "domain:openx.net",
-            "domain:moatads.com",
-            "domain:smartadserver.com",
-            "domain:bidswitch.net",
-            "domain:scorecardresearch.com",
-            "domain:unityads.unity3d.com",
-            "domain:applovin.com",
-            "domain:applvn.com",
-            "domain:supersonicads.com",
-            "domain:chartboost.com",
-            "domain:vungle.com",
-            "domain:inmobi.com",
-            "domain:adcolony.com",
-            "domain:startappservice.com",
-            "domain:mopub.com"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "10.0.0.0/8",
-            "100.64.0.0/10",
-            "127.0.0.0/8",
-            "169.254.0.0/16",
-            "172.16.0.0/12",
-            "192.168.0.0/16",
-            "::1/128",
-            "fc00::/7",
-            "fe80::/10"
-          ],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "domain": [
-            "domain:instagram.com",
-            "domain:cdninstagram.com",
-            "domain:facebook.com",
-            "domain:facebook.net",
-            "domain:fbcdn.net",
-            "domain:fbsbx.com",
-            "domain:threads.net"
-          ],
-          "network": "udp",
-          "outboundTag": "block"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "network": "udp",
-          "outboundTag": "proxy"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "outboundTag": "proxy"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth"
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "nl-s-2.pythonmakemigreat.wiki",
-              "port": 61374,
-              "users": [
-                {
-                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "xhttp",
-          "security": "reality",
-          "xhttpSettings": {
-            "path": "/",
-            "host": "nl-s-1.pythonmakemigreat.wiki",
-            "mode": "packet-up",
-            "extra": {
-              "xmux": {
-                "maxConnections": 3
-              },
-              "xPaddingBytes": "100-500",
-              "scMaxBufferedPosts": 10,
-              "scMaxEachPostBytes": "500000-1000000",
-              "scMinPostsIntervalMs": "20-40"
-            }
-          },
-          "realitySettings": {
-            "serverName": "nl-s-2.pythonmakemigreat.wiki",
-            "fingerprint": "firefox",
-            "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-            "shortId": "",
-            "spiderX": "/"
-          }
-        },
-        "tag": "proxy"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "dns-out",
-        "protocol": "dns"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
-    "remarks": "🇺🇸 США №3"
-  },
-  {
-    "dns": {
-      "tag": "dns-module",
-      "servers": [
-        {
-          "address": "77.88.8.8",
-          "domains": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "skipFallback": true
-        },
-        "https://1.1.1.1/dns-query",
-        "https://8.8.8.8/dns-query"
-      ],
-      "disableCache": false,
-      "queryStrategy": "UseIPv4"
-    },
-    "log": {
-      "loglevel": "none"
-    },
-    "policy": {
-      "levels": {
-        "0": {
-          "connIdle": 300,
-          "handshake": 4
-        }
-      },
-      "system": {
-        "statsOutboundUplink": false,
-        "statsOutboundDownlink": false
-      }
-    },
-    "routing": {
-      "rules": [
-        {
-          "ip": [
-            "77.88.8.8",
-            "77.88.8.1"
-          ],
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "inboundTag": [
-            "dns-module"
-          ],
-          "outboundTag": "proxy"
-        },
-        {
-          "port": 53,
-          "type": "field",
-          "outboundTag": "dns-out"
-        },
-        {
-          "type": "field",
-          "protocol": [
-            "bittorrent"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:doubleclick.net",
-            "domain:googlesyndication.com",
-            "domain:googleadservices.com",
-            "domain:adservice.google.com",
-            "domain:googletagservices.com",
-            "domain:an.yandex.ru",
-            "domain:yabs.yandex.ru",
-            "domain:adfox.ru",
-            "domain:adfox.yandex.ru",
-            "domain:yandexadexchange.net",
-            "domain:ad.mail.ru",
-            "domain:ads.vk.com",
-            "domain:adnxs.com",
-            "domain:criteo.com",
-            "domain:criteo.net",
-            "domain:taboola.com",
-            "domain:outbrain.com",
-            "domain:amazon-adsystem.com",
-            "domain:adsrvr.org",
-            "domain:rubiconproject.com",
-            "domain:pubmatic.com",
-            "domain:openx.net",
-            "domain:moatads.com",
-            "domain:smartadserver.com",
-            "domain:bidswitch.net",
-            "domain:scorecardresearch.com",
-            "domain:unityads.unity3d.com",
-            "domain:applovin.com",
-            "domain:applvn.com",
-            "domain:supersonicads.com",
-            "domain:chartboost.com",
-            "domain:vungle.com",
-            "domain:inmobi.com",
-            "domain:adcolony.com",
-            "domain:startappservice.com",
-            "domain:mopub.com"
-          ],
-          "outboundTag": "block"
-        },
-        {
-          "ip": [
-            "10.0.0.0/8",
-            "100.64.0.0/10",
-            "127.0.0.0/8",
-            "169.254.0.0/16",
-            "172.16.0.0/12",
-            "192.168.0.0/16",
-            "::1/128",
-            "fc00::/7",
-            "fe80::/10"
-          ],
-          "type": "field",
-          "outboundTag": "direct"
-        },
-        {
-          "type": "field",
-          "domain": [
-            "domain:ru",
-            "domain:su",
-            "domain:xn--p1ai",
-            "domain:xn--p1acf",
-            "domain:xn--80adxhks",
-            "domain:moscow",
-            "domain:tatar",
-            "domain:vk.com",
-            "domain:vk.me",
-            "domain:vkuser.net",
-            "domain:userapi.com",
-            "domain:vk-cdn.net",
-            "domain:vkuservideo.net",
-            "domain:vkuseraudio.net",
-            "domain:vk-portal.net",
-            "domain:mycdn.me",
-            "domain:vkontakte.com",
-            "domain:yandex.net",
-            "domain:yandex.com",
-            "domain:yastatic.net",
-            "domain:yandexcloud.net",
-            "domain:yandex.by",
-            "domain:yandex.kz",
-            "domain:turbopages.org",
-            "domain:mradx.net",
-            "domain:ozon.com",
-            "domain:ozonusercontent.com",
-            "domain:wbstatic.net",
-            "domain:wbcontent.net",
-            "domain:avito.st",
-            "domain:sberbank.com",
-            "domain:2gis.com",
-            "domain:qiwi.com",
-            "domain:okko.tv",
-            "domain:more.tv",
-            "domain:premier.one",
-            "domain:emias.info",
-            "domain:lenta.com",
-            "domain:pobeda.aero",
-            "domain:steamcontent.com"
-          ],
-          "outboundTag": "direct"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "domain": [
-            "domain:instagram.com",
-            "domain:cdninstagram.com",
-            "domain:facebook.com",
-            "domain:facebook.net",
-            "domain:fbcdn.net",
-            "domain:fbsbx.com",
-            "domain:threads.net"
-          ],
-          "network": "udp",
-          "outboundTag": "block"
-        },
-        {
-          "port": 443,
-          "type": "field",
-          "network": "udp",
-          "outboundTag": "proxy"
-        },
-        {
-          "type": "field",
-          "network": "tcp,udp",
-          "outboundTag": "proxy"
-        }
-      ],
-      "domainMatcher": "hybrid",
-      "domainStrategy": "AsIs"
-    },
-    "inbounds": [
-      {
-        "tag": "socks",
-        "port": 10808,
-        "listen": "127.0.0.1",
-        "protocol": "socks",
-        "settings": {
-          "udp": true,
-          "auth": "noauth"
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      },
-      {
-        "tag": "http",
-        "port": 10809,
-        "listen": "127.0.0.1",
-        "protocol": "http",
-        "settings": {
-          "allowTransparent": false
-        },
-        "sniffing": {
-          "enabled": true,
-          "routeOnly": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
-          ]
-        }
-      }
-    ],
-    "outbounds": [
-      {
-        "protocol": "vless",
-        "settings": {
-          "vnext": [
-            {
-              "address": "fi-b2.pythonsetupbib.online",
-              "port": 443,
-              "users": [
-                {
-                  "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                  "encryption": "none",
-                  "flow": "xtls-rprx-vision"
-                }
-              ]
-            }
-          ]
-        },
-        "streamSettings": {
-          "network": "tcp",
-          "security": "reality",
-          "realitySettings": {
-            "serverName": "fi-b2.pythonsetupbib.online",
-            "fingerprint": "firefox",
-            "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-            "shortId": "bdf5852d1423e694",
-            "spiderX": "/"
-          }
-        },
-        "tag": "proxy"
-      },
-      {
-        "tag": "block",
-        "protocol": "blackhole"
-      },
-      {
-        "tag": "direct",
-        "protocol": "freedom"
-      },
-      {
-        "tag": "dns-out",
-        "protocol": "dns"
-      }
-    ],
-    "burstObservatory": {
-      "pingConfig": {
-        "timeout": "5s",
-        "interval": "30s",
-        "sampling": 3,
-        "httpMethod": "HEAD",
-        "destination": "https://www.gstatic.com/generate_204"
-      },
-      "subjectSelector": [
-        "proxy"
-      ]
-    },
-    "remarks": "🇺🇸 США №4"
   }
 ]

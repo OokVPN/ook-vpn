@@ -280,25 +280,29 @@
         "vnext": [
           {
             "address": "194.146.223.27",
-            "port": 443,
+            "port": 8443,
             "users": [
               {
                 "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/v3/playlist/chunk",
+          "host": "idealista.com",
+          "mode": "stream-one"
+        },
         "realitySettings": {
-          "serverName": "theverge.com",
+          "serverName": "idealista.com",
           "fingerprint": "edge",
-          "publicKey": "d1hCrgQISDeQIzWAudFDhOZRH2kAdJZYirmGnmI_LAA",
-          "shortId": "06954fd1b0648c6f",
+          "publicKey": "fA__7DH2qV9GHvLGF_PclC4WSykvRFQzUneo4Fn3N00",
+          "shortId": "e0409925beaca288",
           "spiderX": "/"
         }
       },
