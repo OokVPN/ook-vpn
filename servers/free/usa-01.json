@@ -223,7 +223,7 @@
         "port": 443,
         "type": "field",
         "network": "udp",
-        "outboundTag": "proxy"
+        "outboundTag": "block"
       },
       {
         "type": "field",
@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "fi-b2.pythonsetupbib.online",
+            "address": "nl-s-2.pythonmakemigreat.wiki",
             "port": 443,
             "users": [
               {
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "fi-b2.pythonsetupbib.online",
+          "serverName": "nl-s-2.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "bdf5852d1423e694",
+          "shortId": "a3565610aa574a6e",
           "spiderX": "/"
         }
       },
@@ -317,17 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "burstObservatory": {
-    "pingConfig": {
-      "timeout": "5s",
-      "interval": "30s",
-      "sampling": 3,
-      "httpMethod": "HEAD",
-      "destination": "https://www.gstatic.com/generate_204"
-    },
-    "subjectSelector": [
-      "proxy"
-    ]
-  },
   "remarks": "🇺🇸 США №1"
 }
