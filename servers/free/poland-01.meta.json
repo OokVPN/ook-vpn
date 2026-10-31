@@ -6,8 +6,7 @@
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
-  "geoSource": "exit",
-  "sourceHash": "fb52d6af925928e35d522b54e11c07d10dc68d65a02d28ee3dd436e5ff16da62",
-  "reachable": true,
-  "source": 1
+  "geoSource": "cache",
+  "sourceHash": "565f1fa42f809525509190ebb4e9543646be40ec15f07d0cdf3bb286def96ea5",
+  "source": 2
 }

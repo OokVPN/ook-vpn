@@ -279,30 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "130.12.45.183",
-            "port": 8443,
+            "address": "fi-b2.pythonsetupbib.online",
+            "port": 443,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "nasa3.arsen.me",
-          "mode": "stream-one"
-        },
         "realitySettings": {
-          "serverName": "nasa3.arsen.me",
-          "fingerprint": "edge",
-          "publicKey": "FgOOgorEeEDvnyjVUg4U1AqvHz8hO0UJONa2E_S9Sjw",
-          "shortId": "3d519a50ff61dd4e",
+          "serverName": "fi-b2.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+          "shortId": "78f97d82e16aaad6",
           "spiderX": "/"
         }
       },

@@ -1,0 +1,12 @@
+{
+  "id": "germany-05",
+  "name": "🇩🇪 Германия №5",
+  "country": "DE",
+  "tier": "free",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "cache",
+  "sourceHash": "da3bd993aded8af14d576b98a61b3befbc544b2f20006288c3bdb785de8d1e36",
+  "source": 2
+}

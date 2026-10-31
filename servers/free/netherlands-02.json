@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "fl-b2.golangwikito.cfd",
+            "address": "fr.golangwikito.cfd",
             "port": 61374,
             "users": [
               {
@@ -295,7 +295,7 @@
         "security": "reality",
         "xhttpSettings": {
           "path": "/",
-          "host": "fl-b2.golangwikito.cfd",
+          "host": "fr.golangwikito.cfd",
           "mode": "packet-up",
           "extra": {
             "xmux": {
@@ -308,7 +308,7 @@
           }
         },
         "realitySettings": {
-          "serverName": "fl-b2.golangwikito.cfd",
+          "serverName": "fr.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "40a4b9403abe554c",

@@ -279,30 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "31.58.235.32",
-            "port": 8443,
+            "address": "pl-b1.golangwikito.cfd",
+            "port": 443,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "wellvps.com",
-          "mode": "stream-one"
-        },
         "realitySettings": {
-          "serverName": "wellvps.com",
-          "fingerprint": "edge",
-          "publicKey": "2Dttk8wiTIu9rLKr5kUMt5hrWrZ_WMrtrRAnegULQTU",
-          "shortId": "",
+          "serverName": "pl-b1.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
+          "shortId": "4df7c47222f104ba",
           "spiderX": "/"
         }
       },

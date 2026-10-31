@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "fi-b2.pythonsetupbib.online",
+            "address": "se-2-b1.pythonsetupbib.online",
             "port": 61374,
             "users": [
               {
@@ -295,7 +295,7 @@
         "security": "reality",
         "xhttpSettings": {
           "path": "/",
-          "host": "fi-b2.pythonsetupbib.online",
+          "host": "se-2-b1.pythonsetupbib.online",
           "mode": "packet-up",
           "extra": {
             "xmux": {
@@ -308,7 +308,7 @@
           }
         },
         "realitySettings": {
-          "serverName": "fi-b2.pythonsetupbib.online",
+          "serverName": "se-2-b1.pythonsetupbib.online",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "",

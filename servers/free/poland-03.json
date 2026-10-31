@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "pl-b1.golangwikito.cfd",
+            "address": "cz.pythonmakemigreat.wiki",
             "port": 61374,
             "users": [
               {
@@ -295,7 +295,7 @@
         "security": "reality",
         "xhttpSettings": {
           "path": "/",
-          "host": "pl-b1.golangwikito.cfd",
+          "host": "cz.pythonmakemigreat.wiki",
           "mode": "packet-up",
           "extra": {
             "xmux": {
@@ -308,7 +308,7 @@
           }
         },
         "realitySettings": {
-          "serverName": "pl-b1.golangwikito.cfd",
+          "serverName": "cz.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "",
