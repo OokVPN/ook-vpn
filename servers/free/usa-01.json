@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "193.8.112.21",
+            "address": "fi-b2.pythonsetupbib.online",
             "port": 443,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "pay-mora.com",
-          "fingerprint": "edge",
-          "publicKey": "-Z4ARYlSJ470iYtKJG-CK6wrqLdOAHHnK3e4h1WmNmA",
-          "shortId": "f3fd0e4bea13a0da",
+          "serverName": "fi-b2.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+          "shortId": "bdf5852d1423e694",
           "spiderX": "/"
         }
       },
