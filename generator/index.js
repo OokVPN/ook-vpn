@@ -396,6 +396,29 @@ function makeStream(network, security, p, host) {
   if (security === "tls") { out.tlsSettings = { serverName:p.sni || host, fingerprint:p.fp || "chrome", alpn:p.alpn ? String(p.alpn).split(",") : ["h2","http/1.1"] }; if (truthyParam(p.allowInsecure)) out.tlsSettings.allowInsecure = true; if (p.pcs) out.tlsSettings.pinnedPeerCertSha256 = p.pcs; if (p.ech) out.tlsSettings.echConfigList = p.ech; }
   return out;
 }
+const NAME_FLAGS_RE = /[\u{1F1E6}-\u{1F1FF}]/gu;
+const CONNECTION_TOKENS = [
+  { label:"LTE", re:/(?:^|[^a-zа-я0-9])lte(?![a-zа-я0-9])/i, slug:"lte" },
+  { label:"5G", re:/(?:^|[^a-zа-я0-9])5g(?![a-zа-я0-9])/i, slug:"5g" },
+  { label:"4G", re:/(?:^|[^a-zа-я0-9])4g(?![a-zа-я0-9])/i, slug:"4g" },
+  { label:"3G", re:/(?:^|[^a-zа-я0-9])3g(?![a-zа-я0-9])/i, slug:"3g" },
+  { label:"Wi-Fi", re:/wi-?fi|вай-?фай/i, slug:"wifi" }
+];
+const CATEGORY_TOKENS = [
+  { label:"Обход", re:/обход|глушил/i, slug:"bypass" },
+  { label:"БС", re:/белы[а-я]*\s+списк|(?:^|[^a-zа-я0-9])бс(?![a-zа-я0-9])|white\s*-?\s*list/i, slug:"wl" },
+  { label:"Все операторы", re:/вс[её]\s+оператор/i, slug:"allops" }
+];
+const JAMMER_RE = /глушил/i;
+const YOUTUBE_RE = /youtube|ютуб|ютьюб|you\s+tube/i;
+function classifyName(raw) {
+  const text = String(raw ?? "").replace(NAME_FLAGS_RE, " ").replace(/ё/gi, (m) => (m === "Ё" ? "Е" : "е"));
+  const connections = CONNECTION_TOKENS.filter((t) => t.re.test(text));
+  const categories = CATEGORY_TOKENS.filter((t) => t.re.test(text));
+  const jammer = JAMMER_RE.test(text);
+  if (jammer && !connections.some((t) => t.label === "LTE")) connections.unshift(CONNECTION_TOKENS.find((t) => t.label === "LTE"));
+  return { connections, categories, youtube: YOUTUBE_RE.test(text), antenna: jammer || String(raw ?? "").includes("📡") };
+}
 function detectCountryStrict(text = "") {
   const s = String(text).toLocaleLowerCase("ru-RU");
   for (const c of COUNTRIES) if (c.matches.some((m) => s.includes(m)) || new RegExp(`(^|[-_\\s])${c.code.toLowerCase()}($|[-_\\s])`, "i").test(s)) return c;
@@ -409,24 +432,28 @@ function countryByCode(code) {
   try { ru = new Intl.DisplayNames(["ru"], { type:"region" }).of(c); en = new Intl.DisplayNames(["en"], { type:"region" }).of(c); } catch { return null; }
   if (!ru || !en || ru === c || en === c) return null;
   const flag = String.fromCodePoint(...[...c].map((ch) => 0x1F1E6 + ch.charCodeAt(0) - 65));
-  const slug = en.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || c.toLowerCase();
-  return { code:c, slug, flag, name:ru, matches:[] };
+  const shortName = ru.replace(/\s*\([^)]*\)/g, "").trim() || ru;
+  const slug = en.replace(/\s*\([^)]*\)/g, "").replace(/\s+SAR(?:\s+China)?$/i, "").toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || c.toLowerCase();
+  return { code:c, slug, flag, name:shortName, matches:[] };
 }
 function primaryOutbound(config) {
   const arr = Array.isArray(config?.outbounds) ? config.outbounds : [];
   return arr.find((o) => o?.tag === "proxy" && !isService(o)) || arr.find((o) => !isService(o) && !/^node-/i.test(String(o?.tag || "")) && (o?.protocol || o?.settings));
 }
 function isTemplateNode(o) { return typeof o?.tag === "string" && /^node-/i.test(o.tag) && !isService(o); }
+function placeholderTagSet(template) {
+  return new Set((template?.outbounds || []).filter((o) => o?.tag && !isService(o) && isProxyOutbound(o) && isPlaceholderOutbound(o)).map((o) => o.tag));
+}
 function makeIndividualConfig(template, outbound, templateTags, deps = []) {
   const result = structuredClone(template); const selected = structuredClone(outbound); selected.tag = "proxy";
   const hops = (deps || []).map((d) => structuredClone(d)); const hopTags = new Set(hops.map((d) => d.tag));
   result.outbounds = [selected, ...hops, ...(result.outbounds || []).filter((o) => !isTemplateNode(o) && !templateTags.has(o?.tag) && o?.tag !== "proxy" && !hopTags.has(o?.tag))];
   if (result.routing) {
     delete result.routing.balancers;
-    if (Array.isArray(result.routing.rules)) result.routing.rules = result.routing.rules.map((r0) => { const r = structuredClone(r0); if (Object.hasOwn(r,"balancerTag")) { delete r.balancerTag; r.outboundTag = "proxy"; } else if (templateTags.has(r.outboundTag) || String(r.outboundTag || "").startsWith("node-")) r.outboundTag = "proxy"; return r; });
+    const deadTags = placeholderTagSet(template);
+    if (Array.isArray(result.routing.rules)) result.routing.rules = result.routing.rules.map((r0) => { const r = structuredClone(r0); if (deadTags.has(r.outboundTag)) r.outboundTag = "block"; else if (Object.hasOwn(r,"balancerTag")) { delete r.balancerTag; r.outboundTag = "proxy"; } else if (templateTags.has(r.outboundTag) || String(r.outboundTag || "").startsWith("node-")) r.outboundTag = "proxy"; return r; });
   }
-  if (result.observatory) result.observatory.subjectSelector = ["proxy"];
-  if (result.burstObservatory) result.burstObservatory.subjectSelector = ["proxy"];
+  delete result.observatory; delete result.burstObservatory;
   return result;
 }
 function cleanTemplateForAuto(template, profiles) {
@@ -450,6 +477,8 @@ function cleanTemplateForAuto(template, profiles) {
   if (!balancer) { balancer = { tag:"PROXY", selector:[], strategy:{ type:"leastLoad" } }; auto.routing.balancers = [balancer]; }
   balancer.selector = tags; balancer.fallbackTag = tags[0];
   auto.routing.balancers = [balancer];
+  const deadTags = placeholderTagSet(template);
+  if (Array.isArray(auto.routing.rules)) for (const r of auto.routing.rules) if (deadTags.has(r.outboundTag)) r.outboundTag = "block";
   if (auto.observatory) auto.observatory.subjectSelector = tags;
   if (auto.burstObservatory) auto.burstObservatory.subjectSelector = tags;
   return { config:auto, tags };
@@ -498,19 +527,34 @@ async function run() {
   const maxRatio = Number(process.env.GEO_MAX_DROP_RATIO ?? 0.5);
   if (toDrop && sourceNodes.length >= 2 && toDrop / sourceNodes.length > maxRatio) throw new Error(`Страну не удалось определить у ${toDrop} из ${sourceNodes.length} узлов (порог ${Math.round(maxRatio * 100)}%): похоже на сбой GeoIP/сети, а не на мёртвые серверы. Старые файлы не очищены.`);
   if (toDrop) console.log(`Отброшено как нерабочие: ${toDrop} (не отвечают: ${geoStats.dead}, страна не определена: ${geoStats.unknown})`);
-  const counts = new Map(); const seen = new Set(); const generated = [];
+  const seen = new Set(); const entries = [];
   for (let i = 0; i < sourceNodes.length; i++) {
     const node = sourceNodes[i]; const g = geo[i];
     if (requireCountry && g.drop) continue;
     const hash = nodeFingerprint(node.outbound, node.deps); if (seen.has(hash)) continue; seen.add(hash);
     const named = detectCountryStrict(`${node.name || ""} ${node.sourceTag || ""}`); const byGeo = g.code ? countryByCode(g.code) : null;
     let c = OTHER_COUNTRY; let geoSource = "none";
-    if (byGeo && (g.source === "override" || g.source === "exit")) { c = byGeo; geoSource = g.source; }
+    if (byGeo) { c = byGeo; geoSource = g.source; }
     else if (named) { c = named; geoSource = "name"; }
-    else if (byGeo) { c = byGeo; geoSource = g.source; }
-    const n = (counts.get(c.code) || 0) + 1; counts.set(c.code, n);
-    const id = `${c.slug}-${String(n).padStart(2,"0")}`; const existingMetaPath = path.join(FREE_DIR,`${id}.meta.json`); let existing = null; try { if (fs.existsSync(existingMetaPath)) existing = readJson(existingMetaPath); } catch {}
-    const name = `${c.flag} ${c.name} №${n}`; const meta = { id, name, country:c.code, tier:"free", enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", geoSource, sourceHash:hash };
+    const cls = classifyName(node.name || ""); const special = cls.categories.length > 0;
+    const labels = special ? [...cls.connections, ...cls.categories].map((t) => t.label) : [];
+    if (cls.youtube && special) labels.push("[YouTube]");
+    const kind = special ? "special" : cls.youtube ? "youtube" : "standard";
+    const nameBase = special ? `${c.flag} ${labels.join(" | ")}` : cls.youtube ? `${c.flag} ${c.name} | [YouTube]` : `${c.flag} ${c.name}`;
+    const kindSlug = special ? [...cls.connections, ...cls.categories].map((t) => t.slug).concat(cls.youtube ? ["yt"] : []).join("-") : cls.youtube ? "yt" : "";
+    entries.push({ node, g, hash, c, geoSource, cls, kind, labels, nameBase: `${c.code}|${nameBase}`, nameText: nameBase, idBase: kindSlug ? `${c.slug}-${kindSlug}` : c.slug });
+  }
+  const nameTotals = new Map(); for (const e of entries) nameTotals.set(e.nameBase, (nameTotals.get(e.nameBase) || 0) + 1);
+  const nameCounts = new Map(); const idCounts = new Map(); const generated = [];
+  for (const e of entries) {
+    const { node, g, hash, c, geoSource, cls, kind } = e;
+    const n = (nameCounts.get(e.nameBase) || 0) + 1; nameCounts.set(e.nameBase, n);
+    const k = (idCounts.get(e.idBase) || 0) + 1; idCounts.set(e.idBase, k);
+    const id = `${e.idBase}-${String(k).padStart(2,"0")}`; const existingMetaPath = path.join(FREE_DIR,`${id}.meta.json`); let existing = null; try { if (fs.existsSync(existingMetaPath)) existing = readJson(existingMetaPath); } catch {}
+    const showNumber = kind === "standard" || nameTotals.get(e.nameBase) > 1;
+    const name = `${e.nameText}${showNumber ? ` №${n}` : ""}${kind === "special" && cls.antenna ? " 📡" : ""}`;
+    const meta = { id, name, country:c.code, tier:"free", kind, enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", geoSource, sourceHash:hash };
+    if (e.labels.length) meta.labels = e.labels;
     if (g.reachable !== null) meta.reachable = g.reachable;
     if (node.sourceIndex && urls.length > 1) meta.source = node.sourceIndex;
     const config = makeIndividualConfig(template,node.outbound,templateTags,node.deps); config.remarks = name;
@@ -518,7 +562,7 @@ async function run() {
   }
   if (!generated.length) throw new Error("Все узлы отфильтрованы; старые файлы сохранены.");
   const newIds = generated.map((x) => x.id); const keep = new Set(newIds); const removed = [];
-  const isGeneratedMeta = (id, meta) => { if (!meta || meta.manual === true) return false; if (meta.generatedBy === "upstream") return true; if (meta.generatedBy) return false; return /-\d{2}$/.test(id) && /№\s*\d+\s*$/.test(String(meta.name || "")); };
+  const isGeneratedMeta = (id, meta) => { if (!meta || meta.manual === true) return false; if (meta.generatedBy === "upstream") return true; if (meta.generatedBy) return false; return /-\d{2}$/.test(id) && /№\s*\d+\s*(?:📡)?\s*$/u.test(String(meta.name || "")); };
   const staleIds = new Set(oldIds.filter((id) => id !== "auto"));
   for (const f of fs.readdirSync(FREE_DIR)) {
     if (f.startsWith(".") || !f.endsWith(".meta.json")) continue;
