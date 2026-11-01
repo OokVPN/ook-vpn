@@ -14,6 +14,8 @@ const AUTO_TEMPLATE_PATH = path.join(ROOT, "generator/templates/auto.json");
 const MANIFEST_PATH = path.join(FREE_DIR, ".generated-servers.json");
 const GEO_CACHE_PATH = path.join(FREE_DIR, ".geo-cache.json");
 const GEO_OVERRIDES_PATH = path.join(ROOT, "servers/geo-overrides.json");
+const EXCLUDE_PATH = path.join(ROOT, "servers/exclude.json");
+const GENERATOR_VERSION = "2026-10-30.7 (названия, exclude.json, очистка по источникам)";
 const OTHER_COUNTRY = { code:"UN", slug:"other", flag:"🌐", name:"Другой регион", matches:[] };
 const SUPPORTED_URI = /^(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i;
 function normalizeSponsorText(value) {
@@ -491,7 +493,23 @@ function loadPremium() {
   });
 }
 function sortProfiles(items, order = []) { const p = new Map(order.map((id,i) => [id,i])); return items.sort((a,b) => (p.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (p.get(b.id) ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id)); }
+function loadExclude() {
+  try {
+    if (!fs.existsSync(EXCLUDE_PATH)) return { hosts: new Set(), names: [] };
+    const raw = readJson(EXCLUDE_PATH);
+    const list = Array.isArray(raw) ? raw : [...(raw.hosts || []), ...(raw.names || []).map((n) => `name:${n}`)];
+    const hosts = new Set(); const names = [];
+    for (const item of list) { const v = String(item || "").trim().toLowerCase(); if (!v) continue; if (v.startsWith("name:")) names.push(normalizeSponsorText(v.slice(5))); else hosts.add(v); }
+    return { hosts, names };
+  } catch (error) { console.warn(`servers/exclude.json: ${error.message}`); return { hosts: new Set(), names: [] }; }
+}
+function isExcluded(node, exclude) {
+  const ep = endpointOf(node.outbound); const host = String(ep?.address || "").toLowerCase();
+  if (host && (exclude.hosts.has(host) || exclude.hosts.has(`${host}:${ep.port}`))) return true;
+  const name = normalizeSponsorText(node.name || ""); return Boolean(name) && exclude.names.some((n) => name.includes(n));
+}
 async function run() {
+  console.log(`Генератор: ${GENERATOR_VERSION}`);
   fs.mkdirSync(FREE_DIR,{recursive:true}); fs.mkdirSync(PREMIUM_DIR,{recursive:true}); fs.mkdirSync(OUTPUT_DIR,{recursive:true});
   if (!fs.existsSync(AUTO_TEMPLATE_PATH)) throw new Error("Не найден generator/templates/auto.json.");
   if (!fs.existsSync(AUTO_META_PATH)) throw new Error("Не найден servers/free/auto.meta.json.");
@@ -499,14 +517,14 @@ async function run() {
   if (autoMeta.enabled === false) throw new Error("AUTO отключён в servers/free/auto.meta.json.");
   const urls = upstreamUrls();
   if (!urls.length) throw new Error("Не задан FREE_UPSTREAM_URL. Добавь ссылку (или несколько, по одной в строке) в GitHub Secrets → Actions.");
-  const sourceNodes = []; const mergedHashes = new Set(); let failedSources = 0; let crossDuplicates = 0; const totalStats = { placeholder:0, sponsor:0 };
+  const sourceNodes = []; const mergedHashes = new Set(); let failedSources = 0; const failedIndexes = new Set(); let crossDuplicates = 0; const totalStats = { placeholder:0, sponsor:0 };
   for (let k = 0; k < urls.length; k++) {
     const label = urls.length > 1 ? `Источник ${k + 1}/${urls.length}` : "";
     resetStats(); let nodes = [];
     try {
       const raw = await fetchSource(urls[k], label); nodes = parseSource(raw); logPayload(raw, nodes.length, label);
       if (!nodes.length) throw new Error(`${label ? `${label}: ` : ""}не найдено прокси-узлов`);
-    } catch (error) { failedSources++; console.warn(`${label ? `${label}: ` : ""}пропущен: ${error.message}`); continue; }
+    } catch (error) { failedSources++; failedIndexes.add(k + 1); console.warn(`${label ? `${label}: ` : ""}пропущен: ${error.message}`); continue; }
     totalStats.placeholder += STATS.placeholderDropped; totalStats.sponsor += STATS.sponsorDropped + STATS.uriSponsor;
     let added = 0;
     for (const node of nodes) { const h = nodeFingerprint(node.outbound, node.deps); if (mergedHashes.has(h)) { crossDuplicates++; continue; } mergedHashes.add(h); sourceNodes.push({ ...node, sourceIndex:k + 1 }); added++; }
@@ -515,6 +533,10 @@ async function run() {
   STATS.placeholderDropped = totalStats.placeholder;
   if (urls.length > 1) console.log(`Источников: ${urls.length}, не сработало: ${failedSources}, общих узлов между источниками: ${crossDuplicates}`);
   if (!sourceNodes.length) throw new Error("Ни один источник не дал прокси-узлов. Старые файлы не очищены.");
+  const exclude = loadExclude(); let excludedCount = 0;
+  for (let i = sourceNodes.length - 1; i >= 0; i--) if (isExcluded(sourceNodes[i], exclude)) { sourceNodes.splice(i, 1); excludedCount++; }
+  if (excludedCount) console.log(`Исключено по servers/exclude.json: ${excludedCount}`);
+  if (!sourceNodes.length) throw new Error("После exclude.json не осталось узлов. Старые файлы не очищены.");
   if (failedSources && process.env.UPSTREAM_REQUIRE_ALL === "1") throw new Error(`Не сработало источников: ${failedSources}. Старые файлы не очищены (UPSTREAM_REQUIRE_ALL=1).`);
   const oldManifest = fs.existsSync(MANIFEST_PATH) ? readJson(MANIFEST_PATH) : { generated:[] };
   const oldIds = Array.isArray(oldManifest.generated) ? oldManifest.generated : [];
@@ -556,7 +578,7 @@ async function run() {
     const meta = { id, name, country:c.code, tier:"free", kind, enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", geoSource, sourceHash:hash };
     if (e.labels.length) meta.labels = e.labels;
     if (g.reachable !== null) meta.reachable = g.reachable;
-    if (node.sourceIndex && urls.length > 1) meta.source = node.sourceIndex;
+    if (node.sourceIndex) meta.source = node.sourceIndex;
     const config = makeIndividualConfig(template,node.outbound,templateTags,node.deps); config.remarks = name;
     writeJson(path.join(FREE_DIR,`${id}.json`),config); writeJson(existingMetaPath,meta); generated.push({id,config,meta});
   }
@@ -570,7 +592,10 @@ async function run() {
     let meta = null; try { meta = readJson(path.join(FREE_DIR, f)); } catch {}
     if (isGeneratedMeta(id, meta)) staleIds.add(id);
   }
-  if (failedSources) { console.log("Часть источников не сработала: устаревшие серверы не удаляются в этом запуске."); staleIds.clear(); }
+  if (failedSources) {
+    for (const id of [...staleIds]) { let m = null; try { m = readJson(path.join(FREE_DIR, `${id}.meta.json`)); } catch {} if (!m || !m.source || failedIndexes.has(m.source)) staleIds.delete(id); }
+    console.log(`Часть источников не сработала (${[...failedIndexes].join(", ")}): серверы этих источников и серверы без пометки источника не удаляются.`);
+  }
   for (const id of staleIds) if (!keep.has(id)) for (const ext of [".json",".meta.json"]) { const f = path.join(FREE_DIR,`${id}${ext}`); if (fs.existsSync(f)) { fs.unlinkSync(f); if (ext === ".json") removed.push(id); } }
   if (removed.length) console.log(`Удалены устаревшие серверы (${removed.length}): ${removed.sort().join(", ")}`);
   writeJson(MANIFEST_PATH,{generated:newIds});
@@ -584,6 +609,7 @@ async function run() {
   const premium = sortProfiles(loadPremium(),CONFIG.servers?.premiumOrder || []);
   writeJson(path.join(OUTPUT_DIR,"free.json"),free.map((x) => x.config)); writeJson(path.join(OUTPUT_DIR,"premium.json"),premium.map((x) => x.config));
   if (STATS.placeholderDropped) console.log(`Отброшено заглушек (127.0.0.1, 0000, порт 0): ${STATS.placeholderDropped}`);
+  for (const x of generated) console.log(`  • ${x.id}: ${x.meta.name} [страна: ${x.meta.geoSource}${x.meta.reachable === undefined ? "" : x.meta.reachable ? ", отвечает" : ", не отвечает"}${x.meta.source ? `, источник ${x.meta.source}` : ""}]`);
   console.log(`Узлов из источника: ${generated.length}`); console.log(`Узлов в AUTO: ${autoResult.tags.length}`); console.log(`Free-профилей: ${free.length}`); console.log(`Premium-профилей: ${premium.length}`); console.log("Генерация завершена.");
 }
 run().catch((error) => { console.error(`Ошибка генерации: ${error.message}`); process.exitCode = 1; });
