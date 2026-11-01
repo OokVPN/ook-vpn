@@ -3,10 +3,12 @@
   "name": "🇳🇱 Нидерланды №3",
   "country": "NL",
   "tier": "free",
+  "kind": "standard",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
-  "geoSource": "ip",
-  "sourceHash": "de1abe7c0a3e7722879e7d1b228f4eb26696e0efa06a9d02bc2d646292726145",
+  "geoSource": "exit",
+  "sourceHash": "55da5cf956ee6aa735ce50f2919512d3480df2e4c14498445f793d299db3dc39",
+  "reachable": true,
   "source": 2
 }
