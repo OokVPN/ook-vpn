@@ -243,7 +243,6 @@
           "node-hong-kong-sar-china-02",
           "node-netherlands-01",
           "node-poland-01",
-          "node-poland-02",
           "node-usa-02"
         ],
         "strategy": {
@@ -531,36 +530,6 @@
       "settings": {
         "vnext": [
           {
-            "address": "pl-b1.golangwikito.cfd",
-            "port": 443,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "pl-b1.golangwikito.cfd",
-          "fingerprint": "chrome",
-          "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
-          "shortId": "f8b695e5c59d028c",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-poland-01"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
             "address": "cz.pythonmakemigreat.wiki",
             "port": 443,
             "users": [
@@ -584,7 +553,7 @@
           "spiderX": "/"
         }
       },
-      "tag": "node-poland-02"
+      "tag": "node-poland-01"
     },
     {
       "protocol": "vless",
@@ -650,7 +619,6 @@
       "node-hong-kong-sar-china-02",
       "node-netherlands-01",
       "node-poland-01",
-      "node-poland-02",
       "node-usa-02"
     ]
   },
