@@ -279,39 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "fl-b2.golangwikito.cfd",
-            "port": 61374,
+            "address": "fr-b1.golangwikito.cfd",
+            "port": 443,
             "users": [
               {
                 "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none"
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "path": "/",
-          "host": "fl-b2.golangwikito.cfd",
-          "mode": "packet-up",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
         "realitySettings": {
-          "serverName": "fl-b2.golangwikito.cfd",
-          "fingerprint": "firefox",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "serverName": "fr-b1.golangwikito.cfd",
+          "fingerprint": "chrome",
+          "publicKey": "isYQuhKDrgc7IQ7G0LHywFnt57wffrkZ-er18DkVsBA",
+          "shortId": "e6d589857d1cec5e",
           "spiderX": "/"
         }
       },
