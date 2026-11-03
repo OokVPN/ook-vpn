@@ -239,8 +239,6 @@
           "node-estonia-02",
           "node-finland-01",
           "node-finland-02",
-          "node-finland-03",
-          "node-finland-04",
           "node-germany-01",
           "node-germany-02",
           "node-hong-kong-sar-china-01",
@@ -252,6 +250,8 @@
           "node-poland-02",
           "node-poland-03",
           "node-poland-04",
+          "node-sweden-01",
+          "node-sweden-02",
           "node-usa-02"
         ],
         "strategy": {
@@ -460,84 +460,11 @@
           "serverName": "fi-b2.pythonsetupbib.online",
           "fingerprint": "firefox",
           "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "bdf5852d1423e694",
+          "shortId": "a3565610aa574a6e",
           "spiderX": "/"
         }
       },
       "tag": "node-finland-02"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "se-2-b1.pythonsetupbib.online",
-            "port": 61374,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "security": "reality",
-        "xhttpSettings": {
-          "path": "/",
-          "host": "se-2-b1.pythonsetupbib.online",
-          "mode": "packet-up",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
-        "realitySettings": {
-          "serverName": "se-2-b1.pythonsetupbib.online",
-          "fingerprint": "firefox",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-finland-03"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "se-2-b1.pythonsetupbib.online",
-            "port": 443,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "se-2-b1.pythonsetupbib.online",
-          "fingerprint": "firefox",
-          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-          "shortId": "266e9b1bbaf6bba2",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-finland-04"
     },
     {
       "protocol": "vless",
@@ -576,7 +503,7 @@
           "serverName": "be.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
@@ -606,7 +533,7 @@
           "serverName": "be.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-          "shortId": "5f0e533560ec8582",
+          "shortId": "74de1ccddccaa017",
           "spiderX": "/"
         }
       },
@@ -713,7 +640,7 @@
           "serverName": "fl-b2.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -786,7 +713,7 @@
           "serverName": "fr.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "isYQuhKDrgc7IQ7G0LHywFnt57wffrkZ-er18DkVsBA",
-          "shortId": "e6d589857d1cec5e",
+          "shortId": "8f9235fe5ff67e58",
           "spiderX": "/"
         }
       },
@@ -932,11 +859,84 @@
           "serverName": "cz.pythonmakemigreat.wiki",
           "fingerprint": "safari",
           "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-          "shortId": "71d3e27e8115fab1",
+          "shortId": "6addc3f2d5de1eca",
           "spiderX": "/"
         }
       },
       "tag": "node-poland-04"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "se-2-b2.pythonsetupbib.online",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "se-2-b2.pythonsetupbib.online",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "se-2-b2.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-sweden-01"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "se-2-b2.pythonsetupbib.online",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "se-2-b2.pythonsetupbib.online",
+          "fingerprint": "firefox",
+          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
+          "shortId": "c9cf45cddb319c23",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-sweden-02"
     },
     {
       "protocol": "vless",
@@ -998,8 +998,6 @@
       "node-estonia-02",
       "node-finland-01",
       "node-finland-02",
-      "node-finland-03",
-      "node-finland-04",
       "node-germany-01",
       "node-germany-02",
       "node-hong-kong-sar-china-01",
@@ -1011,6 +1009,8 @@
       "node-poland-02",
       "node-poland-03",
       "node-poland-04",
+      "node-sweden-01",
+      "node-sweden-02",
       "node-usa-02"
     ]
   },

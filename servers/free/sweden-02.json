@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "se-2-b1.pythonsetupbib.online",
+            "address": "se-2-b2.pythonsetupbib.online",
             "port": 443,
             "users": [
               {
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "se-2-b1.pythonsetupbib.online",
+          "serverName": "se-2-b2.pythonsetupbib.online",
           "fingerprint": "firefox",
           "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-          "shortId": "266e9b1bbaf6bba2",
+          "shortId": "c9cf45cddb319c23",
           "spiderX": "/"
         }
       },
@@ -317,5 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇫🇮 Финляндия №4"
+  "remarks": "🇸🇪 Швеция №2"
 }
