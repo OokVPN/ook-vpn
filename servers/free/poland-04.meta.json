@@ -1,0 +1,14 @@
+{
+  "id": "poland-04",
+  "name": "🇵🇱 Польша №4",
+  "country": "PL",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "cache",
+  "sourceHash": "9d607d3711edb1441fd2b05c97029b55e70f05e02d11b042c6779b8263fb1b86",
+  "reachable": true,
+  "source": 2
+}
