@@ -239,18 +239,17 @@
           "node-estonia-02",
           "node-finland-01",
           "node-finland-02",
-          "node-germany-01",
-          "node-germany-02",
           "node-hong-kong-sar-china-01",
           "node-hong-kong-sar-china-02",
           "node-netherlands-01",
           "node-netherlands-02",
           "node-netherlands-03",
+          "node-netherlands-04",
+          "node-netherlands-05",
           "node-poland-01",
           "node-poland-02",
           "node-poland-03",
           "node-poland-04",
-          "node-sweden-01",
           "node-usa-02"
         ],
         "strategy": {
@@ -386,7 +385,7 @@
           "serverName": "ee.golangwikito.cfd",
           "fingerprint": "ios",
           "publicKey": "AfLfeA78ADz_3yXd0_bBW0syUkvawPYeq0kvY1c-zRw",
-          "shortId": "6051794d7ff7ae0e",
+          "shortId": "c1037eecbbb5e655",
           "spiderX": "/"
         }
       },
@@ -464,79 +463,6 @@
         }
       },
       "tag": "node-finland-02"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "be.golangwikito.cfd",
-            "port": 61374,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "security": "reality",
-        "xhttpSettings": {
-          "path": "/",
-          "host": "be.golangwikito.cfd",
-          "mode": "packet-up",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
-        "realitySettings": {
-          "serverName": "be.golangwikito.cfd",
-          "fingerprint": "firefox",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-germany-01"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "be.golangwikito.cfd",
-            "port": 443,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "be.golangwikito.cfd",
-          "fingerprint": "firefox",
-          "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-          "shortId": "7d3e668e0cb831f1",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-germany-02"
     },
     {
       "protocol": "vless",
@@ -650,6 +576,79 @@
       "settings": {
         "vnext": [
           {
+            "address": "be.golangwikito.cfd",
+            "port": 61374,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "host": "be.golangwikito.cfd",
+          "mode": "packet-up",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
+        "realitySettings": {
+          "serverName": "be.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-netherlands-02"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "be.golangwikito.cfd",
+            "port": 443,
+            "users": [
+              {
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "be.golangwikito.cfd",
+          "fingerprint": "firefox",
+          "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
+          "shortId": "74de1ccddccaa017",
+          "spiderX": "/"
+        }
+      },
+      "tag": "node-netherlands-03"
+    },
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
             "address": "fr.golangwikito.cfd",
             "port": 61374,
             "users": [
@@ -682,11 +681,11 @@
           "serverName": "fr.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
-      "tag": "node-netherlands-02"
+      "tag": "node-netherlands-04"
     },
     {
       "protocol": "vless",
@@ -712,11 +711,11 @@
           "serverName": "fr.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "isYQuhKDrgc7IQ7G0LHywFnt57wffrkZ-er18DkVsBA",
-          "shortId": "387e0dc7fea61dc4",
+          "shortId": "e6d589857d1cec5e",
           "spiderX": "/"
         }
       },
-      "tag": "node-netherlands-03"
+      "tag": "node-netherlands-05"
     },
     {
       "protocol": "vless",
@@ -785,7 +784,7 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
-          "shortId": "4df7c47222f104ba",
+          "shortId": "f8b695e5c59d028c",
           "spiderX": "/"
         }
       },
@@ -828,7 +827,7 @@
           "serverName": "cz.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -858,54 +857,11 @@
           "serverName": "cz.pythonmakemigreat.wiki",
           "fingerprint": "safari",
           "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-          "shortId": "3b306f15c6057d55",
+          "shortId": "6addc3f2d5de1eca",
           "spiderX": "/"
         }
       },
       "tag": "node-poland-04"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "se-2-b2.pythonsetupbib.online",
-            "port": 61374,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "security": "reality",
-        "xhttpSettings": {
-          "path": "/",
-          "host": "se-2-b2.pythonsetupbib.online",
-          "mode": "packet-up",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
-        "realitySettings": {
-          "serverName": "se-2-b2.pythonsetupbib.online",
-          "fingerprint": "firefox",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-sweden-01"
     },
     {
       "protocol": "vless",
@@ -967,18 +923,17 @@
       "node-estonia-02",
       "node-finland-01",
       "node-finland-02",
-      "node-germany-01",
-      "node-germany-02",
       "node-hong-kong-sar-china-01",
       "node-hong-kong-sar-china-02",
       "node-netherlands-01",
       "node-netherlands-02",
       "node-netherlands-03",
+      "node-netherlands-04",
+      "node-netherlands-05",
       "node-poland-01",
       "node-poland-02",
       "node-poland-03",
       "node-poland-04",
-      "node-sweden-01",
       "node-usa-02"
     ]
   },
