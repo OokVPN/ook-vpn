@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "fi-b2.pythonsetupbib.online",
+            "address": "fi-b1.golangwikito.cfd",
             "port": 61374,
             "users": [
               {
@@ -295,7 +295,7 @@
         "security": "reality",
         "xhttpSettings": {
           "path": "/",
-          "host": "fi-b2.pythonsetupbib.online",
+          "host": "fi-b1.golangwikito.cfd",
           "mode": "packet-up",
           "extra": {
             "xmux": {
@@ -308,7 +308,7 @@
           }
         },
         "realitySettings": {
-          "serverName": "fi-b2.pythonsetupbib.online",
+          "serverName": "fi-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "",
