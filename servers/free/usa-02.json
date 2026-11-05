@@ -223,7 +223,7 @@
         "port": 443,
         "type": "field",
         "network": "udp",
-        "outboundTag": "proxy"
+        "outboundTag": "block"
       },
       {
         "type": "field",
@@ -279,30 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "193.8.112.21",
-            "port": 8443,
+            "address": "nl-s-2-b1.pythonmakemigreat.wiki",
+            "port": 443,
             "users": [
               {
-                "id": "c41c1b16-11f5-42ca-842d-cc452c4db799",
-                "encryption": "none"
+                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "path": "/v3/playlist/chunk",
-          "host": "pay-mora.com",
-          "mode": "stream-one"
-        },
         "realitySettings": {
-          "serverName": "pay-mora.com",
-          "fingerprint": "edge",
-          "publicKey": "A7j0RYJSfkBkbYjoLJWZCm1HdNr17wWKPOG5vToPsmc",
-          "shortId": "eeeef14e2d6139e5",
+          "serverName": "nl-s-2-b1.pythonmakemigreat.wiki",
+          "fingerprint": "firefox",
+          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
+          "shortId": "78f97d82e16aaad6",
           "spiderX": "/"
         }
       },
@@ -321,17 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "burstObservatory": {
-    "pingConfig": {
-      "timeout": "5s",
-      "interval": "30s",
-      "sampling": 3,
-      "httpMethod": "HEAD",
-      "destination": "https://www.gstatic.com/generate_204"
-    },
-    "subjectSelector": [
-      "proxy"
-    ]
-  },
   "remarks": "🇺🇸 США №2"
 }

@@ -3,11 +3,12 @@
   "name": "🇺🇸 США №2",
   "country": "US",
   "tier": "free",
+  "kind": "standard",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
   "geoSource": "exit",
-  "sourceHash": "e4a85c9364f61780c9c56cb6affc9e2c3e17af9be4fbffb887e188c9b2713374",
+  "sourceHash": "4a718b8134551631608e2f29ce711c329cf40a00c479f32a82b3e7c9eb32f6e0",
   "reachable": true,
-  "source": 1
+  "source": 2
 }

@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "be.golangwikito.cfd",
+            "address": "fr.golangwikito.cfd",
             "port": 443,
             "users": [
               {
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "be.golangwikito.cfd",
+          "serverName": "fr.golangwikito.cfd",
           "fingerprint": "firefox",
-          "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-          "shortId": "01d2246b4bd92f49",
+          "publicKey": "isYQuhKDrgc7IQ7G0LHywFnt57wffrkZ-er18DkVsBA",
+          "shortId": "b855895687e50137",
           "spiderX": "/"
         }
       },
