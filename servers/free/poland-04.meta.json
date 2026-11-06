@@ -7,8 +7,8 @@
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
-  "geoSource": "cache",
-  "sourceHash": "3b209a70a507c415443d890817702d0aaee0fe1cd126157424276a17d5dfbec5",
-  "reachable": false,
+  "geoSource": "ip",
+  "sourceHash": "f9ac218013c3a7682260440d83636c4ad399e71909b8a5e613454164294ab8fa",
+  "reachable": true,
   "source": 2
 }
