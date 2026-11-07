@@ -253,7 +253,6 @@
           "node-poland-01",
           "node-poland-02",
           "node-poland-03",
-          "node-poland-04",
           "node-usa-01",
           "node-usa-02"
         ],
@@ -506,7 +505,7 @@
           "serverName": "se-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
@@ -652,7 +651,7 @@
           "serverName": "fl-b2.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
@@ -789,7 +788,7 @@
           "serverName": "be.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "6sEquzhND4g7HGZptDdnO-B0UjAKib9Pcjkd2_IoC2s",
-          "shortId": "01d2246b4bd92f49",
+          "shortId": "5f0e533560ec8582",
           "spiderX": "/"
         }
       },
@@ -905,7 +904,7 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -935,54 +934,11 @@
           "serverName": "pl-b1.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "DsTVLCehsKvfFGtNZU5leKOLTlEp28qeifHYtRKOFwg",
-          "shortId": "986ede37bf6925ae",
+          "shortId": "acccaaaa9f72147d",
           "spiderX": "/"
         }
       },
       "tag": "node-poland-02"
-    },
-    {
-      "protocol": "vless",
-      "settings": {
-        "vnext": [
-          {
-            "address": "cz-b1.pythonmakemigreat.wiki",
-            "port": 61374,
-            "users": [
-              {
-                "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "xhttp",
-        "security": "reality",
-        "xhttpSettings": {
-          "path": "/",
-          "host": "cz-b1.pythonmakemigreat.wiki",
-          "mode": "packet-up",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
-        "realitySettings": {
-          "serverName": "cz-b1.pythonmakemigreat.wiki",
-          "fingerprint": "firefox",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
-          "spiderX": "/"
-        }
-      },
-      "tag": "node-poland-03"
     },
     {
       "protocol": "vless",
@@ -1008,11 +964,11 @@
           "serverName": "cz-b1.pythonmakemigreat.wiki",
           "fingerprint": "safari",
           "publicKey": "YElt1bioVqHB6VIEFCqqiKFm9eLd2W8R8aqZAkkvUHg",
-          "shortId": "2171ecf33df62f7e",
+          "shortId": "71d3e27e8115fab1",
           "spiderX": "/"
         }
       },
-      "tag": "node-poland-04"
+      "tag": "node-poland-03"
     },
     {
       "protocol": "vless",
@@ -1081,7 +1037,7 @@
           "serverName": "nl-s-2-b1.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
           "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "78f97d82e16aaad6",
+          "shortId": "bdf5852d1423e694",
           "spiderX": "/"
         }
       },
@@ -1127,7 +1083,6 @@
       "node-poland-01",
       "node-poland-02",
       "node-poland-03",
-      "node-poland-04",
       "node-usa-01",
       "node-usa-02"
     ]
