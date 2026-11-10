@@ -1,0 +1,14 @@
+{
+  "id": "russia-01",
+  "name": "🇷🇺 Россия №1",
+  "country": "RU",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "ip",
+  "sourceHash": "35c0994fe25e91ea3a269a13b1c0a49391508c1fdebd58be964c0eb3f01f9bdd",
+  "reachable": true,
+  "source": 2
+}
