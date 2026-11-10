@@ -279,8 +279,8 @@
       "settings": {
         "vnext": [
           {
-            "address": "media.study.golangwikito.cfd",
-            "port": 8443,
+            "address": "fi-b2.golangwikito.cfd",
+            "port": 61374,
             "users": [
               {
                 "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
@@ -295,7 +295,7 @@
         "security": "reality",
         "xhttpSettings": {
           "path": "/",
-          "host": "fl-b2.golangwikito.cfd",
+          "host": "fi-b2.golangwikito.cfd",
           "mode": "packet-up",
           "extra": {
             "xmux": {
@@ -308,10 +308,10 @@
           }
         },
         "realitySettings": {
-          "serverName": "media.study.golangwikito.cfd",
+          "serverName": "fi-b2.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -330,5 +330,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇵🇱 Польша №5"
+  "remarks": "🇫🇮 Финляндия №1"
 }

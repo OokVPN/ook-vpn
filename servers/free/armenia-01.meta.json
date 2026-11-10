@@ -1,0 +1,14 @@
+{
+  "id": "armenia-01",
+  "name": "🇦🇲 Армения №1",
+  "country": "AM",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "ip",
+  "sourceHash": "5375ecaf142c95a6322439247fafb7e9df19dcbaf48b5b4025b5edd98d2a5cf1",
+  "reachable": true,
+  "source": 2
+}
