@@ -279,39 +279,26 @@
       "settings": {
         "vnext": [
           {
-            "address": "se-b1.golangwikito.cfd",
-            "port": 61374,
+            "address": "de-b1.pythonmakemigreat.wiki",
+            "port": 443,
             "users": [
               {
                 "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
-                "encryption": "none"
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
-        "xhttpSettings": {
-          "path": "/",
-          "host": "se-b1.golangwikito.cfd",
-          "mode": "packet-up",
-          "extra": {
-            "xmux": {
-              "maxConnections": 3
-            },
-            "xPaddingBytes": "100-500",
-            "scMaxBufferedPosts": 10,
-            "scMaxEachPostBytes": "500000-1000000",
-            "scMinPostsIntervalMs": "20-40"
-          }
-        },
         "realitySettings": {
-          "serverName": "se-b1.golangwikito.cfd",
+          "serverName": "de-b1.pythonmakemigreat.wiki",
           "fingerprint": "firefox",
-          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "publicKey": "5fkwwCKZzMsE6Eb_b3iqluu-1AWIfnYl-p0N3EL9Al8",
+          "shortId": "1b21fca2edd3872b",
           "spiderX": "/"
         }
       },
