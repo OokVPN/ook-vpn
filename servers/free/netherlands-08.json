@@ -307,7 +307,7 @@
           }
         },
         "realitySettings": {
-          "serverName": "video.study.golangwikito.cfd",
+          "serverName": "lessons.study.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "",
@@ -329,5 +329,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇫🇮 Финляндия №6"
+  "remarks": "🇳🇱 Нидерланды №8"
 }

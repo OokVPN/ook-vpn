@@ -279,7 +279,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "assets.study.golangwikito.cfd",
+            "address": "static.study.golangwikito.cfd",
             "port": 8443,
             "users": [
               {
@@ -308,10 +308,10 @@
           }
         },
         "realitySettings": {
-          "serverName": "assets.study.golangwikito.cfd",
+          "serverName": "static.study.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/"
         }
       },
@@ -330,5 +330,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇦🇲 Армения №2"
+  "remarks": "🇳🇱 Нидерланды №6"
 }

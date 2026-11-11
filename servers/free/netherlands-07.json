@@ -307,10 +307,10 @@
           }
         },
         "realitySettings": {
-          "serverName": "media.study.golangwikito.cfd",
+          "serverName": "static.study.golangwikito.cfd",
           "fingerprint": "firefox",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
-          "shortId": "40a4b9403abe554c",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -329,5 +329,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇷🇺 Россия №1"
+  "remarks": "🇳🇱 Нидерланды №7"
 }

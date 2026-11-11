@@ -1,0 +1,14 @@
+{
+  "id": "netherlands-06",
+  "name": "🇳🇱 Нидерланды №6",
+  "country": "NL",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "361e1afb6bfae27a45814e9a1b6a32a70288dc3783bd480135f9d751513751cc",
+  "reachable": true,
+  "source": 2
+}

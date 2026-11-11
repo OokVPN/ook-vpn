@@ -1,13 +1,13 @@
 {
-  "id": "russia-01",
-  "name": "🇷🇺 Россия №1",
-  "country": "RU",
+  "id": "poland-04",
+  "name": "🇵🇱 Польша №4",
+  "country": "PL",
   "tier": "free",
   "kind": "standard",
   "enabled": true,
   "auto": true,
   "generatedBy": "upstream",
-  "geoSource": "ip",
+  "geoSource": "exit",
   "sourceHash": "308d6ac1c1f79fb459876f45f4df93f5b4b52323a63343c273e1b62eca7de803",
   "reachable": true,
   "source": 2
