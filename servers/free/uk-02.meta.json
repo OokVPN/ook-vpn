@@ -1,0 +1,13 @@
+{
+  "id": "uk-02",
+  "name": "🇬🇧 Великобритания №2",
+  "country": "GB",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "ip",
+  "sourceHash": "cebb88bc00ff895c7921615b3e9fffefbe471631f0a33e4b54f39126b9104995",
+  "source": 2
+}

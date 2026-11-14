@@ -275,11 +275,12 @@
   ],
   "outbounds": [
     {
+      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "se-b1.golangwikito.cfd",
+            "address": "de-b1.pythonmakemigreat.wiki",
             "port": 443,
             "users": [
               {
@@ -293,16 +294,15 @@
       },
       "streamSettings": {
         "network": "tcp",
+        "tcpSettings": {},
         "security": "reality",
         "realitySettings": {
-          "serverName": "se-b1.golangwikito.cfd",
-          "fingerprint": "firefox",
-          "publicKey": "Kb8SsVPprs46BJSUNp5JvWLI-TFEiHmlBOXLQd37Glg",
-          "shortId": "c9cf45cddb319c23",
-          "spiderX": "/"
+          "serverName": "de-b1.pythonmakemigreat.wiki",
+          "publicKey": "5fkwwCKZzMsE6Eb_b3iqluu-1AWIfnYl-p0N3EL9Al8",
+          "shortId": "713e9e2cca714dfa",
+          "fingerprint": "firefox"
         }
-      },
-      "tag": "proxy"
+      }
     },
     {
       "tag": "block",

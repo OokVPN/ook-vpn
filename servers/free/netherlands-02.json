@@ -275,6 +275,7 @@
   ],
   "outbounds": [
     {
+      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
@@ -293,16 +294,15 @@
       },
       "streamSettings": {
         "network": "tcp",
+        "tcpSettings": {},
         "security": "reality",
         "realitySettings": {
           "serverName": "fr.golangwikito.cfd",
-          "fingerprint": "firefox",
           "publicKey": "isYQuhKDrgc7IQ7G0LHywFnt57wffrkZ-er18DkVsBA",
-          "shortId": "8f9235fe5ff67e58",
-          "spiderX": "/"
+          "shortId": "387e0dc7fea61dc4",
+          "fingerprint": "firefox"
         }
-      },
-      "tag": "proxy"
+      }
     },
     {
       "tag": "block",

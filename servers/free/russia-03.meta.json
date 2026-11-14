@@ -1,0 +1,14 @@
+{
+  "id": "russia-03",
+  "name": "🇷🇺 Россия №3",
+  "country": "RU",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "cache",
+  "sourceHash": "e077db08ba7e3a8b71eede10544b19b261474205bdf51e7126012cb5c13ae4cb",
+  "reachable": false,
+  "source": 2
+}

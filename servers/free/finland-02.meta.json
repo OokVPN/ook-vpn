@@ -1,0 +1,14 @@
+{
+  "id": "finland-02",
+  "name": "🇫🇮 Финляндия №2",
+  "country": "FI",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "ba8315ba31edc5f9275ef2bd7f2d05095d07d26052d708ca9c75718e867d167e",
+  "reachable": true,
+  "source": 2
+}
