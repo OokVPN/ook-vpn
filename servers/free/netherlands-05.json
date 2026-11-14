@@ -280,7 +280,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "static.study.golangwikito.cfd",
+            "address": "82.148.244.55",
             "port": 8443,
             "users": [
               {
@@ -296,7 +296,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "mode": "packet-up",
-          "host": "fl-b2.golangwikito.cfd",
+          "host": "",
           "path": "/",
           "extra": {
             "xmux": {

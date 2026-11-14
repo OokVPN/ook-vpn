@@ -310,7 +310,7 @@
         },
         "security": "reality",
         "realitySettings": {
-          "serverName": "assets.study.golangwikito.cfd",
+          "serverName": "media.study.golangwikito.cfd",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "spiderX": "/",
           "fingerprint": "firefox"

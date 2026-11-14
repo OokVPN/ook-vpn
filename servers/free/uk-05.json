@@ -310,8 +310,9 @@
         },
         "security": "reality",
         "realitySettings": {
-          "serverName": "static.study.golangwikito.cfd",
+          "serverName": "files.study.golangwikito.cfd",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
           "spiderX": "/",
           "fingerprint": "firefox"
         }
@@ -330,5 +331,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇳🇱 Нидерланды №6"
+  "remarks": "🇬🇧 Великобритания №5"
 }

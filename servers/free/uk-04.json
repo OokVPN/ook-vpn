@@ -280,26 +280,40 @@
       "settings": {
         "vnext": [
           {
-            "address": "fi-b2.golangwikito.cfd",
-            "port": 443,
+            "address": "82.148.244.55",
+            "port": 8443,
             "users": [
               {
                 "id": "f8d52ece-fad4-478d-875d-df6eed3befa7",
                 "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "flow": ""
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
+        "network": "xhttp",
+        "xhttpSettings": {
+          "mode": "packet-up",
+          "host": "",
+          "path": "/",
+          "extra": {
+            "xmux": {
+              "maxConnections": 3
+            },
+            "xPaddingBytes": "100-500",
+            "scMaxBufferedPosts": 10,
+            "scMaxEachPostBytes": "500000-1000000",
+            "scMinPostsIntervalMs": "20-40"
+          }
+        },
         "security": "reality",
         "realitySettings": {
-          "serverName": "fi-b2.golangwikito.cfd",
-          "publicKey": "ZqVz1kWNxh_5zQ5PPkoPHoaXQOvppM0ZyIo8uKp2dCg",
-          "shortId": "78f97d82e16aaad6",
+          "serverName": "lessons.study.golangwikito.cfd",
+          "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
+          "shortId": "40a4b9403abe554c",
+          "spiderX": "/",
           "fingerprint": "firefox"
         }
       }
@@ -317,5 +331,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇺🇸 США №2"
+  "remarks": "🇬🇧 Великобритания №4"
 }

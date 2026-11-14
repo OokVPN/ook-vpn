@@ -280,7 +280,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "lessons.study.golangwikito.cfd",
+            "address": "assets.study.golangwikito.cfd",
             "port": 8443,
             "users": [
               {
@@ -310,7 +310,7 @@
         },
         "security": "reality",
         "realitySettings": {
-          "serverName": "lessons.study.golangwikito.cfd",
+          "serverName": "assets.study.golangwikito.cfd",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "spiderX": "/",
           "fingerprint": "firefox"

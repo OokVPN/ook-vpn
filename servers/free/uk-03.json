@@ -310,7 +310,7 @@
         },
         "security": "reality",
         "realitySettings": {
-          "serverName": "files.study.golangwikito.cfd",
+          "serverName": "assets.study.golangwikito.cfd",
           "publicKey": "QrNs0ew7snHqLfpVXS9RAhlRzgAzzGZK9fXmDcx9xHI",
           "shortId": "40a4b9403abe554c",
           "spiderX": "/",
