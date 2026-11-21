@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
-import { endpointOf, isPlaceholderOutbound, resolveGeo, findXray, checkViaXray } from "./geo.js";
+import { endpointOf, isPlaceholderOutbound, resolveGeo, prepareChecks, verifyNodes } from "./geo.js";
 
 const ROOT = process.cwd();
 const CONFIG = readJson(path.join(ROOT, "config.json"));
@@ -15,7 +15,7 @@ const MANIFEST_PATH = path.join(FREE_DIR, ".generated-servers.json");
 const GEO_CACHE_PATH = path.join(FREE_DIR, ".geo-cache.json");
 const GEO_OVERRIDES_PATH = path.join(ROOT, "servers/geo-overrides.json");
 const EXCLUDE_PATH = path.join(ROOT, "servers/exclude.json");
-const GENERATOR_VERSION = "2026-11-19.1 (заголовки списка, обходы + LTE, только для TG)";
+const GENERATOR_VERSION = "2026-11-21.1 (проверка через российский опорный узел, keepalive, проверка ручных серверов)";
 const OTHER_COUNTRY = { code:"UN", slug:"other", flag:"🌐", name:"Другой регион", matches:[] };
 const SUPPORTED_URI = /^(?:vless|vmess|trojan|ss|hysteria2|hy2):\/\//i;
 function normalizeSponsorText(value) {
@@ -521,6 +521,48 @@ function loadPremium() {
   });
 }
 function sortProfiles(items, order = []) { const p = new Map(order.map((id,i) => [id,i])); return items.sort((a,b) => (p.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (p.get(b.id) ?? Number.MAX_SAFE_INTEGER) || a.id.localeCompare(b.id)); }
+// Russian vantage point: a known-good server in Russia. Taken from the RU_HOP_CONFIG secret
+// (preferred, keeps the keys out of the repository) or from health.tunnel.configFile.
+// Either a full Xray config or a vless:// link.
+function loadHop() {
+  const tcfg = CONFIG.health?.tunnel || {};
+  if (tcfg.enabled === false || process.env.HEALTH_TUNNEL === "0") return null;
+  let raw = String(process.env.RU_HOP_CONFIG || "").trim(); let from = "секрет RU_HOP_CONFIG";
+  if (!raw) {
+    const file = path.join(ROOT, tcfg.configFile || "generator/tunnel.json");
+    if (fs.existsSync(file)) { raw = fs.readFileSync(file, "utf8"); from = path.relative(ROOT, file); }
+  }
+  if (!raw) return null;
+  resetStats();
+  const nodes = parseSource(raw);
+  resetStats();
+  if (!nodes.length) { console.warn(`Опорный российский сервер (${from}): не найдено ни одного прокси-узла в конфиге.`); return null; }
+  return { outbound: nodes[0].outbound, deps: nodes[0].deps || [], name: nodes[0].name, from };
+}
+
+// Ready-made servers (manual and premium files) used to go straight into the subscription
+// without any check. They are verified the same way as the generated ones; a dead one is
+// left out of the output (its file on disk is not touched).
+async function dropDeadProfiles(profiles, label, ctx) {
+  const skip = (p) => ["auto", "tech"].includes(p.id) || String(p.id).startsWith("separator-");
+  const items = [];
+  for (const p of profiles) {
+    if (skip(p)) continue;
+    const outbound = primaryOutbound(p.config);
+    if (!outbound || isPlaceholderOutbound(outbound)) continue;
+    items.push({ profile: p, node: { outbound: structuredClone(outbound), deps: collectDeps(outbound, p.config.outbounds || []) } });
+  }
+  if (!items.length) return profiles;
+  const checked = await verifyNodes(items.map((x) => x.node), { ctx, health: CONFIG.health || {} });
+  const dead = new Set();
+  items.forEach((x, i) => {
+    if (checked[i].ok) return;
+    dead.add(x.profile.id);
+    console.log(`  ✗ [${label}] ${x.profile.id} (${String(x.profile.meta?.name || x.profile.config?.remarks || "").slice(0, 40)}) — ${checked[i].reason} [не попадёт в подписку]`);
+  });
+  if (dead.size) console.log(`Проверка серверов «${label}»: проверено ${items.length}, не прошли ${dead.size}`);
+  return profiles.filter((p) => !dead.has(p.id));
+}
 function loadExclude() {
   try {
     if (!fs.existsSync(EXCLUDE_PATH)) return { hosts: new Set(), names: [] };
@@ -536,31 +578,6 @@ function isExcluded(node, exclude) {
   if (host && (exclude.hosts.has(host) || exclude.hosts.has(`${host}:${ep.port}`))) return true;
   const name = normalizeSponsorText(node.name || ""); return Boolean(name) && exclude.names.some((n) => name.includes(n));
 }
-function loadExistingCandidates(mergedHashes) {
-  if (!fs.existsSync(FREE_DIR)) return [];
-  const existing = [];
-  const files = fs.readdirSync(FREE_DIR).filter((f) => !f.startsWith(".") && f.endsWith(".json") && !f.endsWith(".meta.json") && f !== "auto.json" && f !== "tech.json");
-  for (const f of files) {
-    try {
-      const config = readJson(path.join(FREE_DIR, f));
-      const outbound = (config.outbounds || []).find((o) => !isService(o) && isProxyOutbound(o));
-      if (!outbound) continue;
-      const deps = collectDeps(outbound, config.outbounds || []);
-      const h = nodeFingerprint(outbound, deps);
-      if (mergedHashes.has(h)) continue;
-      mergedHashes.add(h);
-      existing.push({
-        outbound: structuredClone(outbound),
-        deps,
-        name: String(config.remarks || f.slice(0, -5)),
-        sourceTag: f.slice(0, -5),
-        fromDisk: true
-      });
-    } catch {}
-  }
-  return existing;
-}
-
 async function run() {
   console.log(`Генератор: ${GENERATOR_VERSION}`);
   fs.mkdirSync(FREE_DIR,{recursive:true}); fs.mkdirSync(PREMIUM_DIR,{recursive:true}); fs.mkdirSync(OUTPUT_DIR,{recursive:true});
@@ -586,14 +603,6 @@ async function run() {
   STATS.placeholderDropped = totalStats.placeholder;
   if (totalStats.tg) console.log(`Исключено «только для TG»: ${totalStats.tg}`);
   if (urls.length > 1) console.log(`Источников: ${urls.length}, не сработало: ${failedSources}, общих узлов между источниками: ${crossDuplicates}`);
-
-  // Также добавляем кандидатов из существующих файлов серверов на диске, чтобы проверить и вычистить нерабочие
-  const existingCandidates = loadExistingCandidates(mergedHashes);
-  if (existingCandidates.length) {
-    console.log(`Кандидатов с диска (servers/free): ${existingCandidates.length}`);
-    sourceNodes.push(...existingCandidates);
-  }
-
   if (!sourceNodes.length) throw new Error("Ни один источник не дал прокси-узлов. Старые файлы не очищены.");
   const exclude = loadExclude(); let excludedCount = 0;
   for (let i = sourceNodes.length - 1; i >= 0; i--) if (isExcluded(sourceNodes[i], exclude)) { sourceNodes.splice(i, 1); excludedCount++; }
@@ -603,23 +612,12 @@ async function run() {
   const oldManifest = fs.existsSync(MANIFEST_PATH) ? readJson(MANIFEST_PATH) : { generated:[] };
   const oldIds = Array.isArray(oldManifest.generated) ? oldManifest.generated : [];
   const templateTags = new Set((template.outbounds || []).filter((o) => !isService(o) && (o.protocol || o.settings)).map((o) => o.tag).filter(Boolean));
-
-  // --- ЭТАП 1: Превращение ВСЕХ серверов в правильные и преобразованные конфиги ---
-  console.log(`Этап 1: Преобразование ВСЕХ узлов (${sourceNodes.length}) в полные рабочие конфиги...`);
-  for (let i = 0; i < sourceNodes.length; i++) {
-    const n = sourceNodes[i];
-    const cls = classifyName(n.name || "");
-    n.bypass = isBypassClass(cls);
-    n.cls = cls;
-    n.kind = n.bypass ? "bypass" : cls.youtube ? "youtube" : "standard";
-    // Превращаем узел в готовый конфиг Xray по правилам шаблона
-    n.fullConfig = makeIndividualConfig(template, n.outbound, templateTags, n.deps);
-  }
-  console.log(`Этап 1 завершён: создано ${sourceNodes.length} полноценных конфигураций.`);
-
-  // --- ЭТАП 2: Валидатор проверяет все конфиги через туннель (Happ keepalive) и отсекает нерабочие ---
-  console.log("Этап 2: Валидация серверов (Happ keepalive режим через туннель)...");
-  const { results: geo, stats: geoStats } = await resolveGeo(sourceNodes, { cacheFile:GEO_CACHE_PATH, overridesFile:GEO_OVERRIDES_PATH, health:CONFIG.health || {} });
+  for (const n of sourceNodes) n.bypass = isBypassClass(classifyName(n.name || ""));
+  const hop = loadHop();
+  if (!hop && CONFIG.health?.tunnel?.enabled !== false) console.warn("ВНИМАНИЕ: опорный российский сервер не задан (секрет RU_HOP_CONFIG или generator/tunnel.json): серверы проверяются напрямую из GitHub и могут оказаться недоступными из России.");
+  const checks = await prepareChecks({ health:CONFIG.health || {}, hop });
+  if (checks.hopInfo) console.log(`Опорный российский сервер: ${String(hop.name || "").slice(0, 40)} (${hop.from}) — работает, выход ${checks.hopInfo.exitIp || "?"}, ${checks.hopInfo.latency || "?"} мс. Режим: ${CONFIG.health?.tunnel?.mode || "only"} (все серверы проверяются через него).`);
+  const { results: geo, stats: geoStats } = await resolveGeo(sourceNodes, { cacheFile:GEO_CACHE_PATH, overridesFile:GEO_OVERRIDES_PATH, health:CONFIG.health || {}, ctx:checks });
   console.log(`Страны: xray=${geoStats.xrayUsed ? "да" : "нет"}, по выходу=${geoStats.exit}, по IP сервера=${geoStats.ip}, из кэша=${geoStats.cache}, ручные=${geoStats.override}, не определено=${geoStats.none}`);
   if (!geoStats.xrayUsed) {
     if (process.env.HEALTH_REQUIRE_XRAY === "1") throw new Error("Xray не найден: проверка серверов на работоспособность невозможна. Старые файлы не очищены (HEALTH_REQUIRE_XRAY=1).");
@@ -635,197 +633,91 @@ async function run() {
   // Dead / unconfirmed servers are always removed; "country unknown" only when GEO_REQUIRE_COUNTRY is on.
   const mustDrop = (g) => g.drop && (requireCountry || g.reason === "dead" || g.reason === "unchecked");
   const toDrop = geo.filter(mustDrop).length;
-  const maxRatio = Number(process.env.GEO_MAX_DROP_RATIO ?? CONFIG.health?.maxDropRatio ?? 0.85);
-  if (toDrop && sourceNodes.length >= 2 && toDrop / sourceNodes.length > maxRatio && (sourceNodes.length - toDrop) === 0) {
-    throw new Error(`Страну/работоспособность не удалось определить ни у одного из ${sourceNodes.length} узлов: похоже на сбой сети. Старые файлы не очищены.`);
-  }
+  const maxRatio = Number(process.env.GEO_MAX_DROP_RATIO ?? CONFIG.health?.maxDropRatio ?? 0.5);
+  if (toDrop && sourceNodes.length >= 2 && toDrop / sourceNodes.length > maxRatio) throw new Error(`Страну не удалось определить у ${toDrop} из ${sourceNodes.length} узлов (порог ${Math.round(maxRatio * 100)}%): похоже на сбой GeoIP/сети, а не на мёртвые серверы. Старые файлы не очищены.`);
   if (toDrop) console.log(`Отброшено как нерабочие: ${toDrop} (не отвечают: ${geoStats.dead}, не подтверждены: ${geoStats.unverified}, страна не определена: ${geoStats.unknown})`);
-
-  // Дополнительная валидация стабильности: подтверждаем выживших повторно
-  const bin = findXray();
-  if (bin) {
-    console.log("Контрольная проверка стабильности выживших серверов...");
-    let pruned = 0;
-    for (let i = 0; i < sourceNodes.length; i++) {
-      if (mustDrop(geo[i])) continue;
-      const node = sourceNodes[i];
-      try {
-        const confirm = await checkViaXray(bin, node.outbound, {
-          fullConfig: node.fullConfig,
-          tunnel: { active: true, socksPort: 10808, httpPort: 10809 },
-          health: CONFIG.health || {}
-        });
-        if (!confirm || !confirm.ok) {
-          console.log(`  ✗ Не прошёл контрольную проверку (нестабилен): ${String(node.name || geo[i].host).slice(0, 50)} — ${confirm?.reason || "н/д"} [убран]`);
-          geo[i].drop = true;
-          geo[i].reachable = false;
-          pruned++;
-        } else if (confirm.latency) {
-          geo[i].latency = confirm.latency;
-        }
-      } catch {
-        geo[i].drop = true;
-        pruned++;
-      }
-    }
-    if (pruned) console.log(`Контрольная проверка отсеяла нестабильных серверов: ${pruned}`);
-  }
-
-  // --- ЭТАП 3: Генератор заново нумерует и именует выжившие серверы строго по порядку (1, 2, 3...) ---
-  console.log("Этап 3: Перенумерация и переименование выживших серверов без пропусков...");
-  const seen = new Set();
-  const survivors = [];
+  const seen = new Set(); const entries = [];
   for (let i = 0; i < sourceNodes.length; i++) {
-    const node = sourceNodes[i];
-    const g = geo[i];
-    if (mustDrop(g)) continue; // Отбрасываем нерабочие ("н/д")
-
-    const hash = nodeFingerprint(node.outbound, node.deps);
-    if (seen.has(hash)) continue;
-    seen.add(hash);
-
-    const named = detectCountryStrict(`${node.name || ""} ${node.sourceTag || ""}`);
-    const byGeo = g.code ? countryByCode(g.code) : null;
-    let c = OTHER_COUNTRY;
-    let geoSource = "none";
+    const node = sourceNodes[i]; const g = geo[i];
+    if (mustDrop(g)) continue;
+    const hash = nodeFingerprint(node.outbound, node.deps); if (seen.has(hash)) continue; seen.add(hash);
+    const named = detectCountryStrict(`${node.name || ""} ${node.sourceTag || ""}`); const byGeo = g.code ? countryByCode(g.code) : null;
+    let c = OTHER_COUNTRY; let geoSource = "none";
     if (byGeo) { c = byGeo; geoSource = g.source; }
     else if (named) { c = named; geoSource = "name"; }
-
-    const kindSlug = node.kind === "bypass" ? "bypass" : node.kind === "youtube" ? "yt" : "";
-    const nameBase = node.kind === "bypass"
-      ? `${c.flag} ${c.name} | Обход`
-      : node.kind === "youtube"
-        ? `${c.flag} ${c.name} | [YouTube]`
-        : `${c.flag} ${c.name}`;
-
-    survivors.push({
-      node,
-      g,
-      hash,
-      c,
-      geoSource,
-      cls: node.cls,
-      kind: node.kind,
-      nameBase: `${c.code}|${nameBase}`,
-      nameText: nameBase,
-      idBase: kindSlug ? `${c.slug}-${kindSlug}` : c.slug
-    });
+    const cls = classifyName(node.name || ""); const bypass = isBypassClass(cls);
+    const kind = bypass ? "bypass" : cls.youtube ? "youtube" : "standard";
+    const nameBase = bypass ? `${c.flag} ${c.name} | Обход` : cls.youtube ? `${c.flag} ${c.name} | [YouTube]` : `${c.flag} ${c.name}`;
+    const kindSlug = bypass ? "bypass" : cls.youtube ? "yt" : "";
+    entries.push({ node, g, hash, c, geoSource, cls, kind, nameBase: `${c.code}|${nameBase}`, nameText: nameBase, idBase: kindSlug ? `${c.slug}-${kindSlug}` : c.slug });
   }
-
-  // Сортируем выживших: по стране, а внутри страны — по задержке (сначала самые быстрые)
-  survivors.sort((a, b) => {
-    if (a.c.code !== b.c.code) return a.c.name.localeCompare(b.c.name, "ru");
-    return (a.g.latency || 9999) - (b.g.latency || 9999);
-  });
-
-  // Сквозная нумерация по каждой группе (стране и типу) без дыр
-  const nameCounts = new Map();
-  const idCounts = new Map();
-  const generated = [];
-  let bypassNumber = 0;
-
-  for (const s of survivors) {
-    const { node, g, hash, c, geoSource, kind, nameBase, nameText, idBase } = s;
-
-    // Номер внутри страны/типа: 1, 2, 3... без пропусков (например, если Финляндия 2 умерла, третья становится второй)
-    const n = (nameCounts.get(nameBase) || 0) + 1;
-    nameCounts.set(nameBase, n);
-
-    const k = (idCounts.get(idBase) || 0) + 1;
-    idCounts.set(idBase, k);
-
-    const id = `${idBase}-${String(k).padStart(2, "0")}`;
-    const name = kind === "bypass"
-      ? `${nameText} №${++bypassNumber}`
-      : `${nameText} №${n}`;
-
-    // Обновляем remarks в готовом преобразованном конфиге
-    node.fullConfig.remarks = name;
-
-    const existingMetaPath = path.join(FREE_DIR, `${id}.meta.json`);
-    let existing = null;
-    try { if (fs.existsSync(existingMetaPath)) existing = readJson(existingMetaPath); } catch {}
-
-    const meta = {
-      id,
-      name,
-      country: c.code,
-      tier: "free",
-      kind,
-      enabled: existing?.enabled !== false,
-      auto: existing?.auto !== false,
-      generatedBy: "upstream",
-      geoSource,
-      sourceHash: hash
-    };
+  const nameTotals = new Map(); for (const e of entries) nameTotals.set(e.nameBase, (nameTotals.get(e.nameBase) || 0) + 1);
+  const nameCounts = new Map(); const idCounts = new Map(); const generated = []; let bypassNumber = 0;
+  for (const e of entries) {
+    const { node, g, hash, c, geoSource, cls, kind } = e;
+    const n = (nameCounts.get(e.nameBase) || 0) + 1; nameCounts.set(e.nameBase, n);
+    const k = (idCounts.get(e.idBase) || 0) + 1; idCounts.set(e.idBase, k);
+    const id = `${e.idBase}-${String(k).padStart(2,"0")}`; const existingMetaPath = path.join(FREE_DIR,`${id}.meta.json`); let existing = null; try { if (fs.existsSync(existingMetaPath)) existing = readJson(existingMetaPath); } catch {}
+    const showNumber = kind === "standard" || nameTotals.get(e.nameBase) > 1;
+    const name = kind === "bypass" ? `${e.nameText} №${++bypassNumber}` : `${e.nameText}${showNumber ? ` №${n}` : ""}`;
+    const meta = { id, name, country:c.code, tier:"free", kind, enabled:existing?.enabled !== false, auto:existing?.auto !== false, generatedBy:"upstream", geoSource, sourceHash:hash };
     if (g.latency) meta.latency = g.latency;
     if (g.reachable !== null) meta.reachable = g.reachable;
     if (kind === "bypass") meta.bypassNumber = bypassNumber;
     if (node.sourceIndex) meta.source = node.sourceIndex;
-
-    writeJson(path.join(FREE_DIR, `${id}.json`), node.fullConfig);
-    writeJson(existingMetaPath, meta);
-    generated.push({ id, config: node.fullConfig, meta });
+    const config = makeIndividualConfig(template,node.outbound,templateTags,node.deps); config.remarks = name;
+    writeJson(path.join(FREE_DIR,`${id}.json`),config); writeJson(existingMetaPath,meta); generated.push({id,config,meta});
   }
-
   if (!generated.length) throw new Error("Все узлы отфильтрованы; старые файлы сохранены.");
-  const newIds = generated.map((x) => x.id);
-  const keep = new Set(newIds);
-  const removed = [];
-
-  // Очищаем ВСЕ файлы серверов на диске в servers/free, которых нет среди подтверждённых живых серверов
+  const newIds = generated.map((x) => x.id); const keep = new Set(newIds); const removed = [];
+  const isGeneratedMeta = (id, meta) => { if (!meta || meta.manual === true) return false; if (meta.generatedBy === "upstream") return true; if (meta.generatedBy) return false; return /-\d{2}$/.test(id) && /№\s*\d+\s*(?:📡)?\s*$/u.test(String(meta.name || "")); };
+  const staleIds = new Set(oldIds.filter((id) => id !== "auto"));
   for (const f of fs.readdirSync(FREE_DIR)) {
-    if (f.startsWith(".") || (!f.endsWith(".json") && !f.endsWith(".meta.json"))) continue;
-    const isMeta = f.endsWith(".meta.json");
-    const id = isMeta ? f.slice(0, -10) : f.slice(0, -5);
-    if (id === "auto" || id === "tech") continue;
-    if (!keep.has(id)) {
-      const filePath = path.join(FREE_DIR, f);
-      try {
-        if (isMeta) {
-          const m = readJson(filePath);
-          if (m?.manual === true) continue; // Ручные серверы не трогаем
-        }
-      } catch {}
-      fs.unlinkSync(filePath);
-      if (!isMeta) removed.push(id);
-    }
+    if (f.startsWith(".") || !f.endsWith(".meta.json")) continue;
+    const id = f.slice(0, -10); if (id === "auto" || id === "tech") continue;
+    let meta = null; try { meta = readJson(path.join(FREE_DIR, f)); } catch {}
+    if (isGeneratedMeta(id, meta)) staleIds.add(id);
   }
-  if (removed.length) console.log(`Удалены нерабочие/устаревшие серверы (${[...new Set(removed)].length}): ${[...new Set(removed)].sort().join(", ")}`);
-  writeJson(MANIFEST_PATH, { generated: newIds });
-
-  // Загружаем только явные ручные серверы (meta.manual === true)
+  if (failedSources) {
+    for (const id of [...staleIds]) { let m = null; try { m = readJson(path.join(FREE_DIR, `${id}.meta.json`)); } catch {} if (!m || !m.source || failedIndexes.has(m.source)) staleIds.delete(id); }
+    console.log(`Часть источников не сработала (${[...failedIndexes].join(", ")}): серверы этих источников и серверы без пометки источника не удаляются.`);
+  }
+  for (const id of staleIds) if (!keep.has(id)) for (const ext of [".json",".meta.json"]) { const f = path.join(FREE_DIR,`${id}${ext}`); if (fs.existsSync(f)) { fs.unlinkSync(f); if (ext === ".json") removed.push(id); } }
+  if (removed.length) console.log(`Удалены устаревшие серверы (${removed.length}): ${removed.sort().join(", ")}`);
+  writeJson(MANIFEST_PATH,{generated:newIds});
   const manual = fs.readdirSync(FREE_DIR).filter((f) => !f.startsWith(".") && f.endsWith(".json") && !f.endsWith(".meta.json") && f !== "auto.json").flatMap((f) => {
     const id = f.slice(0,-5); const mp = path.join(FREE_DIR,`${id}.meta.json`); if (!fs.existsSync(mp)) return [];
-    try { const meta = readJson(mp); if (meta.manual !== true || meta.enabled === false || sponsor(meta.name)) return []; const config = readJson(path.join(FREE_DIR,f)); config.remarks = meta.name || config.remarks || id; return [{id,config,meta}]; } catch { return []; }
+    try { const config = readJson(path.join(FREE_DIR,f)); const meta = readJson(mp); if (meta.enabled === false || sponsor(meta.name)) return []; config.remarks = meta.name || config.remarks || id; return [{id,config,meta}]; } catch { return []; }
   });
-  const byId = new Map(manual.map((p) => [p.id,p])); for (const p of generated) byId.set(p.id,p);
+  const manualVerified = CONFIG.health?.validateManual === false ? manual : await dropDeadProfiles(manual.filter((p) => !keep.has(p.id)), "ручной", checks);
+  const byId = new Map(manualVerified.map((p) => [p.id,p])); for (const p of generated) byId.set(p.id,p);
   const profiles = [...byId.values()]; const autoResult = cleanTemplateForAuto(template,profiles); autoResult.config.remarks = autoMeta.name || "🇪🇺 ⚡ Авто-выбор"; writeJson(AUTO_PATH,autoResult.config);
   const sortedFree = sortProfiles([...profiles.filter((p) => p.id !== "auto"),{id:"auto",config:autoResult.config,meta:autoMeta}],CONFIG.servers?.freeOrder || []);
   const isBypassName = (name) => isBypassClass(classifyName(name || ""));
   const isBypassProfile = (p) => p.id !== "auto" && p.id !== "tech" && (p.meta?.kind === "bypass" || (p.meta?.generatedBy !== "upstream" && isBypassName(p.meta?.name)));
   const bypassRank = (p) => (p.meta?.generatedBy === "upstream" ? p.meta.bypassNumber || 0 : 1e6 + sortedFree.indexOf(p));
-  
+  // Final order: tech, ⬇️ АВТО ВЫБОР ⬇️, AUTO, ⬇️ СКОРОСТНЫЕ СЕРВЕРА ⬇️, servers, ⬇️ ОБХОДЫ ⬇️, bypasses.
+  // A header is added only when there is something under it.
   const bypassList = sortedFree.filter(isBypassProfile).sort((x, y) => bypassRank(x) - bypassRank(y));
   const normalList = sortedFree.filter((p) => !isBypassProfile(p));
   const techList = normalList.filter((p) => p.id === "tech");
   const autoList = normalList.filter((p) => p.id === "auto");
   const regularList = normalList.filter((p) => p.id !== "tech" && p.id !== "auto");
-
-  // ВАЖНО: Никаких фиктивных заглушек 0000:0 в output/free.json по умолчанию!
-  // Happ пингует каждый профиль, из-за чего 0000:0 всегда показывает «н/д» и портит выдачу.
-  const keepSeparators = process.env.KEEP_SEPARATORS === "1" || CONFIG.separators === true;
-  const header = (key, show) => (keepSeparators && show ? [loadSeparator(key)].filter(Boolean) : []);
+  // Headers are on by default; "separators": false in config.json switches them off (Happ pings
+  // every profile, so a header always shows "н/д" there).
+  const header = (key, show) => (show && CONFIG.separators !== false ? [loadSeparator(key)].filter(Boolean) : []);
   const free = [
     ...techList,
     ...header("auto", autoList.length > 0), ...autoList,
     ...header("fast", regularList.length > 0), ...regularList,
     ...header("bypass", bypassList.length > 0), ...bypassList
   ];
-  const premium = sortProfiles(loadPremium(),CONFIG.servers?.premiumOrder || []);
+  const premiumAll = loadPremium();
+  const premiumChecked = CONFIG.health?.validateManual === false ? premiumAll : await dropDeadProfiles(premiumAll, "premium", checks);
+  const premium = sortProfiles(premiumChecked,CONFIG.servers?.premiumOrder || []);
   writeJson(path.join(OUTPUT_DIR,"free.json"),free.map((x) => x.config)); writeJson(path.join(OUTPUT_DIR,"premium.json"),premium.map((x) => x.config));
   if (STATS.placeholderDropped) console.log(`Отброшено заглушек (127.0.0.1, 0000, порт 0): ${STATS.placeholderDropped}`);
-  for (const x of generated) console.log(`  • ${x.id}: ${x.meta.name} [страна: ${x.meta.geoSource}${x.meta.latency ? `, задержка: ${x.meta.latency} мс` : ""}${x.meta.reachable === undefined ? "" : x.meta.reachable ? ", отвечает" : ", н/д"}${x.meta.source ? `, источник ${x.meta.source}` : ""}]`);
+  for (const x of generated) console.log(`  • ${x.id}: ${x.meta.name} [страна: ${x.meta.geoSource}${x.meta.reachable === undefined ? "" : x.meta.reachable ? ", отвечает" : ", не отвечает"}${x.meta.source ? `, источник ${x.meta.source}` : ""}]`);
   console.log(`Узлов из источника: ${generated.length}`); console.log(`Узлов в AUTO: ${autoResult.tags.length}`); console.log(`Free-профилей: ${free.filter((x) => !x.separator).length} (+ заголовков: ${free.filter((x) => x.separator).length})`); console.log(`Premium-профилей: ${premium.length}`); console.log("Генерация завершена.");
 }
 run().catch((error) => { console.error(`Ошибка генерации: ${error.message}`); process.exitCode = 1; });
