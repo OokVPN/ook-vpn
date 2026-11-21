@@ -1,0 +1,124 @@
+{
+  "dns": {
+    "hosts": {
+      "8.8.8.8": "8.8.8.8",
+      "77.88.8.8": "77.88.8.8",
+      "domain:googleapis.cn": "googleapis.com",
+      "lkfl2.nalog.ru": "213.24.64.175",
+      "lknpd.nalog.ru": "213.24.64.181"
+    },
+    "queryStrategy": "UseIPv4",
+    "servers": [
+      "1.1.1.1",
+      "1.0.0.1"
+    ]
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      },
+      "tag": "socks"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "2.27.122.221",
+            "port": 443,
+            "users": [
+              {
+                "id": "dcec1f6d-0584-48ee-9e67-c2e16f23904a",
+                "encryption": "none",
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "fingerprint": "chrome",
+          "serverName": "www.nvidia.com",
+          "publicKey": "YuFm9PUkI61urw2Uzk_bulQJdblxqxebBafwKHW-8TE",
+          "shortId": "b484941b4767eb",
+          "spiderX": "/"
+        },
+        "tcpSettings": {
+          "header": {
+            "type": "none"
+          }
+        }
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    }
+  ],
+  "remarks": "🇫🇮 Финляндия #2 | Supercell 🔥",
+  "routing": {
+    "domainMatcher": "hybrid",
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "domain": [
+          "domain:supercellid.com",
+          "domain:supercell.com",
+          "domain:supercell.io",
+          "domain:brawlstarsgame.com",
+          "keyword:brawlstars",
+          "keyword:assets",
+          "bsd.meowfox.net",
+          "bsdtest.meowfox.net"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "145.239.3.4"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "port": "9339",
+        "network": "tcp,udp",
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "network": "udp",
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "regexp:(?i)(^|\\.)dns\\."
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "network": "tcp",
+        "outboundTag": "direct"
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "estonia-01",
+  "name": "🇪🇪 Эстония №1",
+  "country": "EE",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "fdf9a1c3dff4906cd999cd17cd25ccb2fb029124fcc05685f901c0951d81100c",
+  "latency": 282,
+  "reachable": true,
+  "source": 1
+}

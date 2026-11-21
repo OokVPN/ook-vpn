@@ -1,0 +1,175 @@
+{
+  "dns": {
+    "queryStrategy": "UseIP",
+    "servers": [
+      "1.1.1.1",
+      "1.0.0.1"
+    ]
+  },
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled": true,
+        "routeOnly": false
+      },
+      "tag": "socks"
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "allowTransparent": false
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ],
+        "enabled": true,
+        "routeOnly": false
+      },
+      "tag": "http"
+    }
+  ],
+  "meta": null,
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "ru.sparxiecn.com",
+            "port": 34443,
+            "users": [
+              {
+                "encryption": "none",
+                "flow": "xtls-rprx-vision",
+                "id": "dbeb56ee-68d4-4bf1-9190-5fa8965c2eb2"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "realitySettings": {
+          "fingerprint": "chrome",
+          "publicKey": "NBiCX_Tj3BeMAyG-GbLLKpGjW_qacm3A2Mz5mN8v3Xk",
+          "serverName": "ru.sparxiecn.com",
+          "shortId": "ab532d3308daa67b"
+        },
+        "security": "reality",
+        "tcpSettings": {}
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    }
+  ],
+  "remarks": "🇷🇺Россия",
+  "routing": {
+    "domainMatcher": "hybrid",
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "outboundTag": "direct",
+        "protocol": [
+          "bittorrent"
+        ],
+        "type": "field"
+      },
+      {
+        "domain": [
+          "domain:okko.tv",
+          "domain:okko.sport",
+          "domain:okkoapi.tv",
+          "domain:playfamily.ru"
+        ],
+        "outboundTag": "proxy",
+        "type": "field"
+      },
+      {
+        "domain": [
+          "geosite:category-ru",
+          "domain:4epenaxa.com",
+          "domain:alefbank.com",
+          "domain:alfa.me",
+          "domain:alfabank.st",
+          "domain:atomyze.tech",
+          "domain:bank131.com",
+          "domain:best2pay.net",
+          "domain:bps-sberbank.by",
+          "domain:codeseason.by",
+          "domain:dbo-dengi.online",
+          "domain:energotransbank.com",
+          "domain:etna.ai",
+          "domain:gazprombank.com",
+          "domain:gazprombank.investments",
+          "domain:home.bank",
+          "domain:hva.im",
+          "domain:jump.taxi",
+          "domain:koronapay.com",
+          "domain:koshelek.app",
+          "domain:maritimebank.com",
+          "domain:moex.com",
+          "domain:priovtb.com",
+          "domain:prodcontest.com",
+          "domain:pskb.com",
+          "domain:pvubank.com",
+          "domain:rbsgate.com",
+          "domain:rbsuat.com",
+          "domain:rosbank-credit.com",
+          "domain:ru.ccb.com",
+          "domain:safeliner.tech",
+          "domain:sage-observability.tech",
+          "domain:sber-bank.by",
+          "domain:sberbank.com",
+          "domain:spasibo.digital",
+          "domain:spasibo.market",
+          "domain:t-bank.by",
+          "domain:t-finance.group",
+          "domain:t-tech.dev",
+          "domain:t-tech.team",
+          "domain:t.finance",
+          "domain:tbank-online.com",
+          "domain:tdev.by",
+          "domain:tinkoff-group.com",
+          "domain:tinkoff.ai",
+          "domain:tinkoffmobile.com",
+          "domain:tochka-tech.com",
+          "domain:tochka.com",
+          "domain:unidraw.io",
+          "domain:vtb-direct.com",
+          "domain:vtb.com",
+          "domain:vtbglobalperspectives.com",
+          "domain:xn--90aifd0az.shop",
+          "domain:xn--90aifd0azb.xn--p1acf",
+          "domain:xn--b1aechhj6bof8g5a.site",
+          "domain:xn--d1abkf4ap.fun",
+          "domain:xn--h1ao.site"
+        ],
+        "outboundTag": "direct"
+      }
+    ]
+  }
+}

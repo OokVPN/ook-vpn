@@ -1,0 +1,12 @@
+{
+  "name": "clearance-vpn",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node generator/index.js"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.0"
+  }
+}

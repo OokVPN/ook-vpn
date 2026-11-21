@@ -1,0 +1,105 @@
+{
+  "project": {
+    "name": "ClearanceVPN",
+    "support": "@Clearance_vpn",
+    "channel": "@Clearance_vpn"
+  },
+  "maintenance": false,
+  "subscriptions": {
+    "free": true,
+    "premium": true
+  },
+  "servers": {
+    "freePath": "servers/free",
+    "premiumPath": "servers/premium",
+    "freeOrder": [
+      "auto"
+    ],
+    "premiumOrder": [
+      "germany-01"
+    ]
+  },
+  "maintenanceAllowedIps": [
+    "46.138.232.163",
+    "5.228.114.62"
+  ],
+  "bot": {
+    "menuPhoto": "https://hotimg.com/f/xx5G65uc.jpg"
+  },
+  "health": {
+    "strict": true,
+    "tunnel": {
+      "enabled": true,
+      "socksPort": 10808,
+      "httpPort": 10809,
+      "configFile": "generator/tunnel.json"
+    },
+    "pingMode": "keepalive",
+    "checkUrl": "https://cp.cloudflare.com/generate_204",
+    "tcpTimeoutMs": 4000,
+    "requestTimeoutMs": 4000,
+    "attemptsPerTest": 2,
+    "retryDelayMs": 300,
+    "timeoutsBeforeGiveUp": 2,
+    "startTimeoutMs": 5000,
+    "minTestsPassed": 2,
+    "rounds": 2,
+    "roundDelayMs": 200,
+    "maxLatencyMs": 500,
+    "concurrency": 6,
+    "budgetMs": 540000,
+    "maxDropRatio": 0.7,
+    "bypassPolicy": "strict",
+    "transfer": {
+      "enabled": true,
+      "urls": [
+        "https://speed.cloudflare.com/__down?bytes=200000"
+      ],
+      "minBytes": 150000,
+      "timeoutMs": 15000
+    },
+    "dns": {
+      "enabled": true,
+      "globalServers": [
+        "1.1.1.1",
+        "8.8.8.8"
+      ],
+      "ruServers": [
+        "77.88.8.8",
+        "77.88.8.1"
+      ],
+      "timeoutMs": 3000
+    },
+    "ruProbe": {
+      "enabled": true,
+      "required": false,
+      "maxNodes": 3,
+      "minOk": 1,
+      "concurrency": 2,
+      "ttlMs": 7200000
+    },
+    "tests": [
+      {
+        "url": "https://www.cloudflare.com/cdn-cgi/trace",
+        "status": 200,
+        "kind": "trace"
+      },
+      {
+        "url": "https://cp.cloudflare.com/generate_204",
+        "status": 204
+      },
+      {
+        "url": "https://www.gstatic.com/generate_204",
+        "status": 204
+      }
+    ]
+  },
+  "defaults": {
+    "plan": "free",
+    "source": "free"
+  },
+  "devices": {
+    "requireHwid": true,
+    "touchIntervalSeconds": 300
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "uk-bypass-01",
+  "name": "🇬🇧 Великобритания | Обход №1",
+  "country": "GB",
+  "tier": "free",
+  "kind": "bypass",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "500fd0b0136f0e663dfb540d7afef502c7620b300c3e753dd406a199528e5a52",
+  "latency": 261,
+  "reachable": true,
+  "bypassNumber": 1
+}

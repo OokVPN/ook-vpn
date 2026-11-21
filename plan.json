@@ -1,0 +1,21 @@
+{
+  "free": {
+    "name": "Free",
+    "description": "Бесплатный доступ к ClearanceVPN",
+    "devices": 3
+  },
+  "premium": {
+    "name": "Premium",
+    "description": "Расширенный доступ к ClearanceVPN",
+    "devices": 5
+  },
+  "trial": {
+    "name": "Premium Trial",
+    "description": "Пробный Premium на 3 дня",
+    "devices": 5,
+    "days": 3
+  },
+  "admin": {
+    "devices": -1
+  }
+}

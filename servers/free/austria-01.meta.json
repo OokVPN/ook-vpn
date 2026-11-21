@@ -1,0 +1,14 @@
+{
+  "id": "austria-01",
+  "name": "🇦🇹 Австрия №1",
+  "country": "AT",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "5c00c030f7ce4e39e36151352f9838814321cdc9a6082b39f1e377629f8bfdb6",
+  "latency": 279,
+  "reachable": true
+}

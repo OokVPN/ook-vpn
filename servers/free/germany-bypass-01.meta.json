@@ -1,0 +1,15 @@
+{
+  "id": "germany-bypass-01",
+  "name": "🇩🇪 Германия | Обход №2",
+  "country": "DE",
+  "tier": "free",
+  "kind": "bypass",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "8f125d95438cadd0976778d4f243114731f1cdf682e9a1fe262a606fc016efbb",
+  "latency": 289,
+  "reachable": true,
+  "bypassNumber": 2
+}
