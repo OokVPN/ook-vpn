@@ -30,24 +30,23 @@
     "strict": true,
     "tunnel": {
       "enabled": true,
-      "socksPort": 10808,
-      "httpPort": 10809,
+      "required": true,
+      "mode": "only",
       "configFile": "generator/tunnel.json"
     },
     "pingMode": "keepalive",
-    "checkUrl": "https://cp.cloudflare.com/generate_204",
-    "tcpTimeoutMs": 4000,
-    "requestTimeoutMs": 4000,
+    "tcpTimeoutMs": 6000,
+    "requestTimeoutMs": 10000,
     "attemptsPerTest": 2,
     "retryDelayMs": 300,
     "timeoutsBeforeGiveUp": 2,
-    "startTimeoutMs": 5000,
+    "startTimeoutMs": 8000,
     "minTestsPassed": 2,
-    "rounds": 2,
-    "roundDelayMs": 200,
-    "maxLatencyMs": 500,
+    "rounds": 1,
+    "roundDelayMs": 1500,
+    "maxLatencyMs": 1500,
     "concurrency": 6,
-    "budgetMs": 540000,
+    "budgetMs": 900000,
     "maxDropRatio": 0.7,
     "bypassPolicy": "strict",
     "transfer": {
@@ -92,7 +91,16 @@
         "url": "https://www.gstatic.com/generate_204",
         "status": 204
       }
-    ]
+    ],
+    "validateManual": true,
+    "keepAlive": {
+      "enabled": true,
+      "requests": 4,
+      "intervalMs": 1000,
+      "timeoutMs": 8000,
+      "host": "cp.cloudflare.com",
+      "path": "/generate_204"
+    }
   },
   "defaults": {
     "plan": "free",
