@@ -102,72 +102,6 @@ export function findXray() {
   return null;
 }
 
-function isPortListening(port, host = "127.0.0.1", timeoutMs = 800) {
-  return new Promise((resolve) => {
-    const socket = net.connect({ host, port });
-    let done = false;
-    const finish = (val) => {
-      if (done) return;
-      done = true;
-      socket.destroy();
-      resolve(val);
-    };
-    socket.setTimeout(timeoutMs, () => finish(false));
-    socket.once("connect", () => finish(true));
-    socket.once("error", () => finish(false));
-  });
-}
-
-export async function ensureUnderlayTunnel(bin, tunnelCfg = {}) {
-  const socksPort = Number(tunnelCfg.socksPort || 10808);
-  const httpPort = Number(tunnelCfg.httpPort || 10809);
-  const configFile = path.resolve(process.cwd(), tunnelCfg.configFile || "generator/tunnel.json");
-
-  // 1. Check if tunnel is already listening
-  const alreadyListening = await isPortListening(socksPort, "127.0.0.1", 1000);
-  if (alreadyListening) {
-    return {
-      active: true,
-      spawned: false,
-      socksPort,
-      httpPort,
-      stop: () => {}
-    };
-  }
-
-  // 2. If not listening, start from configFile if available and bin is present
-  if (!bin || !fs.existsSync(configFile)) {
-    return {
-      active: false,
-      spawned: false,
-      socksPort,
-      httpPort,
-      error: `Файл конфигурации туннеля не найден: ${configFile}`
-    };
-  }
-
-  const child = spawn(bin, ["run", "-c", configFile], { stdio: "ignore" });
-  let exited = false;
-  child.on("exit", () => { exited = true; });
-
-  const ok = await waitForPort(socksPort, 12000);
-  if (!ok || exited) {
-    try { child.kill("SIGKILL"); } catch {}
-    throw new Error(`Не удалось запустить туннель через ${configFile} (порт ${socksPort} не открылся)`);
-  }
-
-  return {
-    active: true,
-    spawned: true,
-    child,
-    socksPort,
-    httpPort,
-    stop: () => {
-      try { child.kill("SIGKILL"); } catch {}
-    }
-  };
-}
-
 function freePort() {
   return new Promise((resolve, reject) => {
     const server = net.createServer();
@@ -218,180 +152,6 @@ export function getViaHttpProxy(proxyPort, urlString, { timeoutMs = 10000, tlsOp
   });
 }
 
-// Happ "Via Proxy GET" with Keepalive Mode:
-// Performs multiple GET requests in a single persistent core session over one TLS instance.
-// Tests initial connect, then measures pure round-trip tunnel latency over the established
-// keepalive connection without re-handshaking, and extracts exit IP / geo from Cloudflare trace.
-// If any stage fails, times out, or connection resets -> returns "н/д" to drop dead servers.
-export function happViaProxyPing(proxyPort, {
-  targetHost = "cp.cloudflare.com",
-  targetPort = 443,
-  pingPath = "/generate_204",
-  tracePath = "/cdn-cgi/trace",
-  timeoutMs = 8000,
-  rounds = 2,
-  roundDelayMs = 150
-} = {}) {
-  return new Promise((resolve) => {
-    let settled = false;
-    let timer = null;
-    let connectSocket = null;
-    let tlsSocket = null;
-
-    const finish = (result) => {
-      if (settled) return;
-      settled = true;
-      if (timer) clearTimeout(timer);
-      try { if (tlsSocket) tlsSocket.destroy(); } catch {}
-      try { if (connectSocket) connectSocket.destroy(); } catch {}
-      resolve(result);
-    };
-
-    timer = setTimeout(() => {
-      finish({ ok: false, error: "таймаут ответа прокси (н/д)" });
-    }, timeoutMs);
-
-    const connectReq = http.request({
-      host: "127.0.0.1",
-      port: proxyPort,
-      method: "CONNECT",
-      path: `${targetHost}:${targetPort}`,
-      headers: {
-        Host: `${targetHost}:${targetPort}`,
-        "Proxy-Connection": "keep-alive"
-      }
-    });
-
-    connectReq.on("error", (err) => {
-      finish({ ok: false, error: `CONNECT: ${err.message}` });
-    });
-
-    connectReq.on("connect", (res, socket) => {
-      if (res.statusCode !== 200) {
-        return finish({ ok: false, error: `CONNECT ${res.statusCode}` });
-      }
-      connectSocket = socket;
-
-      const sec = tls.connect({
-        socket,
-        servername: targetHost,
-        rejectUnauthorized: false
-      }, async () => {
-        tlsSocket = sec;
-        try {
-          let incomingBuf = Buffer.alloc(0);
-          let onDataHandler = null;
-
-          sec.on("data", (chunk) => {
-            incomingBuf = Buffer.concat([incomingBuf, chunk]);
-            if (onDataHandler) onDataHandler();
-          });
-
-          const readHttpResponse = () => {
-            return new Promise((resHttp) => {
-              const check = () => {
-                const headerEnd = incomingBuf.indexOf("\r\n\r\n");
-                if (headerEnd === -1) return;
-
-                const headerStr = incomingBuf.slice(0, headerEnd).toString("utf8");
-                const lines = headerStr.split("\r\n");
-                const statusLine = lines[0] || "";
-                const statusCode = parseInt(statusLine.split(" ")[1], 10) || 0;
-
-                const headers = {};
-                for (let i = 1; i < lines.length; i++) {
-                  const colon = lines[i].indexOf(":");
-                  if (colon > 0) {
-                    headers[lines[i].slice(0, colon).trim().toLowerCase()] = lines[i].slice(colon + 1).trim();
-                  }
-                }
-
-                if (statusCode === 204 || statusCode === 304) {
-                  incomingBuf = incomingBuf.slice(headerEnd + 4);
-                  onDataHandler = null;
-                  return resHttp({ statusCode, headers, body: "" });
-                }
-
-                const cl = parseInt(headers["content-length"] || "-1", 10);
-                if (cl >= 0) {
-                  const totalNeeded = headerEnd + 4 + cl;
-                  if (incomingBuf.length < totalNeeded) return;
-                  const body = incomingBuf.slice(headerEnd + 4, totalNeeded).toString("utf8");
-                  incomingBuf = incomingBuf.slice(totalNeeded);
-                  onDataHandler = null;
-                  return resHttp({ statusCode, headers, body });
-                }
-
-                incomingBuf = incomingBuf.slice(headerEnd + 4);
-                onDataHandler = null;
-                return resHttp({ statusCode, headers, body: "" });
-              };
-
-              onDataHandler = check;
-              check();
-            });
-          };
-
-          const latencies = [];
-
-          // Round 1: Warmup / Handshake Ping
-          const t0 = Date.now();
-          sec.write(`GET ${pingPath} HTTP/1.1\r\nHost: ${targetHost}\r\nUser-Agent: Happ/3.8.0 (ClearanceVPN)\r\nConnection: keep-alive\r\nAccept: */*\r\n\r\n`);
-          const r1 = await readHttpResponse();
-          const lat1 = Math.max(1, Date.now() - t0);
-
-          if (r1.statusCode !== 204 && r1.statusCode !== 200) {
-            return finish({ ok: false, error: `HTTP ${r1.statusCode} (н/д)` });
-          }
-          latencies.push(lat1);
-
-          if (roundDelayMs > 0) {
-            await delay(roundDelayMs);
-          }
-
-          // Round 2: Pure Keepalive Ping (over SAME TLS socket)
-          const t1 = Date.now();
-          sec.write(`GET ${pingPath} HTTP/1.1\r\nHost: ${targetHost}\r\nUser-Agent: Happ/3.8.0 (ClearanceVPN)\r\nConnection: keep-alive\r\nAccept: */*\r\n\r\n`);
-          const r2 = await readHttpResponse();
-          const lat2 = Math.max(1, Date.now() - t1);
-
-          if (r2.statusCode !== 204 && r2.statusCode !== 200) {
-            return finish({ ok: false, error: `Keepalive HTTP ${r2.statusCode} (н/д)` });
-          }
-          latencies.push(lat2);
-
-          // Round 3: Query Cloudflare trace on SAME TLS connection
-          sec.write(`GET ${tracePath} HTTP/1.1\r\nHost: ${targetHost}\r\nUser-Agent: Happ/3.8.0 (ClearanceVPN)\r\nConnection: close\r\nAccept: */*\r\n\r\n`);
-          const r3 = await readHttpResponse();
-          let exitIp = null;
-          let code = null;
-          if (r3.statusCode === 200 && r3.body) {
-            const tr = parseTrace(r3.body);
-            exitIp = tr.ip || null;
-            code = normalizeCode(tr.loc);
-          }
-
-          finish({
-            ok: true,
-            latency: lat2,
-            connectLatency: lat1,
-            exitIp,
-            code
-          });
-        } catch (err) {
-          finish({ ok: false, error: `Keepalive: ${err.message} (н/д)` });
-        }
-      });
-
-      sec.on("error", (err) => {
-        finish({ ok: false, error: `TLS: ${err.message} (н/д)` });
-      });
-    });
-
-    connectReq.end();
-  });
-}
-
 const DEFAULT_HEALTH_TESTS = [
   { url: "https://www.cloudflare.com/cdn-cgi/trace", status: 200, kind: "trace" },
   { url: "https://cp.cloudflare.com/generate_204", status: 204 },
@@ -403,16 +163,15 @@ const DEFAULT_HEALTH_TESTS = [
 // not be slower than maxLatencyMs. Anything not positively confirmed is dropped.
 const HEALTH_DEFAULTS = {
   strict: true,
+  // "keepalive": like Happ "Via Proxy GET + keepalive" - several requests over ONE connection.
   pingMode: "keepalive",
-  tunnel: {
-    enabled: true,
-    socksPort: 10808,
-    httpPort: 10809,
-    configFile: "generator/tunnel.json"
-  },
+  keepAlive: { enabled: true, requests: 4, intervalMs: 1000, timeoutMs: 8000, host: "cp.cloudflare.com", path: "/generate_204" },
+  // Russian vantage point: a known-good Russian server that every candidate is dialed through
+  // (Xray dialerProxy). mode "only" = must work through it; "both" = directly AND through it.
+  tunnel: { enabled: true, required: true, mode: "only", configFile: "generator/tunnel.json" },
   tcpTimeoutMs: 6000, requestTimeoutMs: 10000, attemptsPerTest: 2, retryDelayMs: 300,
   timeoutsBeforeGiveUp: 2, startTimeoutMs: 8000,
-  minTestsPassed: 2, rounds: 2, roundDelayMs: 1500, maxLatencyMs: 5000,
+  minTestsPassed: 2, rounds: 1, roundDelayMs: 1500, maxLatencyMs: 1500,
   transfer: { enabled: true, urls: ["https://speed.cloudflare.com/__down?bytes=200000"], minBytes: 150000, timeoutMs: 15000 },
   directIpUrl: "https://www.cloudflare.com/cdn-cgi/trace",
   dns: { enabled: true, globalServers: ["1.1.1.1", "8.8.8.8"], ruServers: ["77.88.8.8", "77.88.8.1"], timeoutMs: 3000 },
@@ -424,6 +183,7 @@ const HEALTH_DEFAULTS = {
 export function healthConfig(h = {}) {
   return {
     ...HEALTH_DEFAULTS, ...h,
+    keepAlive: { ...HEALTH_DEFAULTS.keepAlive, ...(h.keepAlive || {}) },
     tunnel: { ...HEALTH_DEFAULTS.tunnel, ...(h.tunnel || {}) },
     transfer: { ...HEALTH_DEFAULTS.transfer, ...(h.transfer || {}) },
     dns: { ...HEALTH_DEFAULTS.dns, ...(h.dns || {}) },
@@ -507,17 +267,66 @@ export async function fetchDirectIp(url, timeoutMs = 8000) {
   } catch { return null; }
 }
 
-// Real health check with support for validation over an active underlay tunnel (dialerProxy)
-// and Happ "Via Proxy GET" keepalive ping mode to eliminate 100% of dead/unstable servers.
-export async function checkViaXray(bin, outbound, { urls, tlsOptions, deps = [], health = {}, directIp = null, tunnel = null, fullConfig = null } = {}) {
+const HOP_TAG = "ru-hop";
+const hasDialer = (o) => Boolean(o?.proxySettings?.tag || o?.streamSettings?.sockopt?.dialerProxy);
+
+// Several requests over ONE persistent connection (what Happ's "Via Proxy GET + keepalive"
+// does). Many servers pass a fresh handshake and then freeze on an already open connection.
+export function keepAliveProbe(proxyPort, { host = "cp.cloudflare.com", path: reqPath = "/generate_204", requests = 4, intervalMs = 1000, timeoutMs = 8000, tlsOptions } = {}) {
+  return new Promise((resolve) => {
+    let settled = false; let timer = null; let secure = null; let raw = null;
+    let sent = 0; let got = 0; let buffer = ""; let sentAt = 0; const latencies = [];
+    const done = (ok, error) => {
+      if (settled) return; settled = true; clearTimeout(timer);
+      try { secure?.destroy(); } catch {} try { raw?.destroy(); } catch {}
+      resolve({ ok, error, latencies });
+    };
+    const arm = () => { clearTimeout(timer); timer = setTimeout(() => done(false, `запрос ${sent} из ${requests}: нет ответа за ${timeoutMs} мс (соединение «замерзло»)`), timeoutMs); };
+    const sendNext = () => {
+      sent++; sentAt = Date.now(); arm();
+      secure.write(`GET ${reqPath} HTTP/1.1\r\nHost: ${host}\r\nUser-Agent: ClearanceVPN-health/1.0\r\nConnection: keep-alive\r\nAccept: */*\r\n\r\n`);
+    };
+    arm();
+    const req = http.request({ host: "127.0.0.1", port: proxyPort, method: "CONNECT", path: `${host}:443` });
+    req.on("error", (e) => done(false, `CONNECT: ${e.message}`));
+    req.on("connect", (res, socket) => {
+      raw = socket;
+      if (res.statusCode !== 200) return done(false, `CONNECT ${res.statusCode}`);
+      secure = tls.connect({ socket, servername: host, ...(tlsOptions || {}) });
+      secure.on("error", (e) => done(false, `TLS: ${e.message}`));
+      secure.on("close", () => { if (!settled) done(false, `соединение закрыто сервером после ${got} из ${requests} запросов`); });
+      secure.once("secureConnect", sendNext);
+      secure.on("data", (chunk) => {
+        buffer += chunk.toString("latin1");
+        let end;
+        while ((end = buffer.indexOf("\r\n\r\n")) >= 0) {
+          const head = buffer.slice(0, end); buffer = buffer.slice(end + 4);
+          const status = /^HTTP\/1\.[01] (\d{3})/.exec(head)?.[1];
+          if (status !== "204") return done(false, `запрос ${got + 1}: HTTP ${status || "?"}, ожидался 204`);
+          got++; latencies.push(Math.max(1, Date.now() - sentAt)); clearTimeout(timer);
+          if (got >= requests) return done(true);
+          setTimeout(() => { if (!settled) sendNext(); }, intervalMs);
+        }
+      });
+    });
+    req.end();
+  });
+}
+
+// Health check of ONE node: TCP pre-check (direct only), Xray with the node as the only
+// outbound, quorum of test URLs, keepalive over one connection, real data transfer.
+// With `hop`, every connection of the node is dialed through the Russian hop server.
+async function probeNode(bin, outbound, { urls, tlsOptions, deps = [], health = {}, directIp = null, hop = null, hopExitIp = null } = {}) {
   const cfg = healthConfig(health);
   const strict = cfg.strict !== false;
+  const viaHop = Boolean(hop);
+  const tests = Array.isArray(cfg.tests) && cfg.tests.length ? cfg.tests : DEFAULT_HEALTH_TESTS;
+  const rounds = strict ? Math.max(1, cfg.rounds) : 1;
+  const need = strict ? Math.min(tests.length, Math.max(1, cfg.minTestsPassed)) : 1;
+  const giveUp = viaHop ? 1 : cfg.timeoutsBeforeGiveUp;
   const fail = (reason) => ({ ok: false, code: null, reason });
 
-  const tunnelActive = Boolean(tunnel && tunnel.active);
-
-  // If NOT dialed over tunnel, direct TCP pre-check
-  if (!tunnelActive) {
+  if (!viaHop) {
     const ep = endpointOf(outbound);
     if (ep && ep.address && ep.port && isTcpBased(outbound) && !deps.length) {
       const tcp = await tcpProbe(ep.address, ep.port, cfg.tcpTimeoutMs);
@@ -529,69 +338,24 @@ export async function checkViaXray(bin, outbound, { urls, tlsOptions, deps = [],
   let child = null;
   try {
     const port = await freePort();
-
-    let config;
-    if (fullConfig) {
-      config = structuredClone(fullConfig);
-      config.log = { loglevel: "none" };
-      config.inbounds = [{ tag: "in", listen: "127.0.0.1", port, protocol: "http", settings: {} }];
-      if (tunnelActive) {
-        const isSvc = (o) => ["direct", "block", "dns-out", "underlay-tunnel", "freedom", "blackhole"].includes(o?.tag) || ["freedom", "blackhole", "dns"].includes(o?.protocol);
-        const proxyOutbounds = (config.outbounds || []).filter((o) => !isSvc(o));
-        for (const po of proxyOutbounds) {
-          po.streamSettings = po.streamSettings || {};
-          po.streamSettings.sockopt = po.streamSettings.sockopt || {};
-          po.streamSettings.sockopt.dialerProxy = "underlay-tunnel";
-        }
-        config.outbounds = [
-          ...(config.outbounds || []).filter((o) => o.tag !== "underlay-tunnel"),
-          {
-            tag: "underlay-tunnel",
-            protocol: "socks",
-            settings: {
-              servers: [{ address: "127.0.0.1", port: tunnel.socksPort || 10808 }]
-            }
-          }
-        ];
+    const main = { ...structuredClone(outbound), tag: "proxy" };
+    const chain = structuredClone(deps);
+    const extra = [];
+    if (viaHop) {
+      // Only the outermost link of a chain is dialed through the hop.
+      for (const o of [main, ...chain]) {
+        if (hasDialer(o)) continue;
+        o.streamSettings = o.streamSettings || {};
+        o.streamSettings.sockopt = { ...(o.streamSettings.sockopt || {}), dialerProxy: HOP_TAG };
       }
-      config.routing = config.routing || {};
-      const isSvc = (o) => ["direct", "block", "dns-out", "underlay-tunnel", "freedom", "blackhole"].includes(o?.tag) || ["freedom", "blackhole", "dns"].includes(o?.protocol);
-      const hasProxyTag = (config.outbounds || []).some((o) => o.tag === "proxy");
-      const targetTag = hasProxyTag
-        ? "proxy"
-        : (config.outbounds || []).find((o) => !isSvc(o))?.tag;
-      if (targetTag) {
-        config.routing.rules = [
-          { type: "field", inboundTag: ["in"], outboundTag: targetTag },
-          ...(config.routing.rules || []).filter((r) => !r.inboundTag || !r.inboundTag.includes("in"))
-        ];
-      }
-    } else {
-      const proxyOutbound = structuredClone(outbound);
-      proxyOutbound.tag = "proxy";
-      const extraOutbounds = [];
-
-      // Route over active tunnel if enabled (dialerProxy)
-      if (tunnelActive) {
-        proxyOutbound.streamSettings = proxyOutbound.streamSettings || {};
-        proxyOutbound.streamSettings.sockopt = proxyOutbound.streamSettings.sockopt || {};
-        proxyOutbound.streamSettings.sockopt.dialerProxy = "underlay-tunnel";
-        extraOutbounds.push({
-          tag: "underlay-tunnel",
-          protocol: "socks",
-          settings: {
-            servers: [{ address: "127.0.0.1", port: tunnel.socksPort || 10808 }]
-          }
-        });
-      }
-
-      config = {
-        log: { loglevel: "none" },
-        inbounds: [{ tag: "in", listen: "127.0.0.1", port, protocol: "http", settings: {} }],
-        outbounds: [proxyOutbound, ...extraOutbounds, ...structuredClone(deps), { tag: "direct", protocol: "freedom" }],
-        routing: { rules: [{ type: "field", inboundTag: ["in"], outboundTag: "proxy" }] }
-      };
+      extra.push({ ...structuredClone(hop.outbound), tag: HOP_TAG }, ...structuredClone(hop.deps || []));
     }
+    const config = {
+      log: { loglevel: "none" },
+      inbounds: [{ tag: "in", listen: "127.0.0.1", port, protocol: "http", settings: {} }],
+      outbounds: [main, ...chain, ...extra, { tag: "direct", protocol: "freedom" }],
+      routing: { rules: [{ type: "field", inboundTag: ["in"], outboundTag: "proxy" }] }
+    };
     const file = path.join(dir, "config.json");
     fs.writeFileSync(file, JSON.stringify(config), { mode: 0o600 });
     child = spawn(bin, ["run", "-c", file], { stdio: "ignore" });
@@ -599,64 +363,111 @@ export async function checkViaXray(bin, outbound, { urls, tlsOptions, deps = [],
     if (!(await waitForPort(port, cfg.startTimeoutMs)) || exited) return fail("xray не стартовал (конфиг узла не принят)");
 
     const opts = { timeoutMs: cfg.requestTimeoutMs, tlsOptions };
-    let code = null;
-    let exitIp = null;
-    let latency = null;
-
-    if (cfg.pingMode === "keepalive") {
-      // Happ "Via Proxy GET" with Keepalive Mode:
-      // Round 1 (handshake/warmup) + Round 2 (pure keepalive latency) + Round 3 (trace exit IP/loc)
-      const ping = await happViaProxyPing(port, {
-        timeoutMs: cfg.requestTimeoutMs || 8000,
-        rounds: cfg.rounds || 2,
-        roundDelayMs: cfg.roundDelayMs || 150
-      });
-      if (!ping.ok) return fail(ping.error || "н/д");
-      latency = ping.latency;
-      exitIp = ping.exitIp || null;
-      code = ping.code || null;
-    } else {
-      // Standard multi-test fallback mode
-      const tests = Array.isArray(cfg.tests) && cfg.tests.length ? cfg.tests : DEFAULT_HEALTH_TESTS;
-      const rounds = strict ? Math.max(1, cfg.rounds) : 1;
-      const need = strict ? Math.min(tests.length, Math.max(1, cfg.minTestsPassed)) : 1;
-      const latencies = [];
-      let lastError = "нет тестов";
-      for (let round = 1; round <= rounds; round++) {
-        let passed = 0; let timeouts = 0;
-        for (let t = 0; t < tests.length; t++) {
-          const test = tests[t]; let ok = false;
-          for (let attempt = 1; attempt <= cfg.attemptsPerTest; attempt++) {
-            if (exited) return fail("процесс xray завершился");
-            const r = await probeOnce(port, test, opts);
-            if (r.ok) { ok = true; latencies.push(r.latency); code = r.code || code; exitIp = r.exitIp || exitIp; break; }
-            lastError = `${new URL(test.url).host}: ${r.error}`;
-            if (r.timedOut) { timeouts++; break; }
-            await delay(cfg.retryDelayMs);
-          }
-          if (ok) passed++;
-          else if (timeouts >= cfg.timeoutsBeforeGiveUp) break;
-          if (passed + (tests.length - t - 1) < need) break;
+    const latencies = []; let code = null; let exitIp = null; let lastError = "нет тестов";
+    for (let round = 1; round <= rounds; round++) {
+      let passed = 0; let timeouts = 0;
+      for (let t = 0; t < tests.length; t++) {
+        const test = tests[t]; let ok = false;
+        for (let attempt = 1; attempt <= cfg.attemptsPerTest; attempt++) {
+          if (exited) return fail("процесс xray завершился");
+          const r = await probeOnce(port, test, opts);
+          if (r.ok) { ok = true; latencies.push(r.latency); code = r.code || code; exitIp = r.exitIp || exitIp; break; }
+          lastError = `${new URL(test.url).host}: ${r.error}`;
+          if (r.timedOut) { timeouts++; break; }
+          await delay(cfg.retryDelayMs);
         }
-        if (passed < need) return fail(`раунд ${round}/${rounds}: прошло ${passed} из ${tests.length} тестов (нужно ${need}); ${lastError}`);
-        if (round < rounds) await delay(cfg.roundDelayMs);
+        if (ok) passed++;
+        else if (timeouts >= giveUp) break;
+        if (passed + (tests.length - t - 1) < need) break; // quorum can no longer be reached
       }
-      latency = median(latencies);
+      if (passed < need) return fail(`раунд ${round}/${rounds}: прошло ${passed} из ${tests.length} тестов (нужно ${need}); ${lastError}`);
+      if (round < rounds) await delay(cfg.roundDelayMs);
     }
 
+    let keepLatency = null;
+    if (strict && cfg.pingMode === "keepalive" && cfg.keepAlive?.enabled !== false) {
+      const ka = await keepAliveProbe(port, { ...cfg.keepAlive, tlsOptions });
+      if (!ka.ok) return fail(`keepalive: ${ka.error}`);
+      // the first request includes the TLS handshake; the rest is the pure round trip
+      keepLatency = median(ka.latencies.slice(1)) ?? median(ka.latencies);
+    }
     if (strict && cfg.transfer?.enabled !== false) {
       const t = await transferCheck(port, cfg.transfer, opts);
       if (!t.ok) return fail(`нет передачи данных: ${t.error}`);
     }
     if (exited) return fail("процесс xray завершился во время проверки");
-    if (strict && directIp && exitIp && exitIp === directIp && !tunnelActive) return fail("выходной IP совпадает с IP раннера: трафик не проксируется");
-    if (strict && latency && latency > cfg.maxLatencyMs) return fail(`слишком медленный: ${latency} мс (предел ${cfg.maxLatencyMs})`);
+    if (strict && exitIp) {
+      if (!viaHop && directIp && exitIp === directIp) return fail("выходной IP совпадает с IP раннера: трафик не проксируется");
+      if (viaHop && hopExitIp && exitIp === hopExitIp) return fail("выходной IP совпадает с IP опорного российского сервера: трафик не проксируется");
+    }
+    const latency = keepLatency ?? median(latencies);
+    if (strict && latency > cfg.maxLatencyMs) return fail(`слишком медленный: ${latency} мс (предел ${cfg.maxLatencyMs})`);
     if (!code) code = await exitCountryFallback(port, urls, tlsOptions);
     return { ok: true, code, latency, exitIp };
   } finally {
     if (child) { try { child.kill("SIGKILL"); } catch {} }
     try { fs.rmSync(dir, { recursive: true, force: true }); } catch {}
   }
+}
+
+export async function checkViaXray(bin, outbound, opts = {}) {
+  const { hop = null, hopMode = "only" } = opts;
+  // UDP-based protocols (hysteria) cannot be dialed through a TCP hop: checked directly.
+  if (!hop || !isTcpBased(outbound)) return probeNode(bin, outbound, { ...opts, hop: null });
+  if (hopMode === "both") {
+    const direct = await probeNode(bin, outbound, { ...opts, hop: null });
+    if (!direct.ok) return { ...direct, reason: `напрямую: ${direct.reason}` };
+  }
+  const viaRu = await probeNode(bin, outbound, opts);
+  return viaRu.ok ? viaRu : { ...viaRu, reason: `через РФ: ${viaRu.reason}` };
+}
+
+// One-time preparation shared by every check of a run: finds Xray, learns the runner's own IP
+// and proves that the Russian hop server itself works. If the hop is configured but dead the
+// run stops (old files stay) instead of dropping every server because of a broken hop.
+export async function prepareChecks({ health = {}, hop = null, tlsOptions } = {}) {
+  const hc = healthConfig(health);
+  const strict = hc.strict !== false;
+  const bin = findXray();
+  if (strict && !bin && process.env.HEALTH_ALLOW_NO_XRAY !== "1") {
+    throw new Error("Xray не найден: в строгом режиме серверы без проверки не пропускаются (HEALTH_ALLOW_NO_XRAY=1 отключает это).");
+  }
+  const ctx = { bin, hc, strict, tlsOptions, hop: null, hopInfo: null, directIp: null, hopConfigured: Boolean(hop) };
+  if (bin && strict) ctx.directIp = await fetchDirectIp(hc.directIpUrl);
+  if (bin && hop && hc.tunnel.enabled !== false && process.env.HEALTH_TUNNEL !== "0") {
+    let last = "нет ответа";
+    for (let attempt = 1; attempt <= 3 && !ctx.hopInfo; attempt++) {
+      const c = await probeNode(bin, hop.outbound, { tlsOptions, deps: hop.deps, health: { ...health, strict: false }, hop: null });
+      if (c.ok) ctx.hopInfo = { exitIp: c.exitIp, latency: c.latency, code: c.code, name: hop.name };
+      else { last = c.reason; await delay(1500); }
+    }
+    if (ctx.hopInfo) ctx.hop = hop;
+    else if (hc.tunnel.required !== false) throw new Error(`Опорный российский сервер не проходит проверку (${last}). Генерация остановлена, старые файлы сохранены.`);
+    else console.warn(`Опорный российский сервер не проходит проверку (${last}): серверы проверяются напрямую, без взгляда из РФ.`);
+  }
+  return ctx;
+}
+
+// Pass/fail check of ready-made servers (manual and premium profiles) without country logic.
+export async function verifyNodes(nodes, { ctx, health = {}, tlsOptions } = {}) {
+  const c = ctx || await prepareChecks({ health, tlsOptions });
+  const out = nodes.map(() => ({ ok: false, reason: "не проверен", latency: null }));
+  if (!c.bin) return out.map(() => ({ ok: true, reason: null, latency: null })); // no Xray allowed: nothing can be proven, nothing is dropped
+  const deadline = Date.now() + Number(process.env.GEO_XRAY_BUDGET_MS || health.budgetMs || 900000);
+  const concurrency = Math.max(1, Number(process.env.GEO_XRAY_CONCURRENCY || health.concurrency || 6));
+  await mapLimit(nodes.map((_, i) => i), concurrency, async (i) => {
+    const node = nodes[i]; const ep = endpointOf(node.outbound);
+    if (c.strict && c.hc.dns.enabled && ep?.address) {
+      const d = await checkDnsConsistency(ep.address, c.hc.dns);
+      if (!d.ok) { out[i] = { ok: false, reason: `DNS: ${d.reason}`, latency: null }; return; }
+    }
+    if (Date.now() > deadline) { out[i].reason = "не хватило времени на проверку"; return; }
+    let check;
+    try { check = await checkViaXray(c.bin, node.outbound, { tlsOptions: c.tlsOptions, deps: node.deps, health, directIp: c.directIp, hop: c.hop, hopMode: c.hc.tunnel.mode, hopExitIp: c.hopInfo?.exitIp }); }
+    catch (error) { check = { ok: false, reason: error.message }; }
+    out[i] = { ok: check.ok, reason: check.ok ? null : (check.reason || "нет ответа"), latency: check.latency || null };
+  });
+  return out;
 }
 
 // The node already passed the health check; this only tries to learn its exit country.
@@ -803,7 +614,7 @@ export async function lookupIps(ips, budgetMs = 45000) {
   return result;
 }
 
-export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions, health = {} } = {}) {
+export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions, health = {}, ctx = null } = {}) {
   const now = Date.now();
   const cache = readJsonSafe(cacheFile, {});
   const overrides = readJsonSafe(overridesFile, {});
@@ -829,24 +640,10 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions, 
     if (code) { r.code = code; r.source = "override"; stats.override++; }
   });
 
-  const bin = findXray();
+  const checks = ctx || await prepareChecks({ health, tlsOptions });
+  const bin = checks.bin;
   stats.xrayUsed = Boolean(bin);
-  if (strict && !bin && process.env.HEALTH_ALLOW_NO_XRAY !== "1") {
-    throw new Error("Xray не найден: в строгом режиме серверы без проверки не пропускаются (HEALTH_ALLOW_NO_XRAY=1 отключает это).");
-  }
-
-  let tunnelHandler = null;
-  const tunnelCfg = hc.tunnel || {};
-  if (bin && tunnelCfg.enabled !== false && process.env.HEALTH_TUNNEL !== "0") {
-    try {
-      tunnelHandler = await ensureUnderlayTunnel(bin, tunnelCfg);
-      if (tunnelHandler?.active) {
-        console.log(`Туннель активен на 127.0.0.1:${tunnelHandler.socksPort} (${tunnelHandler.spawned ? "запущен автоматически из " + tunnelCfg.configFile : "подключен к работающему"})`);
-      }
-    } catch (err) {
-      console.warn(`Предупреждение по туннелю: ${err.message}`);
-    }
-  }
+  stats.hop = checks.hopInfo;
 
   // DNS cross-check (hostname servers only): domains that do not resolve or are poisoned by Russian resolvers.
   if (strict && hc.dns.enabled) {
@@ -859,9 +656,9 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions, 
   }
 
   if (bin) {
-    const xrayDeadline = Date.now() + Number(process.env.GEO_XRAY_BUDGET_MS || health.budgetMs || 540000);
+    const xrayDeadline = Date.now() + Number(process.env.GEO_XRAY_BUDGET_MS || health.budgetMs || 900000);
     const concurrency = Math.max(1, Number(process.env.GEO_XRAY_CONCURRENCY || health.concurrency || 6));
-    const directIp = strict ? await fetchDirectIp(hc.directIpUrl) : null;
+    const directIp = checks.directIp;
     stats.directIp = directIp;
     await mapLimit(nodes.map((_, i) => i), concurrency, async (i) => {
       const r = results[i];
@@ -871,7 +668,7 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions, 
       if (strict && hc.bypassPolicy === "ru" && nodes[i].bypass) { r.skipXray = true; return; }
       if (Date.now() > xrayDeadline) { stats.unchecked++; return; }
       let check;
-      try { check = await checkViaXray(bin, nodes[i].outbound, { tlsOptions, deps: nodes[i].deps, health, directIp, tunnel: tunnelHandler, fullConfig: nodes[i].fullConfig }); }
+      try { check = await checkViaXray(bin, nodes[i].outbound, { tlsOptions, deps: nodes[i].deps, health, directIp, hop: checks.hop, hopMode: hc.tunnel.mode, hopExitIp: checks.hopInfo?.exitIp }); }
       catch (error) { check = { ok: false, code: null, reason: error.message }; }
       r.reachable = check.ok;
       r.latency = check.latency || null;
@@ -892,7 +689,7 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions, 
   }
 
   // TCP reachability from Russian vantage points (check-host.net nodes in RU).
-  if (strict && hc.ruProbe.enabled && process.env.HEALTH_RU_PROBE !== "0") {
+  if (strict && hc.ruProbe.enabled && !checks.hop && process.env.HEALTH_RU_PROBE !== "0") {
     const keyOf = new Map(); const targets = []; const verdicts = new Map();
     nodes.forEach((node, i) => {
       const r = results[i];
@@ -961,10 +758,7 @@ export async function resolveGeo(nodes, { cacheFile, overridesFile, tlsOptions, 
     if (r.dead) stats.dead++; else stats.unknown++;
   }
   stats.none = results.filter((r) => !r.code).length;
-  if (tunnelHandler?.spawned && tunnelHandler?.stop) {
-    try { tunnelHandler.stop(); } catch {}
-  }
   for (const key of Object.keys(cache)) if (now - Number(cache[key]?.at || 0) > CACHE_KEEP) delete cache[key];
   writeJsonSafe(cacheFile, cache);
   return { results, stats };
-       }
+                     }
