@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "fi.starsov.pro",
+            "address": "83.141.93.80",
             "port": 443,
             "users": [
               {
-                "id": "488f41fb-b1e6-4b21-9206-837d016167cb",
+                "id": "37fc45b0-be4d-4920-a0f7-7389e406f5f3",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "api8.eaglors.com",
+          "serverName": "newerson.online",
           "fingerprint": "firefox",
-          "publicKey": "Nb9IwEEhUHEbHSc6e5uYTjxDgN4ZExhDckM3OgYhj2o",
-          "shortId": "52ccb3687fe0b7ec",
+          "publicKey": "TiKF_6UGMtWhgDiAGLsAtyYwyv-s3HxG6F0P9ltyf1U",
+          "shortId": "8888265ef63fba6d",
           "spiderX": "/"
         }
       },

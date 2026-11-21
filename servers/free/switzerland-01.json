@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "45.132.179.90",
+            "address": "77.232.40.206",
             "port": 443,
             "users": [
               {
-                "id": "ef5a57c7-84d5-4f86-b99c-875a16da485f",
+                "id": "c50eae6b-18de-4bdc-a22f-9edda40a57ed",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "sbmicro683.gangplatform.com",
+          "serverName": "ch02.tunnely.space",
           "fingerprint": "firefox",
-          "publicKey": "Ldrfdkq0bJrZWCS0p1u6Z2tPPal0LzRm4cgEYF_2KH8",
-          "shortId": "cda7e8556ea56616",
+          "publicKey": "pPGE5Uacj1AGAB_WLOXB_UUnVBOmuJGH0vTSfmRBKzM",
+          "shortId": "2e40144ddc07e8e1",
           "spiderX": "/"
         }
       },
@@ -317,5 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇵🇱 Польша №2"
+  "remarks": "🇨🇭 Швейцария №1"
 }

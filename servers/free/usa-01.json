@@ -279,26 +279,29 @@
       "settings": {
         "vnext": [
           {
-            "address": "144.31.5.137",
-            "port": 443,
+            "address": "48.102.201.70",
+            "port": 37443,
             "users": [
               {
-                "id": "78a2cdf1-22e5-4ad7-bf89-91aa13d8b76c",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "d3eeebec-d7ba-4695-a1ea-2f2407c86582",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/assets/f02652275452e7283bfb3bf26e888fd7",
+          "mode": "auto"
+        },
         "realitySettings": {
-          "serverName": "se.dataroute.biz",
+          "serverName": "static-fi.snobvpn.online",
           "fingerprint": "firefox",
-          "publicKey": "Jg9VG2d5YKA_b6b2oVT8_QaIEHyww04U050ahEPhZlU",
-          "shortId": "",
+          "publicKey": "jMFGhKm96xsHUKEkN5E_WjdAgTshDmWgEEQLrlEvUj4",
+          "shortId": "c621989690a68cf5",
           "spiderX": "/"
         }
       },
@@ -317,5 +320,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇵🇱 Польша №3"
+  "remarks": "🇺🇸 США №1"
 }

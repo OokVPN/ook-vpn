@@ -279,26 +279,29 @@
       "settings": {
         "vnext": [
           {
-            "address": "178.248.236.234",
+            "address": "193.233.90.99",
             "port": 443,
             "users": [
               {
-                "id": "c444077f-372c-47db-b202-821b59f08861",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "e7f0d68b-69d2-4638-9f51-a4cf53628568",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/",
+          "mode": "auto"
+        },
         "realitySettings": {
-          "serverName": "deepseek.transitbp2systems.com",
-          "fingerprint": "firefox",
-          "publicKey": "0bZSeBuOU8fiL2GFmY2wmperAOaWYhjdBC_44xIK2ho",
-          "shortId": "e34fbbe0114a2ae9",
+          "serverName": "murmansk.gosgenarchive.com",
+          "fingerprint": "safari",
+          "publicKey": "4ltYIatUJFFjrW8ZBDGLJaun0BnYIgxn-jmpmTEDGyc",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -317,5 +320,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇳🇱 Нидерланды | Обход №2"
+  "remarks": "🇵🇱 Польша | Обход №5"
 }

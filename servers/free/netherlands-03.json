@@ -279,33 +279,27 @@
       "settings": {
         "vnext": [
           {
-            "address": "api.floweroom.vip",
+            "address": "195.209.221.235",
             "port": 443,
             "users": [
               {
-                "id": "d8275e29-e946-4a48-bec6-4402bea6c399",
-                "encryption": "none"
+                "id": "ef5a57c7-84d5-4f86-b99c-875a16da485f",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "ws",
-        "security": "tls",
-        "wsSettings": {
-          "path": "/cart/sync/g-jSjxyhq24P",
-          "headers": {
-            "Host": "api.floweroom.vip"
-          }
-        },
-        "tlsSettings": {
-          "serverName": "api.floweroom.vip",
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "ruhsds734.thebestqas.am",
           "fingerprint": "firefox",
-          "alpn": [
-            "h2",
-            "http/1.1"
-          ]
+          "publicKey": "Jv6OJRVpXGL8SlWq1VoCUbkeKCkG9cTzi2OHI2R9eAQ",
+          "shortId": "bd1b77948ad14751",
+          "spiderX": "/"
         }
       },
       "tag": "proxy"
@@ -323,5 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇫🇷 Франция №1"
+  "remarks": "🇳🇱 Нидерланды №3"
 }

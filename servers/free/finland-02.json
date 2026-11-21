@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "153.52.128.106",
+            "address": "13.143.187.220",
             "port": 443,
             "users": [
               {
-                "id": "2334da69-f414-4a83-9128-b1b589d6b44e",
+                "id": "66c78912-4e2d-41dc-8742-aaae2590804e",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "pebble-terrace.justext.space",
+          "serverName": "fi-s1.kadrhub.tech",
           "fingerprint": "firefox",
-          "publicKey": "AH8E2UtnifgXcpkqC9P9UZ6lOLMwl4KBetLjS4dp1wc",
-          "shortId": "03a55323",
+          "publicKey": "eDzVz3bxkv3IoN3BUCa_aA-RicoeG7ACylYSnmS2Pgg",
+          "shortId": "",
           "spiderX": "/"
         }
       },
@@ -317,5 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇦🇲 Армения №1"
+  "remarks": "🇫🇮 Финляндия №2"
 }

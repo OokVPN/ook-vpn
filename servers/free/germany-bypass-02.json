@@ -279,33 +279,27 @@
       "settings": {
         "vnext": [
           {
-            "address": "194.55.239.91",
+            "address": "178.248.236.229",
             "port": 443,
             "users": [
               {
-                "id": "6233f05e-e891-49f0-9cf4-440eba996fe4",
-                "encryption": "none"
+                "id": "a71d6c6d-c95e-4ec1-a892-22e21733bf09",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "ws",
-        "security": "tls",
-        "wsSettings": {
-          "path": "/api/v1/events",
-          "headers": {
-            "Host": "adm.nelerop.app"
-          }
-        },
-        "tlsSettings": {
-          "serverName": "adm.nelerop.app",
-          "fingerprint": "edge",
-          "alpn": [
-            "h2",
-            "http/1.1"
-          ]
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "144.hexdey.com",
+          "fingerprint": "firefox",
+          "publicKey": "_3mkK8SY6YVqws73SUVPKL77tzxDVNUt4ag9J9ec-D0",
+          "shortId": "d05a120d3506d2cc",
+          "spiderX": "/"
         }
       },
       "tag": "proxy"
@@ -323,5 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇬🇧 Великобритания | Обход №1"
+  "remarks": "🇩🇪 Германия | Обход №2"
 }

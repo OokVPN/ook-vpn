@@ -1,0 +1,15 @@
+{
+  "id": "netherlands-03",
+  "name": "🇳🇱 Нидерланды №3",
+  "country": "NL",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "6d10242f8cc88e7567e5c83b8e309bf9fca0901f3c794256fbdc7cebbd9a2c2f",
+  "latency": 468,
+  "reachable": true,
+  "source": 1
+}

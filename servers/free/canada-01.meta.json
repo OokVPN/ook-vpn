@@ -1,0 +1,15 @@
+{
+  "id": "canada-01",
+  "name": "🇨🇦 Канада №1",
+  "country": "CA",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "00bc466ea20f303c4890706c7a7d1b3e78799fc8de6f1b0cd1bf0163772a43ff",
+  "latency": 845,
+  "reachable": true,
+  "source": 1
+}

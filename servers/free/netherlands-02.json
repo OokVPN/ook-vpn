@@ -279,32 +279,27 @@
       "settings": {
         "vnext": [
           {
-            "address": "48.102.173.125",
-            "port": 444,
+            "address": "94.183.164.68",
+            "port": 443,
             "users": [
               {
-                "id": "ef5a57c7-84d5-4f86-b99c-875a16da485f",
-                "encryption": "none"
+                "id": "4f2de292-cafe-4a5a-80cc-742a957ca43c",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "ws",
-        "security": "tls",
-        "wsSettings": {
-          "path": "/stream/updates/a66d7902",
-          "headers": {
-            "Host": "neplay603.gangtype.com"
-          }
-        },
-        "tlsSettings": {
-          "serverName": "neplay603.gangtype.com",
-          "fingerprint": "qq",
-          "alpn": [
-            "http/1.1"
-          ]
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "dogklinik.growmart.site",
+          "fingerprint": "firefox",
+          "publicKey": "ju1YyCfbO_sLy_LZK6G7DbHpR8hhmSc4SaOLLbjuGSE",
+          "shortId": "cd9c321977831739",
+          "spiderX": "/"
         }
       },
       "tag": "proxy"

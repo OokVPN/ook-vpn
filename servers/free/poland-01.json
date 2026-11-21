@@ -279,26 +279,29 @@
       "settings": {
         "vnext": [
           {
-            "address": "48.102.206.180",
-            "port": 9443,
+            "address": "48.102.174.164",
+            "port": 37443,
             "users": [
               {
-                "id": "623e66a7-25ee-4624-a63c-9513d620a287",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "d3eeebec-d7ba-4695-a1ea-2f2407c86582",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/assets/b67356d75c38b8d90e1f64657444e9e2",
+          "mode": "auto"
+        },
         "realitySettings": {
-          "serverName": "po2.hys.braidx.tech",
+          "serverName": "static-pl.snobvpn.online",
           "fingerprint": "firefox",
-          "publicKey": "V-cWjK_GZ0PTJ3wnUHgwey_dNWI6_QNXsC9CdmA0mVI",
-          "shortId": "408c85938839e89f",
+          "publicKey": "WkDCD-E7sNLna62fGIRWD8WXiYCYleD3dHvvEAwmMGg",
+          "shortId": "df85554dd435e718",
           "spiderX": "/"
         }
       },

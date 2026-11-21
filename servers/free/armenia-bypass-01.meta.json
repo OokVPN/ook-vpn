@@ -1,0 +1,16 @@
+{
+  "id": "armenia-bypass-01",
+  "name": "🇦🇲 Армения | Обход №3",
+  "country": "AM",
+  "tier": "free",
+  "kind": "bypass",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "e6f62eaebe922aff7a4d46a9855d40e523a6d47d73900436ad70dcab23b9c3b7",
+  "latency": 259,
+  "reachable": true,
+  "bypassNumber": 3,
+  "source": 1
+}

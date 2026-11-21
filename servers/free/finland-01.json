@@ -279,26 +279,29 @@
       "settings": {
         "vnext": [
           {
-            "address": "13.143.187.220",
-            "port": 443,
+            "address": "177.3.209.122",
+            "port": 36443,
             "users": [
               {
-                "id": "66c78912-4e2d-41dc-8742-aaae2590804e",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "d3eeebec-d7ba-4695-a1ea-2f2407c86582",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "xhttp",
         "security": "reality",
+        "xhttpSettings": {
+          "path": "/assets/d2a0752e84654859fbd76eeed1901292",
+          "mode": "auto"
+        },
         "realitySettings": {
-          "serverName": "fi-s1.kadrhub.tech",
+          "serverName": "static-se.snobmenu.xyz",
           "fingerprint": "firefox",
-          "publicKey": "eDzVz3bxkv3IoN3BUCa_aA-RicoeG7ACylYSnmS2Pgg",
-          "shortId": "",
+          "publicKey": "N-uJSEyk-n_rfnJUJXorw6vdHBn8buRapPty6O2rRy4",
+          "shortId": "12628dbd45f29a78",
           "spiderX": "/"
         }
       },
