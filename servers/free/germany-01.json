@@ -275,40 +275,34 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
-      "protocol": "hysteria",
+      "protocol": "vless",
       "settings": {
-        "address": "outh.yandex-cloud.org",
-        "port": 54183,
-        "version": 2
+        "vnext": [
+          {
+            "address": "fi.starsov.pro",
+            "port": 443,
+            "users": [
+              {
+                "id": "488f41fb-b1e6-4b21-9206-837d016167cb",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
       },
       "streamSettings": {
-        "network": "hysteria",
-        "hysteriaSettings": {
-          "version": 2,
-          "auth": "1aadf5fa-4c4d-4b4a-8ff1-286a30f394fa"
-        },
-        "security": "tls",
-        "tlsSettings": {
-          "serverName": "outh.yandex-cloud.org",
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "api8.eaglors.com",
           "fingerprint": "firefox",
-          "alpn": [
-            "h3"
-          ]
-        },
-        "finalmask": {
-          "tcp": [
-            {
-              "type": "fragment",
-              "settings": {
-                "length": "10-20",
-                "packets": "tlshello",
-                "interval": "10-20"
-              }
-            }
-          ]
+          "publicKey": "Nb9IwEEhUHEbHSc6e5uYTjxDgN4ZExhDckM3OgYhj2o",
+          "shortId": "52ccb3687fe0b7ec",
+          "spiderX": "/"
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",

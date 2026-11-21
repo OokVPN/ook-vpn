@@ -275,72 +275,34 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "231ccd11c72e7354.topology.gslb.yccdn.ru",
+            "address": "168.113.254.217",
             "port": 443,
             "users": [
               {
-                "id": "1aadf5fa-4c4d-4b4a-8ff1-286a30f394fa",
+                "id": "ef5a57c7-84d5-4f86-b99c-875a16da485f",
                 "encryption": "none",
-                "flow": ""
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
-        "xhttpSettings": {
-          "mode": "packet-up",
-          "host": "681942.xyz",
-          "path": "/api/v1/events",
-          "extra": {
-            "xmux": {
-              "cMaxReuseTimes": 0,
-              "maxConcurrency": "16-32",
-              "maxConnections": 0,
-              "hKeepAlivePeriod": 0,
-              "hMaxRequestTimes": "600-900",
-              "hMaxReusableSecs": "1800-3000"
-            },
-            "headers": {},
-            "noGRPCHeader": false,
-            "xPaddingBytes": "100-1000",
-            "uplinkChunkSize": 2048,
-            "uplinkHTTPMethod": "GET",
-            "scMaxEachPostBytes": 2048,
-            "uplinkDataPlacement": "header",
-            "scMinPostsIntervalMs": 30,
-            "scStreamUpServerSecs": "20-80"
-          }
-        },
-        "security": "tls",
-        "tlsSettings": {
-          "serverName": "yccdn.cloud.yandex.net",
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "sbmicro690.alexdjane.am",
           "fingerprint": "firefox",
-          "alpn": [
-            "h3",
-            "h2",
-            "http/1.1"
-          ]
-        },
-        "finalmask": {
-          "tcp": [
-            {
-              "type": "fragment",
-              "settings": {
-                "length": "10-20",
-                "packets": "tlshello",
-                "interval": "10-20"
-              }
-            }
-          ]
+          "publicKey": "Lcqz3jkke-A5WHJv5yxGSUFV4qbT6FEbCASxAswYnFk",
+          "shortId": "787145828dc7896c",
+          "spiderX": "/"
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",

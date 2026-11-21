@@ -275,46 +275,40 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "api.videodolina.cc",
+            "address": "api.floweroom.vip",
             "port": 443,
             "users": [
               {
-                "id": "1aadf5fa-4c4d-4b4a-8ff1-286a30f394fa",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "d8275e29-e946-4a48-bec6-4402bea6c399",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
-        "tcpSettings": {},
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "api.videodolina.cc",
-          "publicKey": "r5WB5FnSCt4eeBC1FJMfkWHbzsMuabo0Rc6wuAhlZUs",
-          "shortId": "a8",
-          "fingerprint": "firefox"
+        "network": "ws",
+        "security": "tls",
+        "wsSettings": {
+          "path": "/cart/sync/g-jSjxyhq24P",
+          "headers": {
+            "Host": "api.floweroom.vip"
+          }
         },
-        "finalmask": {
-          "tcp": [
-            {
-              "type": "fragment",
-              "settings": {
-                "length": "10-20",
-                "packets": "tlshello",
-                "interval": "10-20"
-              }
-            }
+        "tlsSettings": {
+          "serverName": "api.floweroom.vip",
+          "fingerprint": "firefox",
+          "alpn": [
+            "h2",
+            "http/1.1"
           ]
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",

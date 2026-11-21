@@ -279,32 +279,27 @@
       "settings": {
         "vnext": [
           {
-            "address": "at-43-wt6w.new-wave-split.site",
-            "port": 8444,
+            "address": "153.52.128.106",
+            "port": 443,
             "users": [
               {
-                "id": "0f2dc4af-951f-4690-922e-07c6e8bab26a",
-                "encryption": "none"
+                "id": "2334da69-f414-4a83-9128-b1b589d6b44e",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
-        "security": "tls",
-        "xhttpSettings": {
-          "path": "/xh",
-          "host": "at-43-wt6w.new-wave-split.site",
-          "mode": "auto"
-        },
-        "tlsSettings": {
-          "serverName": "at-43-wt6w.new-wave-split.site",
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "pebble-terrace.justext.space",
           "fingerprint": "firefox",
-          "alpn": [
-            "h2",
-            "http/1.1"
-          ]
+          "publicKey": "AH8E2UtnifgXcpkqC9P9UZ6lOLMwl4KBetLjS4dp1wc",
+          "shortId": "03a55323",
+          "spiderX": "/"
         }
       },
       "tag": "proxy"
@@ -322,5 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇳🇱 Нидерланды №4"
+  "remarks": "🇦🇲 Армения №1"
 }

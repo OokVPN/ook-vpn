@@ -279,26 +279,28 @@
       "settings": {
         "vnext": [
           {
-            "address": "5.59.205.83",
+            "address": "80.47.13.56",
             "port": 443,
             "users": [
               {
-                "id": "49118954-b846-4da7-9d55-c859ce59ab50",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "52e854c3-f891-4eb5-943a-fe385f59e8fb",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
+        "grpcSettings": {
+          "serviceName": "grpc"
+        },
         "realitySettings": {
-          "serverName": "fi.xenovpn.top",
+          "serverName": "ps1.jetservaki.fit",
           "fingerprint": "firefox",
-          "publicKey": "5d73hwUBkVYgpoy_H4Rsq64LqklNZB-mwXcMj2W7XV0",
-          "shortId": "bd0772b42160b76b",
+          "publicKey": "qYmjDdoe-W9e55-Rs6u_G4HCHMk31G_qj0t1Q4_BcUg",
+          "shortId": "884b938083b628d2",
           "spiderX": "/"
         }
       },
@@ -317,5 +319,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇫🇮 Финляндия №3"
+  "remarks": "🇵🇱 Польша | Обход №3"
 }

@@ -275,33 +275,40 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "48.102.240.6",
-            "port": 8443,
+            "address": "194.55.239.91",
+            "port": 443,
             "users": [
               {
-                "id": "9bd93334-1e1a-406d-8852-824b46423b83",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "6233f05e-e891-49f0-9cf4-440eba996fe4",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "77.88.8.8",
-          "publicKey": "tm1f7W3RTgSx1F6NsoE32TborUxVe1udZQr4LhDAIio",
-          "fingerprint": "firefox",
-          "shortId": "6d5496b5539e2ee4"
+        "network": "ws",
+        "security": "tls",
+        "wsSettings": {
+          "path": "/api/v1/events",
+          "headers": {
+            "Host": "adm.nelerop.app"
+          }
+        },
+        "tlsSettings": {
+          "serverName": "adm.nelerop.app",
+          "fingerprint": "edge",
+          "alpn": [
+            "h2",
+            "http/1.1"
+          ]
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",

@@ -279,27 +279,32 @@
       "settings": {
         "vnext": [
           {
-            "address": "143.203.216.187",
-            "port": 443,
+            "address": "48.102.173.125",
+            "port": 444,
             "users": [
               {
-                "id": "6db6b948-655f-4f68-a9e7-865050e05b31",
-                "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "id": "ef5a57c7-84d5-4f86-b99c-875a16da485f",
+                "encryption": "none"
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-          "serverName": "remote.propaint.cl",
-          "fingerprint": "firefox",
-          "publicKey": "o7R9liafUMmCf4Sr14gLaB-gZ7mo_axffMCT176tuHw",
-          "shortId": "672cfc",
-          "spiderX": "/"
+        "network": "ws",
+        "security": "tls",
+        "wsSettings": {
+          "path": "/stream/updates/a66d7902",
+          "headers": {
+            "Host": "neplay603.gangtype.com"
+          }
+        },
+        "tlsSettings": {
+          "serverName": "neplay603.gangtype.com",
+          "fingerprint": "qq",
+          "alpn": [
+            "http/1.1"
+          ]
         }
       },
       "tag": "proxy"

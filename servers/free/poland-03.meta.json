@@ -1,0 +1,15 @@
+{
+  "id": "poland-03",
+  "name": "🇵🇱 Польша №3",
+  "country": "PL",
+  "tier": "free",
+  "kind": "standard",
+  "enabled": true,
+  "auto": true,
+  "generatedBy": "upstream",
+  "geoSource": "exit",
+  "sourceHash": "d187b65877c94bb500e780697352725ab16a4570bdf32ff3005dd385f51d947b",
+  "latency": 183,
+  "reachable": true,
+  "source": 1
+}

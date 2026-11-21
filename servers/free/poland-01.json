@@ -275,16 +275,15 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "api.oblachnyservis.cc",
-            "port": 443,
+            "address": "48.102.206.180",
+            "port": 9443,
             "users": [
               {
-                "id": "1aadf5fa-4c4d-4b4a-8ff1-286a30f394fa",
+                "id": "623e66a7-25ee-4624-a63c-9513d620a287",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -294,27 +293,16 @@
       },
       "streamSettings": {
         "network": "tcp",
-        "tcpSettings": {},
         "security": "reality",
         "realitySettings": {
-          "serverName": "api.oblachnyservis.cc",
-          "publicKey": "r5WB5FnSCt4eeBC1FJMfkWHbzsMuabo0Rc6wuAhlZUs",
-          "shortId": "a8",
-          "fingerprint": "firefox"
-        },
-        "finalmask": {
-          "tcp": [
-            {
-              "type": "fragment",
-              "settings": {
-                "length": "10-20",
-                "packets": "tlshello",
-                "interval": "10-20"
-              }
-            }
-          ]
+          "serverName": "po2.hys.braidx.tech",
+          "fingerprint": "firefox",
+          "publicKey": "V-cWjK_GZ0PTJ3wnUHgwey_dNWI6_QNXsC9CdmA0mVI",
+          "shortId": "408c85938839e89f",
+          "spiderX": "/"
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",

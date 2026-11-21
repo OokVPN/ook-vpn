@@ -275,16 +275,15 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "79.174.92.180",
+            "address": "178.248.236.234",
             "port": 443,
             "users": [
               {
-                "id": "49118954-b846-4da7-9d55-c859ce59ab50",
+                "id": "c444077f-372c-47db-b202-821b59f08861",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -293,15 +292,17 @@
         ]
       },
       "streamSettings": {
-        "network": "raw",
+        "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "fi.xenovpn.top",
-          "publicKey": "5d73hwUBkVYgpoy_H4Rsq64LqklNZB-mwXcMj2W7XV0",
-          "fingerprint": "safari",
-          "shortId": "bd0772b42160b76b"
+          "serverName": "deepseek.transitbp2systems.com",
+          "fingerprint": "firefox",
+          "publicKey": "0bZSeBuOU8fiL2GFmY2wmperAOaWYhjdBC_44xIK2ho",
+          "shortId": "e34fbbe0114a2ae9",
+          "spiderX": "/"
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",
@@ -316,5 +317,5 @@
       "protocol": "dns"
     }
   ],
-  "remarks": "🇫🇮 Финляндия | Обход №4"
+  "remarks": "🇳🇱 Нидерланды | Обход №2"
 }

@@ -275,16 +275,15 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy",
       "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "api.mediaroshcha.cc",
+            "address": "45.84.1.207",
             "port": 443,
             "users": [
               {
-                "id": "1aadf5fa-4c4d-4b4a-8ff1-286a30f394fa",
+                "id": "c50eae6b-18de-4bdc-a22f-9edda40a57ed",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -294,27 +293,16 @@
       },
       "streamSettings": {
         "network": "tcp",
-        "tcpSettings": {},
         "security": "reality",
         "realitySettings": {
-          "serverName": "api.mediaroshcha.cc",
-          "publicKey": "r5WB5FnSCt4eeBC1FJMfkWHbzsMuabo0Rc6wuAhlZUs",
-          "shortId": "a8",
-          "fingerprint": "firefox"
-        },
-        "finalmask": {
-          "tcp": [
-            {
-              "type": "fragment",
-              "settings": {
-                "length": "10-20",
-                "packets": "tlshello",
-                "interval": "10-20"
-              }
-            }
-          ]
+          "serverName": "at01.tunnely.space",
+          "fingerprint": "firefox",
+          "publicKey": "pPGE5Uacj1AGAB_WLOXB_UUnVBOmuJGH0vTSfmRBKzM",
+          "shortId": "2e40144ddc07e8e1",
+          "spiderX": "/"
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",

@@ -279,11 +279,11 @@
       "settings": {
         "vnext": [
           {
-            "address": "45.130.127.79",
+            "address": "13.143.187.220",
             "port": 443,
             "users": [
               {
-                "id": "8d251959-b345-4665-b2fc-3ac177c35e6f",
+                "id": "66c78912-4e2d-41dc-8742-aaae2590804e",
                 "encryption": "none",
                 "flow": "xtls-rprx-vision"
               }
@@ -295,10 +295,10 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "fi.users.golu-gulu.online",
+          "serverName": "fi-s1.kadrhub.tech",
           "fingerprint": "firefox",
-          "publicKey": "ZPjkqL8oFJ27Oa8ETFfSC_S2EHnGl8TyN5ujzYwMknw",
-          "shortId": "7d19a6e4c2f8305b",
+          "publicKey": "eDzVz3bxkv3IoN3BUCa_aA-RicoeG7ACylYSnmS2Pgg",
+          "shortId": "",
           "spiderX": "/"
         }
       },
